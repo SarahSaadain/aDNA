@@ -1,0 +1,1 @@
+# fastq before and after adapter removal
