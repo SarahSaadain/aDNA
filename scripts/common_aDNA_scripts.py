@@ -6,7 +6,8 @@ import sys
 #####################
 # Constants
 #####################
-PATH_ADNA_PROJECT = "/home/vetlinux04/Sarah/aDNA/"
+#PATH_ADNA_PROJECT = "/home/vetlinux04/Sarah/aDNA/"
+PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
 
 # species folders
 FOLDER_BGER = "Bger" # just the species names, could be in /raw or in /processed
@@ -38,6 +39,9 @@ FOLDER_FASTQC = "fastqc"
 FOLDER_DEPTH = "depth"
 FOLDER_BREADTH = "breadth"
 FOLDER_MITOCHONDRIA= "mitochondria"
+
+# files
+FILE_NAME_RAW_READS_LIST = "reads_list.txt"
 
 # paths
 # programs
@@ -193,16 +197,44 @@ def get_folder_path_species_results_mitochondria(species):
 # File paths
 #####################
 
-def get_reference_genome_path_by_name(species, ref_genome_name):
+# def get_reference_genome_path_by_name(species, ref_genome_name):
 
-    raw_species_ref_genome_directory = get_folder_path_species_raw_ref_genome(species)
+#     raw_species_ref_genome_directory = get_folder_path_species_raw_ref_genome(species)
 
-    # look for ref genome file in directory of species
-    for ref_genome_file_name in os.listdir(raw_species_ref_genome_directory):
+#     # look for ref genome file in directory of species
+#     for ref_genome_file_name in os.listdir(raw_species_ref_genome_directory):
 
-        # check if file matches, if yes return, otherwise continue
-        if ref_genome_file_name.startswith(ref_genome_name):
-            return os.path.join(raw_species_ref_genome_directory, ref_genome_file_name)
+#         # check if file matches, if yes return, otherwise continue
+#         if ref_genome_file_name.startswith(ref_genome_name):
+#             return os.path.join(raw_species_ref_genome_directory, ref_genome_file_name)
 
-    #if we reach this point, we did not find a ref genome -> Error
-    raise RuntimeError(f"No reference genome found with name {ref_genome_name} for species {species}")
+#     #if we reach this point, we did not find a ref genome -> Error
+#     raise RuntimeError(f"No reference genome found with name {ref_genome_name} for species {species}")
+
+def get_reads_list_of_species(species):
+     
+    if not is_species_folder(species):
+        raise Exception(f"Invalid species folder: {species}")
+    
+    raw_reads_folder = get_folder_path_species_raw_reads(species)
+
+    if not os.path.exists(raw_reads_folder):
+        raise Exception(f"Folder {raw_reads_folder} does not exist")
+    
+    raw_reads_list_file = os.path.join(raw_reads_folder, FILE_NAME_RAW_READS_LIST)
+
+    if not os.path.exists(raw_reads_list_file):
+        raise Exception(f"File {raw_reads_list_file} does not exist")
+    
+    with open(raw_reads_list_file, 'r') as file:
+        lines = file.readlines()
+        
+    # Split each line by the comma, strip the paths to remove any extra spaces or newlines, and make them absolute paths
+    file_paths = [
+        [os.path.abspath(os.path.join(raw_reads_folder, paths[0].strip())),
+        os.path.abspath(os.path.join(raw_reads_folder, paths[1].strip()))]
+        for line in lines
+        for paths in [line.strip().split(',')]  # Split the line by the comma
+    ]
+
+    return file_paths

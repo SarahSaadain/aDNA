@@ -4,26 +4,30 @@ import re
 
 from common_aDNA_scripts import *
 
-ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
+R1_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
+R2_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
 
-def remove_adapters(input_file_path, output_file_path, adapter_sequence:str = ADAPTER_SEQUENCE):
+def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1, output_file_path_r2, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE):
 
     command_remove_adapters = [
         PROGRAM_PATH_CUTADAPT,
-        "-a", adapter_sequence,
-        "-e", "0.1",
-        "-O", "5",
-        "-m", "1",
-        "-q", "5",
-        "-o", output_file_path,
-        input_file_path
+        "-a", adapter_sequence_r1,  # Adapter for R1
+        "-A", adapter_sequence_r2,  # Adapter for R2
+        "-e", "0.1",             # Error rate
+        "-O", "5",               # Minimum overlap
+        "-m", "1",               # Minimum length after trimming
+        "-q", "5",               # Quality trimming
+        "-o", output_file_path_r1,  # Output file for R1
+        "-p", output_file_path_r2,  # Output file for R2
+        input_file_path_r1,        # Input R1 file
+        input_file_path_r2         # Input R2 file
     ]
     
     try:
         subprocess.run(command_remove_adapters, check=True)
-        print_success(f"Removed adapters: {input_file_path} -> {output_file_path}")
+        print_success(f"Removed adapters OK")
     except subprocess.CalledProcessError as e:
-        print_error(f"Removed adapters processing {input_file_path}: {e}")
+        raise Exception(f"Removed adapters error: {e}")
 
 
 
@@ -121,13 +125,35 @@ def loop_at_species_adapter_remove():
     
     for species in FOLDER_SPECIES:
 
-        raw_reads_folder = get_folder_path_species_raw_reads(species)
+        try:
 
-        if not os.path.exists(raw_reads_folder):
-            print_info(f"Folder {raw_reads_folder} does not exist -> SKIP")
-            continue
+            list_of_read_files = get_reads_list_of_species(species)
 
-        #for 
+            print(list_of_read_files)
+
+            for read_file_path in list_of_read_files:
+
+                if not os.path.exists(read_file_path[0]):
+                    print_error(f"Read file {read_file_path[0]} does not exist!")
+                    continue
+
+                if not os.path.exists(read_file_path[1]):
+                    print_error(f"Read file {read_file_path[1]} does not exist!")
+                    continue
+
+                print(read_file_path)
+
+                continue
+
+                filename = os.path.basename(read_file_path)
+                filename_new = filename.replace(".fastq.gz", "_trimmed.fastq.gz")
+
+                adapter_removed_read_file = os.path.join(get_folder_path_species_processed_adapter_removed(species), filename_new)
+
+                #remove_adapters(read_file_path, adapter_removed_read_file)
+        
+        except Exception as e:
+            print_error(e)
 
 
 def main():
