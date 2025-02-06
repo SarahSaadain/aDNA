@@ -127,7 +127,7 @@ def loop_at_species_adapter_remove():
             print_info(f"Folder {raw_reads_folder} does not exist -> SKIP")
             continue
 
-        for 
+        #for 
 
 
 def main():
