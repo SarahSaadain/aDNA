@@ -30,6 +30,7 @@ FOLDER_CONCATENATED = "concatenated"
 FOLDER_NON_CONCATENATED = "non_concatenated"
 FOLDER_MAPPED = "mapped"
 FOLDER_ADAPTER_REMOVED = "adapter_removed"
+FOLDER_GENOMEDELTA = "GenomeDelta"
 
 # results folders
 # if there is no follow up step, it is considered a result
@@ -60,7 +61,13 @@ PROGRAM_PATH_CUTADAPT = "cutadapt"
 #####################
 
 
-def is_sam_file_sorted(sam_file):
+def is_sam_file_sorted(sam_file: str) -> bool:
+    """
+    Checks if a SAM file is sorted by coordinate.
+
+    :param sam_file: The path to the SAM file
+    :return: True if the SAM file is sorted by coordinate, False otherwise
+    """
     try:
         # Check the header for sorting status
         result = subprocess.run(
@@ -72,10 +79,13 @@ def is_sam_file_sorted(sam_file):
         )
         for line in result.stdout.splitlines():
             if line.startswith('@HD') and 'SO:coordinate' in line:
+                # The SAM file is sorted by coordinate
                 return True
+        # The SAM file is not sorted by coordinate
         return False
     except subprocess.CalledProcessError as e:
         print(f"Error reading header: {e}")
+        # Return False in case of an error
         return False
 
 def convert_sam_to_bam(sam_file, bam_file, threads=20):
