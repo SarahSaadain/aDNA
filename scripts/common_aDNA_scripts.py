@@ -49,6 +49,8 @@ PROGRAM_PATH_CUTADAPT = "cutadapt"
 #PROGRAM_PATH_BOWTIE = "/home/vetlinux04/Sarah/softwares/bowtie-1.3.0-linux-x86_64/bowtie"
 #PROGRAM_PATH_TRIM_GALORE ="/home/vetlinux04/Sarah/softwares/TrimGalore-0.6.10/trim_galore"
 
+#"doi.org/10.1093/bioinformatics/btt193" to check damage, include to pipeline
+
 # files
 #FILENAME_SRNA_FILENAME_LIST = "sRNA_target_filenames.txt"
 

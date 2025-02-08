@@ -134,14 +134,12 @@ def loop_at_species_adapter_remove():
             for read_file_path in list_of_read_files:
 
                 if not os.path.exists(read_file_path[0]):
-                    print_error(f"Read file {read_file_path[0]} does not exist!")
-                    continue
+                    raise Exception(f"Read file {read_file_path[0]} does not exist!")
 
                 if not os.path.exists(read_file_path[1]):
-                    print_error(f"Read file {read_file_path[1]} does not exist!")
-                    continue
+                    raise Exception(f"Read file {read_file_path[1]} does not exist!")
 
-                print(read_file_path)
+                #print(read_file_path)
 
                 continue
 
