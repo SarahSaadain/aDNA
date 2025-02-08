@@ -46,7 +46,7 @@ FOLDER_LOGS = "logs"
 FOLDER_RESOURCES = "resources"
 
 # files
-FILE_NAME_RAW_READS_LIST = "reads_list.txt"
+FILE_NAME_RAW_READS_LIST = "reads_list.csv"
 
 # paths
 # programs

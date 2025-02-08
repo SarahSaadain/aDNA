@@ -122,12 +122,20 @@ def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1,
 #             print_error(f"Removed adapters processing {file}: {e}")
 
 def all_species_adapter_remove():
+
+    print("Running adaper removal for all species")
     
     for species in FOLDER_SPECIES:
+
+        print_info(f"Running adapter removal for species {species}")
 
         try:
 
             list_of_read_files = get_reads_list_of_species(species)
+
+            if len(list_of_read_files) == 0:
+                print_info(f"No reads found for species {species}.")
+                continue
 
             print(list_of_read_files)
 

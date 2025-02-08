@@ -34,7 +34,6 @@ def all_species_prepare():
     for species in FOLDER_SPECIES: 
         scripts_folder = get_folder_path_species_scripts(species)
 
-        
         prepare_script_path = os.path.join(scripts_folder, FILE_NAME_PREPARE_SCRIPT)
         call_prepare_script(species, prepare_script_path)
         
