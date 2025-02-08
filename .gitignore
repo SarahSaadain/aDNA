@@ -2,5 +2,6 @@
 .Rhistory
 aDNA.code-workspace
 */raw/reads/
+*/raw/ref_genome/
 */processed/
 __pycache__

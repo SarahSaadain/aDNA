@@ -1,11 +1,13 @@
 from common_aDNA_scripts import *
 
-import generate_reads_list as grl
-import adapter_remove_aDNA as ar
+import generate_reads_list as generate_reads_list
+import adapter_remove_aDNA as adapter_remove
+import prepare_species_for_processing as prepare
 
 def main():
 
-    grl.all_species_generate_reads_lists()
-    ar.all_species_adapter_remove()
+    prepare.all_species_prepare()
+    generate_reads_list.all_species_generate_reads_lists()
+    adapter_remove.all_species_adapter_remove()
 
 
