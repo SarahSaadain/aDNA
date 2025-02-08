@@ -121,7 +121,7 @@ def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1,
 #             print_command(command_remove_adapters)
 #             print_error(f"Removed adapters processing {file}: {e}")
 
-def loop_at_species_adapter_remove():
+def all_species_adapter_remove():
     
     for species in FOLDER_SPECIES:
 
@@ -156,7 +156,7 @@ def loop_at_species_adapter_remove():
 
 def main():
 
-    loop_at_species_adapter_remove()
+    all_species_adapter_remove()
 
 if __name__ == "__main__":
     main()
