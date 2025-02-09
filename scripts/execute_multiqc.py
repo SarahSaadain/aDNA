@@ -14,9 +14,9 @@ def multiqc_for_raw_data(species):
     #TODO: check if multiqc data exists
 
     # raw data
-    raw_reads_folder = get_folder_path_species_raw_reads(species)
-    output_folder = os.path.join(get_folder_path_species_results_qc_multiqc(species),"raw")
-    run_multiqc(species, raw_reads_folder, output_folder)
+    raw_fastqc_folder = get_folder_path_species_results_qc_fastqc_raw(species)
+    output_folder = get_folder_path_species_results_qc_multiqc_raw(species)
+    run_multiqc(species, raw_fastqc_folder, output_folder)
 
     print_success(f"MultiQC for species {species} raw data complete")
 
@@ -26,15 +26,15 @@ def multiqc_for_trimmed_data(species):
     #TODO: check if multiqc data exists    
 
     #adapter removed data
-    trimmed_reads_folder = get_folder_path_species_processed_adapter_removed(species)
-    output_folder = os.path.join(get_folder_path_species_results_qc_multiqc(species),"trimmed")
-    run_multiqc(species, trimmed_reads_folder, output_folder)
+    trimmed_fastqc_folder = get_folder_path_species_results_qc_fastqc_adapter_removed(species)
+    output_folder = get_folder_path_species_results_qc_multiqc_adapter_removed(species)
+    run_multiqc(species, trimmed_fastqc_folder, output_folder)
 
     print_success(f"Multiqc for species {species} trimmed data complete")
 
-def run_multiqc(species, reads_folder, output_folder):
+def run_multiqc(species, fastqc_results_folder, output_folder):
 
-    command = f"multiqc {reads_folder}/*fastq.gz -o {output_folder}"
+    command = f"multiqc {fastqc_results_folder} -o {output_folder}"
     try:
         subprocess.run(command, shell=True, check=True)
     except Exception as e:
