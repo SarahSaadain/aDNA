@@ -91,21 +91,17 @@ def species_prepare_reads_for_GD(species):
     print_info(f"Preparing reads for species {species}")
 
     # Get the list of read files for this species
-    list_of_read_files = get_reads_list_of_species(species)
-
-    # Each entry in the list contains 2 (paired) files, we need to flatten the list to get a list of all files individually
-    # because the reads_list contains two files in a row and we need to separate them
-    file_list = [item for sublist in list_of_read_files for item in sublist]
+    list_of_read_files = get_raw_reads_list_of_species(species)
 
     # Create the output file name
     output_file_path = os.path.join(get_folder_path_species_processed_genomedelta(species), f"{species}_combined_all_reads.fastq")
 
-    if len(file_list) == 0:
+    if len(list_of_read_files) == 0:
         print_warning(f"No reads found for species {species}. Skipping.")
         return
 
     # Combine the files
-    combine_fastq_files(file_list, output_file_path)
+    combine_fastq_files(list_of_read_files, output_file_path)
 
 
 def main():
