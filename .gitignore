@@ -1,7 +1,9 @@
 .DS_Store
 .Rhistory
 aDNA.code-workspace
-*/raw/reads/
-*/raw/ref_genome/
+*/raw/
 */processed/
+*/logs/
+*/results/
 __pycache__
+update_local_scripts_from_github.py

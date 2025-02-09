@@ -36,6 +36,7 @@ FOLDER_GENOMEDELTA = "GenomeDelta"
 # if there is no follow up step, it is considered a result
 FOLDER_RESULTS = "results"
 FOLDER_QUALITYCONTROL = "qualitycontrol"
+FOlDER_POlY_NT = "poly_nt"
 FOLDER_FASTQC = "fastqc"
 FOLDER_DEPTH = "depth"
 FOLDER_BREADTH = "breadth"
@@ -138,13 +139,16 @@ def print_command(subprocess_command):          # prints subprocess commands
     print_info(" ".join(subprocess_command))
 
 def print_info(message):
-    print(f"INFO: {message}")
+    print(f"[INFO] {message}")
 
 def print_error(message):
-    print(f"ERROR: {message}")
+    print(f"[ERROR] {message}")
 
 def print_success(message):
-    print(f"SUCCESS: {message}")
+    print(f"[SUCCESS] {message}")
+
+def print_warning(message): 
+    print(f"[WARNING] {message}")
 
 #####################
 # Folder paths
@@ -232,6 +236,11 @@ def get_folder_path_species_processed_non_concatenated(species):
 
 def get_folder_path_species_results_qualitycontrol(species):
     path = os.path.join(get_folder_path_species_results(species), FOLDER_QUALITYCONTROL)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qualitycontrol_poly_nt(species):
+    path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOlDER_POlY_NT)
     check_folder_exists_or_create(path)
     return path
 
