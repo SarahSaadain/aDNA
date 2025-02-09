@@ -98,7 +98,7 @@ def species_prepare_reads_for_GD(species):
     file_list = [item for sublist in list_of_read_files for item in sublist]
 
     # Create the output file name
-    output_file_path = os.path.join(get_folder_path_species_processed(species), f"{species}_combined_all_reads.fastq")
+    output_file_path = os.path.join(get_folder_path_species_processed_genomedelta(species), f"{species}_combined_all_reads.fastq")
 
     if len(file_list) == 0:
         print_warning(f"No reads found for species {species}. Skipping.")
