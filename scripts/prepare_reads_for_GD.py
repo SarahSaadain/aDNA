@@ -55,8 +55,9 @@ def combine_fastq_files(file_list: list, output_file_path: str):
         # Example:
         # gunzip -c file1 file2 file3 | gzip
 
-        command = f"gunzip -c {file_string} | gzip"
+        command = f"gunzip -c {file_string}"
         subprocess.run(command, shell=True, stdout=open(output_file_path, "wb"), check=True)
+        print_success(f"Files combined into {output_file_path}")
     except subprocess.CalledProcessError as e:
         print_error(f"An error occurred while combining files: {e}")
 
@@ -98,7 +99,7 @@ def species_prepare_reads_for_GD(species):
     file_list = [item for sublist in list_of_read_files for item in sublist]
 
     # Create the output file name
-    output_file_path = os.path.join(get_folder_path_species_processed(species), f"{species}_combined_all_reads.fastq.gz")
+    output_file_path = os.path.join(get_folder_path_species_processed(species), f"{species}_combined_all_reads.fastq")
 
     if len(file_list) == 0:
         print_warning(f"No reads found for species {species}. Skipping.")
