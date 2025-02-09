@@ -55,8 +55,8 @@ def combine_fastq_files(file_list: list, output_file_path: str):
         # Example:
         # gunzip -c file1 file2 file3 | gzip
 
-        command = f"gunzip -c {file_string}"
-        subprocess.run(command, shell=True, stdout=open(output_file_path, "wb"), check=True)
+        command = f"gunzip -c {file_string} > {output_file_path}"
+        subprocess.run(command, shell=True, shell=True, check=True)
         print_success(f"Files combined into {output_file_path}")
     except subprocess.CalledProcessError as e:
         print_error(f"An error occurred while combining files: {e}")
