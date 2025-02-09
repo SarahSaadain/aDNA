@@ -7,8 +7,8 @@ import glob
 #####################
 # Constants
 #####################
-#PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
-PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
+PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
+#PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
 
 
 # species folders
@@ -309,16 +309,6 @@ def get_raw_reads_list_of_species(species):
     fastqc_files = glob.glob(os.path.join(raw_reads_folder, '*.fastq.gz'))
 
     return fastqc_files
-        
-    # Split each line by the comma, strip the paths to remove any extra spaces or newlines, and make them absolute paths
-    file_paths = [
-        [os.path.abspath(os.path.join(raw_reads_folder, paths[0].strip())),
-        os.path.abspath(os.path.join(raw_reads_folder, paths[1].strip()))]
-        for line in lines
-        for paths in [line.strip().split(',')]  # Split the line by the comma
-    ]
-
-    return file_paths
 
 def get_raw_paired_reads_list_of_species(species):
 
