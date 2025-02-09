@@ -9,13 +9,13 @@ This project contains a pipeline to analyze ancient DNA (aDNA) data. The pipelin
 ### cutadapt v5.0   
 
 ```bash
-conda install -c bioconda cutadapt
+pip install cutadapt
 ```
 
-### MultiQC
+### MultiQC v2.35
 
 ```bash
-conda install -c bioconda multiqc
+pip install multiqc
 ```
 
 
