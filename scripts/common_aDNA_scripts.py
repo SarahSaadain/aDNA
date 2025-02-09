@@ -6,8 +6,7 @@ import sys
 #####################
 # Constants
 #####################
-#PATH_ADNA_PROJECT = "/home/vetlinux04/Sarah/aDNA/"
-PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
+PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
 
 # species folders
 FOLDER_BGER = "Bger" # just the species names, could be in /raw or in /processed
