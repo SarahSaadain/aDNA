@@ -29,7 +29,7 @@ FOLDER_CONCATENATED = "concatenated"
 FOLDER_NON_CONCATENATED = "non_concatenated"
 FOLDER_MAPPED = "mapped"
 FOLDER_ADAPTER_REMOVED = "adapter_removed"
-FOLDER_GENOMEDELTA = "GenomeDelta"
+FOLDER_GENOMEDELTA = "genome_delta"
 
 # results folders
 # if there is no follow up step, it is considered a result
@@ -223,6 +223,11 @@ def get_folder_path_species_processed_adapter_removed(species):
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_processed_genomedelta(species):
+    path = os.path.join(get_folder_path_species_processed(species), FOLDER_GENOMEDELTA)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_processed_concatenated(species):
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_CONCATENATED)
     check_folder_exists_or_create(path)
@@ -230,6 +235,12 @@ def get_folder_path_species_processed_concatenated(species):
 
 def get_folder_path_species_processed_non_concatenated(species):
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_NON_CONCATENATED)
+    check_folder_exists_or_create(path)
+    return path
+
+
+def get_folder_path_species_results_genomedelta(species):
+    path = os.path.join(get_folder_path_species_results(species), FOLDER_GENOMEDELTA)
     check_folder_exists_or_create(path)
     return path
 
