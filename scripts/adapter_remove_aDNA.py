@@ -5,7 +5,7 @@ import re
 from common_aDNA_scripts import *
 
 R1_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
-R2_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
+R2_ADAPTER_SEQUENCE = "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
 
 def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1, output_file_path_r2, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE):
 
@@ -56,7 +56,7 @@ def adapter_remove_for_species(species):
     print_info(f"Running adapter removal for species {species}")
 
     try:
-        list_of_read_files = get_reads_list_of_species(species)
+        list_of_read_files = get_raw_paired_reads_list_of_species(species)
 
         if len(list_of_read_files) == 0:
             print_warning(f"No reads found for species {species}.")
