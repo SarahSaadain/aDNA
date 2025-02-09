@@ -50,13 +50,12 @@ def combine_fastq_files(file_list: list, output_file_path: str):
     try:
         # Run the command
         # explanation of the command:
-        # - gunzip -c: uncompress the files and write to stdout. stdout is then piped to the next command
-        # - gzip: compress the output of gunzip and write to stdout. stdout is then redirected to the output file from subprocess.run()
+        # - gunzip -c: uncompress the files and write to output 
         # Example:
-        # gunzip -c file1 file2 file3 | gzip
+        # gunzip -c file1 file2 file3 > output_file
 
         command = f"gunzip -c {file_string} > {output_file_path}"
-        subprocess.run(command, shell=True, shell=True, check=True)
+        subprocess.run(command, shell=True, check=True)
         print_success(f"Files combined into {output_file_path}")
     except subprocess.CalledProcessError as e:
         print_error(f"An error occurred while combining files: {e}")
