@@ -1,8 +1,6 @@
 import os
 from common_aDNA_scripts import *
 
-MULTIQC_THREADS = 20
-
 def multiqc_before_after(species):
     # before: run multiqc for raw data
     multiqc_for_raw_data(species)
@@ -34,9 +32,9 @@ def multiqc_for_trimmed_data(species):
 
     print_success(f"Multiqc for species {species} trimmed data complete")
 
-def run_multiqc(species, reads_folder, output_folder, threads=MULTIQC_THREADS):
+def run_multiqc(species, reads_folder, output_folder):
 
-    command = f"multiqc --threads {threads} {reads_folder}/*fastq.gz -o {output_folder}"
+    command = f"multiqc {reads_folder}/*fastq.gz -o {output_folder}"
     try:
         subprocess.run(command, shell=True, check=True)
     except Exception as e:
