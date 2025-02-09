@@ -272,7 +272,7 @@ def get_folder_path_species_results_qc_fastqc_raw(species):
     return path
 
 def get_folder_path_species_results_qc_fastqc_adapter_removed(species):
-    path = os.path.join(get_folder_path_species_results_qc_fastqc_raw(species), FOLDER_ADAPTER_REMOVED)
+    path = os.path.join(get_folder_path_species_results_qc_fastqc(species), FOLDER_ADAPTER_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
