@@ -304,11 +304,19 @@ def get_raw_reads_list_of_species(species):
         raise Exception(f"Invalid species folder: {species}")
     
     raw_reads_folder = get_folder_path_species_raw_reads(species)
+
+    return get_files_in_folder_matching_pattern(raw_reads_folder, "*.fastq.gz")
+   
+
+def get_files_in_folder_matching_pattern(folder, pattern):
+     
+    if not os.path.exists(folder):
+        raise Exception(f"Invalid folder: {folder}")
     
     #read all reads from folder into list
-    fastqc_files = glob.glob(os.path.join(raw_reads_folder, '*.fastq.gz'))
+    files = glob.glob(os.path.join(folder, pattern))
 
-    return fastqc_files
+    return files
 
 def get_raw_paired_reads_list_of_species(species):
 
