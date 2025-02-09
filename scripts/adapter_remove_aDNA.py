@@ -7,7 +7,9 @@ from common_aDNA_scripts import *
 R1_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
 R2_ADAPTER_SEQUENCE = "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
 
-def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1, output_file_path_r2, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE):
+CUTADAPT_THREADS = 20
+
+def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1, output_file_path_r2, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE, threads:int = CUTADAPT_THREADS):
 
     print_info(f"Removing adapters from {input_file_path_r1} and {input_file_path_r2} ...")
 
@@ -27,6 +29,7 @@ def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1,
 
     command_remove_adapters = [
         PROGRAM_PATH_CUTADAPT,
+        "-j", str(threads),      # Number of threads
         "-a", adapter_sequence_r1,  # Adapter for R1
         "-A", adapter_sequence_r2,  # Adapter for R2
         "-e", "0.1",             # Error rate
