@@ -2,11 +2,14 @@ import os
 import re
 import subprocess
 import sys
+import glob
 
 #####################
 # Constants
 #####################
-PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
+#PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
+PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
+
 
 # species folders
 FOLDER_BGER = "Bger" # just the species names, could be in /raw or in /processed
@@ -36,7 +39,7 @@ FOLDER_GENOMEDELTA = "genome_delta"
 FOLDER_RESULTS = "results"
 FOLDER_QUALITYCONTROL = "qualitycontrol"
 FOlDER_POlY_NT = "poly_nt"
-FOLDER_FASTQC = "fastqc"
+FOLDER_MULTIQC = "multiqc"
 FOLDER_DEPTH = "depth"
 FOLDER_BREADTH = "breadth"
 FOLDER_MITOCHONDRIA= "mitochondria"
@@ -58,6 +61,9 @@ PROGRAM_PATH_CUTADAPT = "cutadapt"
 
 # files
 #FILENAME_SRNA_FILENAME_LIST = "sRNA_target_filenames.txt"
+R1_FILE_PATTERN = "*_R1*.fastq.gz"
+R2_FILE_PATTERN = "*_R2*.fastq.gz"
+EXCLUDE_PATTERN = "*/undetermined/*"
 
 
 #####################
@@ -249,22 +255,22 @@ def get_folder_path_species_results_qualitycontrol(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qualitycontrol_poly_nt(species):
+def get_folder_path_species_results_qc_poly_nt(species):
     path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOlDER_POlY_NT)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qualitycontrol_fastqc(species):
-    path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOLDER_FASTQC)
+def get_folder_path_species_results_qc_multiqc(species):
+    path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOLDER_MULTIQC)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qualitycontrol_depth(species):
+def get_folder_path_species_results_qc_depth(species):
     path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOLDER_DEPTH)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qualitycontrol_breadth(species):
+def get_folder_path_species_results_qc_breadth(species):
     path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOLDER_BREADTH)
     check_folder_exists_or_create(path)
     return path
@@ -292,28 +298,73 @@ def get_folder_path_species_results_mitochondria(species):
 #     #if we reach this point, we did not find a ref genome -> Error
 #     raise RuntimeError(f"No reference genome found with name {ref_genome_name} for species {species}")
 
-def get_reads_list_of_species(species):
+def get_raw_reads_list_of_species(species):
      
     if not is_species_folder(species):
         raise Exception(f"Invalid species folder: {species}")
     
     raw_reads_folder = get_folder_path_species_raw_reads(species)
-
-    if not os.path.exists(raw_reads_folder):
-        raise Exception(f"Folder {raw_reads_folder} does not exist")
     
-    raw_reads_list_file = os.path.join(raw_reads_folder, FILE_NAME_RAW_READS_LIST)
+    #read all reads from folder into list
+    fastqc_files = glob.glob(os.path.join(raw_reads_folder, '*.fastq.gz'))
 
-    if not os.path.exists(raw_reads_list_file):
-        raise Exception(f"File {raw_reads_list_file} does not exist")
-    
-    with open(raw_reads_list_file, 'r') as file:
-        lines = file.readlines()
+    return fastqc_files
         
     # Split each line by the comma, strip the paths to remove any extra spaces or newlines, and make them absolute paths
     file_paths = [
         [os.path.abspath(os.path.join(raw_reads_folder, paths[0].strip())),
         os.path.abspath(os.path.join(raw_reads_folder, paths[1].strip()))]
+        for line in lines
+        for paths in [line.strip().split(',')]  # Split the line by the comma
+    ]
+
+    return file_paths
+
+def get_raw_paired_reads_list_of_species(species):
+
+    if not is_species_folder(species):
+        raise Exception(f"Invalid species folder: {species}")
+
+    folder_path = get_folder_path_species_raw_reads(species)
+
+    #def generate_paired_reads_list(folder_path: str, output_file: str, overwrite: bool = False) -> None:
+    """
+    Generate a list of read files from a given folder path, sorted by sample ID.
+
+    Args:
+        folder_path (str): The path to the folder containing the read files.
+        output_file (str): The path to the output file.
+        overwrite (bool, optional): Whether to overwrite the output file if it already exists. Defaults to False.
+    """
+
+    find_command = f'find {folder_path} -type f \\( -name "{R1_FILE_PATTERN}" -o -name "{R2_FILE_PATTERN}" \\) ! -path "{EXCLUDE_PATTERN}"'
+    
+    # Sort the list of files by sample ID
+    sort_command = 'sort'
+    
+    # Use awk to format the list of files as a comma-separated list
+    awk_command = 'awk \'NR%2{printf "%s,", $0} NR%2==0{print $0}\''
+    
+    # Combine the commands into a single command string
+    full_command = f'{find_command} | {sort_command} | {awk_command}'
+    
+    # Run the command and return the list of files
+    command_result = subprocess.run(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+
+    try:
+        #print_info(f"Running command: {full_command}")
+        command_result = subprocess.run(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    except subprocess.CalledProcessError as e:
+        raise Exception(f"An error occurred while running the command: {e}")
+        
+    #convert output into list of files
+    lines = command_result.stdout.splitlines()
+
+    # Split each line by the comma, strip the paths to remove any extra spaces or newlines, and make them absolute paths
+    file_paths = [
+        [os.path.abspath(os.path.join(folder_path, paths[0].strip())),
+        os.path.abspath(os.path.join(folder_path, paths[1].strip()))]
         for line in lines
         for paths in [line.strip().split(',')]  # Split the line by the comma
     ]
