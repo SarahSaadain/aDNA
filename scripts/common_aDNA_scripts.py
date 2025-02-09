@@ -39,6 +39,7 @@ FOLDER_GENOMEDELTA = "genome_delta"
 FOLDER_RESULTS = "results"
 FOLDER_QUALITYCONTROL = "qualitycontrol"
 FOlDER_POlY_NT = "poly_nt"
+FOLDER_FASTQC = "fastqc"
 FOLDER_MULTIQC = "multiqc"
 FOLDER_DEPTH = "depth"
 FOLDER_BREADTH = "breadth"
@@ -250,28 +251,53 @@ def get_folder_path_species_results_genomedelta(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qualitycontrol(species):
+def get_folder_path_species_results_qc(species):
     path = os.path.join(get_folder_path_species_results(species), FOLDER_QUALITYCONTROL)
     check_folder_exists_or_create(path)
     return path
 
 def get_folder_path_species_results_qc_poly_nt(species):
-    path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOlDER_POlY_NT)
+    path = os.path.join(get_folder_path_species_results_qc(species), FOlDER_POlY_NT)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_fastqc(species):
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_FASTQC)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_fastqc_raw(species):
+    path = os.path.join(get_folder_path_species_results_qc_fastqc(species), FOLDER_RAW)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_fastqc_adapter_removed(species):
+    path = os.path.join(get_folder_path_species_results_qc_fastqc_raw(species), FOLDER_ADAPTER_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
 def get_folder_path_species_results_qc_multiqc(species):
-    path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOLDER_MULTIQC)
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_MULTIQC)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_multiqc_raw(species):
+    path = os.path.join(get_folder_path_species_results_qc_multiqc(species), FOLDER_RAW)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_multiqc_adapter_removed(species):
+    path = os.path.join(get_folder_path_species_results_qc_multiqc(species), FOLDER_ADAPTER_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
 def get_folder_path_species_results_qc_depth(species):
-    path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOLDER_DEPTH)
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_DEPTH)
     check_folder_exists_or_create(path)
     return path
 
 def get_folder_path_species_results_qc_breadth(species):
-    path = os.path.join(get_folder_path_species_results_qualitycontrol(species), FOLDER_BREADTH)
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_BREADTH)
     check_folder_exists_or_create(path)
     return path
 
