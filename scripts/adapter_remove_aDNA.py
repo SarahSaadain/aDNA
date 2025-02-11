@@ -31,12 +31,12 @@ def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1,
         PROGRAM_PATH_CUTADAPT,
         "-j", str(threads),      # Number of threads
         "-a", adapter_sequence_r1,  # Adapter for R1
-        "-A", adapter_sequence_r2,  # Adapter for R2
+        "-g", adapter_sequence_r2,  # Adapter for R2
         "-e", "0.1",             # Error rate
-        "-O", "5",               # Minimum overlap
-        "-m", "5",               # Minimum length after trimming
+        "-O", "3",               # Minimum overlap
+        "-m", "15",               # Minimum length after trimming
         "-q", "5",               # Quality trimming
-        "--poly-g",               # Remove poly-nucleotides
+        "--poly-a",                 # Remove poly-A
         "-o", output_file_path_r1,  # Output file for R1
         "-p", output_file_path_r2,  # Output file for R2
         input_file_path_r1,        # Input R1 file
