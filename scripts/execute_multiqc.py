@@ -11,11 +11,16 @@ def multiqc_before_after(species):
 def multiqc_for_raw_data(species):
     print_info(f"Running MultiQC for species {species} raw data")
 
-    #TODO: check if multiqc data exists
-
     # raw data
     raw_fastqc_folder = get_folder_path_species_results_qc_fastqc_raw(species)
     output_folder = get_folder_path_species_results_qc_multiqc_raw(species)
+
+    files_list = get_files_in_folder_matching_pattern(output_folder, "*.html")
+
+    if len(files_list) > 0:
+        print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        return
+
     run_multiqc(species, raw_fastqc_folder, output_folder)
 
     print_success(f"MultiQC for species {species} raw data complete")
@@ -23,11 +28,17 @@ def multiqc_for_raw_data(species):
 def multiqc_for_trimmed_data(species):
     print_info(f"Running MultiQC for species {species} trimmed data")
 
-    #TODO: check if multiqc data exists    
-
     #adapter removed data
     trimmed_fastqc_folder = get_folder_path_species_results_qc_fastqc_adapter_removed(species)
     output_folder = get_folder_path_species_results_qc_multiqc_adapter_removed(species)
+
+    files_list = get_files_in_folder_matching_pattern(output_folder, "*.html")
+
+    if len(files_list) > 0:
+        print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        return
+
+
     run_multiqc(species, trimmed_fastqc_folder, output_folder)
 
     print_success(f"Multiqc for species {species} trimmed data complete")
