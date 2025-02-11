@@ -17,7 +17,7 @@ def fastqc_for_raw_data(species):
     raw_reads_folder = get_folder_path_species_raw_reads(species)
     output_folder = get_folder_path_species_results_qc_fastqc_raw(species)
 
-    files_list = get_files_in_folder_matching_pattern(output_folder, "*.fastqc.html")
+    files_list = get_files_in_folder_matching_pattern(output_folder, "*fastqc.html")
 
     if len(files_list) > 0:
         print_warning(f"Fastqc data already exists for species {species}. Skipping.")
@@ -34,7 +34,7 @@ def fastqc_for_trimmed_data(species):
     trimmed_reads_folder = get_folder_path_species_processed_adapter_removed(species)
     output_folder = get_folder_path_species_results_qc_fastqc_adapter_removed(species)
 
-    files_list = get_files_in_folder_matching_pattern(output_folder, "*.fastqc.html")
+    files_list = get_files_in_folder_matching_pattern(output_folder, "*fastqc.html")
 
     if len(files_list) > 0:
         print_warning(f"Fastqc data already exists for species {species}. Skipping.")
