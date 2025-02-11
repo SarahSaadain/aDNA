@@ -23,10 +23,10 @@ def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1,
         print_info(f"Output file {output_file_path_r1} already exists! Skipping!")
         return
     
-    filepath_merge_failed_passed_r1 = output_file_path_r1.replace("_merged_trimmed.fastq.gz", "_merge_failed_passed_r1.fastq.gz")
-    filepath_merge_failed_passed_r2 = output_file_path_r1.replace("_merged_trimmed.fastq.gz", "_merge_failed_passed_r2.fastq.gz")
-    filepath_merge_failed_not_passed_r1 = output_file_path_r1.replace("_merged_trimmed.fastq.gz", "_merge_failed_not_passed_r1.fastq.gz")
-    filepath_merge_failed_not_passed_r2 = output_file_path_r1.replace("_merged_trimmed.fastq.gz", "_merge_failed_not_passed_r2.fastq.gz")
+    filepath_merge_failed_passed_r1 = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_passed_r1.fastq.gz")
+    filepath_merge_failed_passed_r2 = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_passed_r2.fastq.gz")
+    filepath_merge_failed_not_passed_r1 = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_not_passed_r1.fastq.gz")
+    filepath_merge_failed_not_passed_r2 = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_not_passed_r2.fastq.gz")
 
     #https://github.com/OpenGene/fastp/blob/59cc2f67414e74e99d42774e227b192a3d9bb63a/README.md#all-options
     command_fastp = [
