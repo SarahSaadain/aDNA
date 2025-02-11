@@ -55,6 +55,7 @@ FILE_NAME_RAW_READS_LIST = "reads_list.csv"
 # paths
 # programs
 PROGRAM_PATH_CUTADAPT = "cutadapt"
+PROGRAM_PATH_FASTP = "fastp"
 #PROGRAM_PATH_BOWTIE = "/home/vetlinux04/Sarah/softwares/bowtie-1.3.0-linux-x86_64/bowtie"
 #PROGRAM_PATH_TRIM_GALORE ="/home/vetlinux04/Sarah/softwares/TrimGalore-0.6.10/trim_galore"
 
