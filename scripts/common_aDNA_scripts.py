@@ -32,19 +32,22 @@ FOLDER_CONCATENATED = "concatenated"
 FOLDER_NON_CONCATENATED = "non_concatenated"
 FOLDER_MAPPED = "mapped"
 FOLDER_ADAPTER_REMOVED = "adapter_removed"
+FOLDER_QUALITY_FILTERED = "quality_filtered"
+FOLDER_DUPLICATES_REMOVED = "duplicates_removed"
 FOLDER_GENOMEDELTA = "genome_delta"
 
 # results folders
 # if there is no follow up step, it is considered a result
 FOLDER_RESULTS = "results"
 FOLDER_QUALITYCONTROL = "qualitycontrol"
-FOlDER_POlY_NT = "poly_nt"
+FOlDER_POLY_NT = "poly_nt"
 FOLDER_FASTQC = "fastqc"
 FOLDER_MULTIQC = "multiqc"
 FOLDER_DEPTH = "depth"
 FOLDER_BREADTH = "breadth"
 FOLDER_MITOCHONDRIA= "mitochondria"
 
+# main folders
 FOLDER_SCRIPTS = "scripts"
 FOLDER_LOGS = "logs"
 FOLDER_RESOURCES = "resources"
@@ -56,23 +59,28 @@ FILE_NAME_RAW_READS_LIST = "reads_list.csv"
 # programs
 PROGRAM_PATH_CUTADAPT = "cutadapt"
 PROGRAM_PATH_FASTP = "fastp"
-#PROGRAM_PATH_BOWTIE = "/home/vetlinux04/Sarah/softwares/bowtie-1.3.0-linux-x86_64/bowtie"
-#PROGRAM_PATH_TRIM_GALORE ="/home/vetlinux04/Sarah/softwares/TrimGalore-0.6.10/trim_galore"
+PROGRAM_PATH_FASTX_TRIMMER = "fastx_trimmer"
+PROGRAM_PATH_FASTX_QUALITY_FILTER = "fastq_quality_filter"
+PROGRAM_PATH_SGA = "sga"
+PROGRAM_PATH_MULTIQC = "multiqc"
+PROGRAM_PATH_FASTQC = "fastqc"
+PROGRAM_PATH_SAMTOOLS = "samtools"
 
 #"doi.org/10.1093/bioinformatics/btt193" to check damage, include to pipeline
 
 # files
-#FILENAME_SRNA_FILENAME_LIST = "sRNA_target_filenames.txt"
 R1_FILE_PATTERN = "*_R1*.fastq.gz"
 R2_FILE_PATTERN = "*_R2*.fastq.gz"
 EXCLUDE_PATTERN = "*/undetermined/*"
-
+FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ = "_merged_trimmed.fastq.gz"
+FILE_ENDING_FASTQ_GZ = ".fastq.gz"
+FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ = "_quality_filtered.fastq.gz"
+FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ = "_duplicates_removed.fastq.gz"
+FILE_ENDING_FASTQC_HTML = "_fastqc.html"
 
 #####################
 # Helpers
 #####################
-
-
 def is_sam_file_sorted(sam_file: str) -> bool:
     """
     Checks if a SAM file is sorted by coordinate.
@@ -83,7 +91,7 @@ def is_sam_file_sorted(sam_file: str) -> bool:
     try:
         # Check the header for sorting status
         result = subprocess.run(
-            ['samtools', 'view', '-H', sam_file],
+            [PROGRAM_PATH_SAMTOOLS, 'view', '-H', sam_file],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -110,20 +118,20 @@ def convert_sam_to_bam(sam_file, bam_file, threads=20):
             print(f"{sam_file} is already sorted. Skipping sorting step.")
             # Convert directly to BAM if needed
             subprocess.run(
-                ['samtools', 'view', '-bS', sam_file, '-o', bam_file],
+                [PROGRAM_PATH_SAMTOOLS, 'view', '-bS', sam_file, '-o', bam_file],
                 check=True
             )
         else:
             # Convert and sort SAM to BAM in one step
             subprocess.run(
-                ['samtools', 'sort', '-@', str(threads), '-o', bam_file, sam_file],
+                [PROGRAM_PATH_SAMTOOLS, 'sort', '-@', str(threads), '-o', bam_file, sam_file],
                 check=True
             )
             print("SAM to BAM conversion and sorting completed.")
 
         # Index the BAM file using samtools index with multiple threads
         subprocess.run(
-            ['samtools', 'index', '-@', str(threads), bam_file], 
+            [PROGRAM_PATH_SAMTOOLS, 'index', '-@', str(threads), bam_file], 
             check=True, 
             stderr=sys.stderr
         )
@@ -135,6 +143,10 @@ def convert_sam_to_bam(sam_file, bam_file, threads=20):
 
 def is_fasta_file(file_name):
     return file_name.endswith("fna") or file_name.endswith("fa") or file_name.endswith("fasta")
+
+def is_fasta_gz_file(file_name):
+    return file_name.endswith("fna.gz") or file_name.endswith("fa.gz") or file_name.endswith("fasta.gz") 
+
 
 
 #####################
@@ -231,6 +243,16 @@ def get_folder_path_species_processed_adapter_removed(species):
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_processed_quality_filtered(species):
+    path = os.path.join(get_folder_path_species_processed(species), FOLDER_QUALITY_FILTERED)
+    check_folder_exists_or_create(path)
+    return path 
+
+def get_folder_path_species_processed_duplicates_removed(species):
+    path = os.path.join(get_folder_path_species_processed(species), FOLDER_DUPLICATES_REMOVED)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_processed_genomedelta(species):
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_GENOMEDELTA)
     check_folder_exists_or_create(path)
@@ -258,7 +280,7 @@ def get_folder_path_species_results_qc(species):
     return path
 
 def get_folder_path_species_results_qc_poly_nt(species):
-    path = os.path.join(get_folder_path_species_results_qc(species), FOlDER_POlY_NT)
+    path = os.path.join(get_folder_path_species_results_qc(species), FOlDER_POLY_NT)
     check_folder_exists_or_create(path)
     return path
 
@@ -277,6 +299,16 @@ def get_folder_path_species_results_qc_fastqc_adapter_removed(species):
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_results_qc_fastqc_quality_filtered(species):
+    path = os.path.join(get_folder_path_species_results_qc_fastqc(species), FOLDER_QUALITY_FILTERED)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_fastqc_duplicates_removed(species):
+    path = os.path.join(get_folder_path_species_results_qc_fastqc(species), FOLDER_DUPLICATES_REMOVED)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_results_qc_multiqc(species):
     path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_MULTIQC)
     check_folder_exists_or_create(path)
@@ -289,6 +321,16 @@ def get_folder_path_species_results_qc_multiqc_raw(species):
 
 def get_folder_path_species_results_qc_multiqc_adapter_removed(species):
     path = os.path.join(get_folder_path_species_results_qc_multiqc(species), FOLDER_ADAPTER_REMOVED)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_multiqc_quality_filtered(species):
+    path = os.path.join(get_folder_path_species_results_qc_multiqc(species), FOLDER_QUALITY_FILTERED)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_multiqc_duplicates_removed(species):
+    path = os.path.join(get_folder_path_species_results_qc_multiqc(species), FOLDER_DUPLICATES_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
