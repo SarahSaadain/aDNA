@@ -34,8 +34,9 @@ def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1,
         "-A", adapter_sequence_r2,  # Adapter for R2
         "-e", "0.1",             # Error rate
         "-O", "5",               # Minimum overlap
-        "-m", "1",               # Minimum length after trimming
+        "-m", "5",               # Minimum length after trimming
         "-q", "5",               # Quality trimming
+        "--poly-g",               # Remove poly-nucleotides
         "-o", output_file_path_r1,  # Output file for R1
         "-p", output_file_path_r2,  # Output file for R2
         input_file_path_r1,        # Input R1 file
