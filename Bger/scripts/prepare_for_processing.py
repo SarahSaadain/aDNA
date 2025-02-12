@@ -12,8 +12,7 @@ MAPPING_FILENAME_FOLDER_TO_LANE = "mapping_folder_to_lane.csv"
 
 def prepare():
     print_info("Preparing Bger for processing.")
-    print_info("This script will prepare the folder structure and copy the files to the correct places.")
-    print_info("It will also create mappings from folder names to lane numbers and from run IDs to sample names.")
+    
 
     try:
 
