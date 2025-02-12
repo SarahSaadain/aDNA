@@ -11,3 +11,11 @@ compare md5sum for 22VCLWLT3_7_R18381_20250131.tar.gz
 
 compare md5sum for 22VCLWLT3_8_R18381_20250131.tar.gz   
 ```echo "2520eebe030f65eb6f57444514c39f3c" "2520eebe030f65eb6f57444514c39f3c" | awk '{if ($1 == $2) print "Match"; else print "Different"}'```
+
+```bash
+grep SUCCESS adapter_remove.log
+````
+
+```bash
+grep ERROR adapter_remove.log
+````
