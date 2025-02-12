@@ -38,7 +38,7 @@ def map_aDNA_to_refgenome_for_species(species):
     ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
     ref_genome_files = get_files_in_folder_matching_pattern(ref_genome_folder, FILE_ENDING_LIST_FASTA)
 
-    if ref_genome_files is None:
+    if len(ref_genome_files) == 0:
         print_warning(f"No reference genome found for species {species}. Skipping.")
         return
 
