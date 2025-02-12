@@ -26,19 +26,37 @@ def execute_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, outp
 def map_aDNA_to_refgenome_for_species(species):
     print_info(f"Mapping aDNA to reference genome for species {species} ...")
 
-    read_folder = get_folder_path_species_processed_duplicates_removed(species)
-    list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}")
+    #get reads
+    read_folder = get_folder_path_species_processed_prepared_for_ref_genome(species)
+    list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FASTQ_GZ}")
 
     if len(list_of_read_files) == 0:
         print_warning(f"No reads found for species {species}. Skipping.")
         return
-    
-    
 
-    #output_folder = get_folder_path_species_processed_mapped_to_refgenome(species)
+    # get ref genome
+    ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
+    ref_genome_files = get_files_in_folder_matching_pattern(ref_genome_folder, FILE_ENDING_LIST_FASTA)
 
-    for read_file_path in list_of_read_files:
-        continue ##TODO: implement this
+    if ref_genome_files is None:
+        print_warning(f"No reference genome found for species {species}. Skipping.")
+        return
+
+    output_folder = get_folder_path_species_processed_mapped(species)
+
+    for ref_genome_path in ref_genome_files:
+
+        ref_genome_filename = os.path.splitext(os.path.basename(ref_genome_path))[0]
+
+        for read_file_path in list_of_read_files:
+
+            print_info(f"Mapping {read_file_path} to reference genome {ref_genome_path} ...")
+
+            read_name = os.path.splitext(os.path.basename(read_file_path))[0]
+            output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}.sam")
+
+            execute_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
+        
 
     print_success(f"Mapping aDNA to reference genome for species {species} complete")
 
