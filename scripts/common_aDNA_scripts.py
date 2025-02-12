@@ -34,6 +34,7 @@ FOLDER_PROCESSED = "processed"
 FOLDER_CONCATENATED = "concatenated"
 FOLDER_NON_CONCATENATED = "non_concatenated"
 FOLDER_MAPPED = "mapped"
+FOLDER_PREPARED_FOR_REF_GENOME = "prepared_for_ref_genome"
 FOLDER_ADAPTER_REMOVED = "adapter_removed"
 FOLDER_QUALITY_FILTERED = "quality_filtered"
 FOLDER_DUPLICATES_REMOVED = "duplicates_removed"
@@ -256,6 +257,11 @@ def get_folder_path_species_processed_duplicates_removed(species):
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_processed_prepared_for_ref_genome(species):
+    path = os.path.join(get_folder_path_species_processed(species), FOLDER_PREPARED_FOR_REF_GENOME)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_processed_genomedelta(species):
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_GENOMEDELTA)
     check_folder_exists_or_create(path)
@@ -270,7 +276,6 @@ def get_folder_path_species_processed_non_concatenated(species):
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_NON_CONCATENATED)
     check_folder_exists_or_create(path)
     return path
-
 
 def get_folder_path_species_results_genomedelta(species):
     path = os.path.join(get_folder_path_species_results(species), FOLDER_GENOMEDELTA)
