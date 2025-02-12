@@ -34,11 +34,12 @@ def prepare():
         print_error("No duplicate removed fastq files found. Exiting.")
         return
     
-    for pattern in generate_fastq_patterns(fastq_files):
+    for prefix, pattern in generate_fastq_patterns(fastq_files).items():
         fastq_files_per_pattern = get_files_in_folder_matching_pattern(duplicates_removed_folder, pattern)
         print_info(f"Found {len(fastq_files_per_pattern)} fastq files for pattern {pattern}")
 
-        output_file_path = pattern.replace(f"*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}", FILE_ENDING_FASTQ_GZ)
+        output_folder = get_folder_path_species_processed_prepared_for_ref_genome(FOLDER_BGER)
+        output_file_path = os.path.join(output_folder,f"{prefix}_{FILE_ENDING_FASTQ_GZ}")
 
         if os.path.exists(output_file_path):
             print_info(f"Output file {output_file_path} already exists. Skipping.")
