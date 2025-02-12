@@ -8,8 +8,6 @@ import execute_multiqc as execute_multiqc
 import execute_fastp_adapter_remove_and_merge as execute_fastp_adapter_remove_and_merge
 import polish_fastp_quality_filter as polish_fastp_quality_filter
 import polish_fastp_deduplication as polish_fastp_deduplication
-import scripts.try_and_error.polish_sga_index_and_remove_duplicates as polish_sga_index_and_remove_duplicates
-import scripts.try_and_error.polish_fastx_trimmer as polish_fastx_trimmer
 
 def run_pipeline():
     
