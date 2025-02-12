@@ -53,7 +53,7 @@ def prepare():
         # call cat via subprocess
         try:
             print_info(f"Concatenating {len(fastq_files_per_pattern)} fastq files for pattern {pattern}")
-            cat_command = f"cat {fastq_files_per_pattern} > {output_file_path}"
+            cat_command = f"cat {pattern} > {output_file_path}"
             subprocess.run(cat_command, shell=True, check=True)
             print_success(f"Concatenation for pattern {pattern} complete")
         except Exception as e:
