@@ -4,7 +4,7 @@ import os
 import importlib.util
 from common_aDNA_scripts import *
 
-FILE_NAME_PREPARE_SCRIPT = "prepare.py"
+FILE_NAME_PREPARE_SCRIPT = "prepare_for_processing.py"
 
 def call_prepare_script(species, prepare_script_full_path):
 
@@ -30,6 +30,8 @@ def call_prepare_script(species, prepare_script_full_path):
         
 
 def all_species_prepare():
+
+    print(f"Running {FILE_NAME_PREPARE_SCRIPT} for all species")
 
     for species in FOLDER_SPECIES: 
         scripts_folder = get_folder_path_species_scripts(species)
