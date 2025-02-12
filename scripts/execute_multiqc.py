@@ -19,6 +19,13 @@ def multiqc_for_raw_data(species):
 
     # raw data
     raw_fastqc_folder = get_folder_path_species_results_qc_fastqc_raw(species)
+
+    file_list = get_files_in_folder_matching_pattern(raw_fastqc_folder, f"*{FILE_ENDING_FASTQC_HTML}")
+
+    if len(file_list) == 0:
+        print_warning(f"No fastqc data found for species {species}. Skipping.")
+        return
+
     output_folder = get_folder_path_species_results_qc_multiqc_raw(species)
 
     files_list = get_files_in_folder_matching_pattern(output_folder, "*.html")
@@ -58,6 +65,13 @@ def multiqc_for_duplicates_removed_data(species):
     print_info(f"Running MultiQC for species {species} duplicates removed data")
 
     duplicates_removed_fastqc_folder = get_folder_path_species_results_qc_fastqc_duplicates_removed(species)
+
+    file_list = get_files_in_folder_matching_pattern(duplicates_removed_fastqc_folder, f"*{FILE_ENDING_FASTQC_HTML}")
+
+    if len(file_list) == 0:
+        print_warning(f"No fastqc data found for species {species}. Skipping.")
+        return
+
     output_folder = get_folder_path_species_results_qc_multiqc_duplicates_removed(species)
 
     files_list = get_files_in_folder_matching_pattern(output_folder, "*.html")
@@ -75,6 +89,13 @@ def multiqc_for_adapter_removed_data(species):
 
     #adapter removed data
     trimmed_fastqc_folder = get_folder_path_species_results_qc_fastqc_adapter_removed(species)
+
+    file_list = get_files_in_folder_matching_pattern(trimmed_fastqc_folder, f"*{FILE_ENDING_FASTQC_HTML}")
+
+    if len(file_list) == 0:
+        print_warning(f"No fastqc data found for species {species}. Skipping.")
+        return
+
     output_folder = get_folder_path_species_results_qc_multiqc_adapter_removed(species)
 
     files_list = get_files_in_folder_matching_pattern(output_folder, "*.html")
