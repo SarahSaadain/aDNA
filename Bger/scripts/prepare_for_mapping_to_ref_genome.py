@@ -47,12 +47,11 @@ def prepare():
         # call cat via subprocess
         try:
             print_info(f"Concatenating {len(fastq_files_per_pattern)} fastq files for pattern {pattern}")
-            cat_command = f"cat {fastq_files_per_pattern} > {pattern}.{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}"
+            cat_command = f"cat {fastq_files_per_pattern} > {output_file_path}"
             subprocess.run(cat_command, shell=True, check=True)
             print_success(f"Concatenation for pattern {pattern} complete")
         except Exception as e:
             print_error(f"Failed to concatenate fastq files for pattern {pattern}: {e}")
-
 
 
 def read_csv(file_path):
