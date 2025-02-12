@@ -10,6 +10,8 @@ import glob
 PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
 #PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
 
+# config
+THREADS_DEFAULT = 10
 
 # species folders
 FOLDER_BGER = "Bger" # just the species names, could be in /raw or in /processed
