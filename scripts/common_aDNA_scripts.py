@@ -81,6 +81,8 @@ FILE_ENDING_FASTQ_GZ = ".fastq.gz"
 FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ = "_quality_filtered.fastq.gz"
 FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ = "_duplicates_removed.fastq.gz"
 FILE_ENDING_FASTQC_HTML = "_fastqc.html"
+FILE_ENDING_SAM = ".sam"
+FILE_ENDING_BAM = ".bam"
 FILE_ENDING_LIST_FASTA = ["*.fna", "*.fasta", "*.fa"]
 
 #####################
