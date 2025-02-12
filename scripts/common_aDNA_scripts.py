@@ -73,9 +73,11 @@ PROGRAM_PATH_SAMTOOLS = "samtools"
 #"doi.org/10.1093/bioinformatics/btt193" to check damage, include to pipeline
 
 # files
-R1_FILE_PATTERN = "*_R1*.fastq.gz"
-R2_FILE_PATTERN = "*_R2*.fastq.gz"
-EXCLUDE_PATTERN = "*/undetermined/*"
+FILE_PATTERN_R1_FASTQ_GZ = "*_R1*.fastq.gz"
+FILE_PATTERN_R2_FASTQ_GZ = "*_R2*.fastq.gz"
+FILE_PATTERN_UNDETERMINED_FOLDER = "*/undetermined/*"
+FILE_PATTERN_LIST_FASTA = ["*.fna", "*.fasta", "*.fa"]
+
 FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ = "_merged_trimmed.fastq.gz"
 FILE_ENDING_FASTQ_GZ = ".fastq.gz"
 FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ = "_quality_filtered.fastq.gz"
@@ -83,7 +85,7 @@ FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ = "_duplicates_removed.fastq.gz"
 FILE_ENDING_FASTQC_HTML = "_fastqc.html"
 FILE_ENDING_SAM = ".sam"
 FILE_ENDING_BAM = ".bam"
-FILE_ENDING_LIST_FASTA = ["*.fna", "*.fasta", "*.fa"]
+
 
 #####################
 # Helpers
@@ -415,7 +417,7 @@ def get_raw_paired_reads_list_of_species(species):
         overwrite (bool, optional): Whether to overwrite the output file if it already exists. Defaults to False.
     """
 
-    find_command = f'find {folder_path} -type f \\( -name "{R1_FILE_PATTERN}" -o -name "{R2_FILE_PATTERN}" \\) ! -path "{EXCLUDE_PATTERN}"'
+    find_command = f'find {folder_path} -type f \\( -name "{FILE_PATTERN_R1_FASTQ_GZ}" -o -name "{FILE_PATTERN_R2_FASTQ_GZ}" \\) ! -path "{FILE_PATTERN_UNDETERMINED_FOLDER}"'
     
     # Sort the list of files by sample ID
     sort_command = 'sort'
