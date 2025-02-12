@@ -12,7 +12,7 @@ def execute_fastx_quality_filter(input_file_path:str, output_file_path:str):
         print_info(f"Output file {output_file_path} already exists! Skipping!")
         return
     
-    output_file_path_failed = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_failed.fastq.gz")
+    output_file_path_failed = output_file_path.replace(FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ, "_failed.fastq.gz")
 
     #https://github.com/OpenGene/fastp/blob/59cc2f67414e74e99d42774e227b192a3d9bb63a/README.md#all-options
     command_fastp = [
