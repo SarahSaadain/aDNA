@@ -8,6 +8,8 @@ import execute_fastp_adapter_remove_and_merge as execute_fastp_adapter_remove_an
 import polish_fastp_quality_filter as polish_fastp_quality_filter
 import polish_fastp_deduplication as polish_fastp_deduplication
 import prepare_species_for_map_to_ref_genome as prepare_species_for_map_to_ref_genome
+import map_aDNA_to_refgenome as map_aDNA_to_refgenome
+import convert_sam2bam as convert_sam2bam
 
 def run_pipeline():
     
@@ -32,6 +34,11 @@ def run_pipeline():
     execute_multiqc.all_species_multiqc_duplicates_removed()
 
     prepare_species_for_map_to_ref_genome.all_species_prepare()
+
+    map_aDNA_to_refgenome.all_species_map_aDNA_to_refgenome()
+
+    convert_sam2bam.all_species_convert_sam_to_bam()
+
 
 def main():
     run_pipeline()
