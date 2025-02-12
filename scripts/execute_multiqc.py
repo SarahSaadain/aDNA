@@ -35,11 +35,18 @@ def multiqc_for_quality_filtered_data(species):
     print_info(f"Running MultiQC for species {species} quality filtered data")  
 
     quality_filtered_fastqc_folder = get_folder_path_species_results_qc_fastqc_quality_filtered(species)
+
+    file_list = get_files_in_folder_matching_pattern(quality_filtered_fastqc_folder, f"*{FILE_ENDING_FASTQC_HTML}")
+
+    if len(file_list) == 0:
+        print_warning(f"No fastqc data found for species {species}. Skipping.")
+        return
+
     output_folder = get_folder_path_species_results_qc_multiqc_quality_filtered(species)
 
-    files_list = get_files_in_folder_matching_pattern(output_folder, "*.html")
+    files_list_multiqc_check = get_files_in_folder_matching_pattern(output_folder, "*.html")
 
-    if len(files_list) > 0:
+    if len(files_list_multiqc_check) > 0:
         print_warning(f"Fastqc data already exists for species {species}. Skipping.")
         return
 
