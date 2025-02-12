@@ -4,18 +4,28 @@ This project contains a pipeline to analyze ancient DNA (aDNA) data. The pipelin
 
 ## Project Structure
 
+### Demultiplexing  
+Sequencing results were demultiplexed with bcl2fastq  
+
+
 ## Requirements
 
-### cutadapt v5.0   
-
-```bash
-pip install cutadapt
-```
-
 ### MultiQC v2.35
-
 ```bash
 pip install multiqc
 ```
 
+### cutadapt v5.0   
+```bash
+pip install cutadapt
+```
 
+### fastx_toolkit  
+```bash
+conda install -c bioconda fastx_toolkit
+```
+
+### sga  
+```bash
+conda install -c bioconda sga
+```
