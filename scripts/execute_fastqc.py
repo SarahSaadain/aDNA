@@ -53,6 +53,10 @@ def fastqc_for_quality_filtered_data(species):
     if len(files_list) > 0:
         print_warning(f"Fastqc data already exists for species {species}. Skipping.")
         return
+    
+    if len(quality_filtered_reads) == 0:
+        print_warning(f"No quality filtered reads found for species {species}. Skipping.")
+        return
 
     for filtered_read in quality_filtered_reads:
         execute_fastqc(species, filtered_read, output_folder)
@@ -74,6 +78,10 @@ def fastqc_for_adapter_removed_data(species):
         print_warning(f"fastqc data already exists for species {species}. Skipping.")
         return
     
+    if len(adapter_removed_reads) == 0:
+        print_warning(f"No adapter removed reads found for species {species}. Skipping.")
+        return
+    
     for trimmed_read in adapter_removed_reads:
         execute_fastqc(species, trimmed_read, output_folder)
 
@@ -91,6 +99,10 @@ def fastqc_for_duplicates_removed_data(species):
 
     if len(files_list) > 0:
         print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        return
+    
+    if len(duplicates_removed_reads) == 0:
+        print_warning(f"No duplicate removed reads found for species {species}. Skipping.")
         return
     
     for duplicates_removed_read in duplicates_removed_reads:
