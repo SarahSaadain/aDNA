@@ -1,9 +1,8 @@
 from common_aDNA_scripts import *
 
-import scripts.try_and_error.adapter_remove_aDNA as adapter_remove
 import prepare_species_for_processing as prepare
 import prepare_reads_for_GD as prepare_reads_for_GD
-import scripts.execute_fastqc as execute_fastqc
+import execute_fastqc as execute_fastqc
 import execute_multiqc as execute_multiqc
 import execute_fastp_adapter_remove_and_merge as execute_fastp_adapter_remove_and_merge
 import polish_fastp_quality_filter as polish_fastp_quality_filter
