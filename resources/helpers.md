@@ -19,3 +19,7 @@ grep SUCCESS adapter_remove.log
 ```bash
 grep ERROR adapter_remove.log
 ````
+
+```bash
+nohup python -u scripts/pipeline_aDNA.py > pipeline.log 2>&1 &
+```
