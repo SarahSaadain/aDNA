@@ -7,7 +7,7 @@ from common_aDNA_scripts import *
 R1_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
 R2_ADAPTER_SEQUENCE = "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
 
-FASTP_THREADS = 20
+FASTP_THREADS = 10
 
 def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE, threads:int = FASTP_THREADS):
 
@@ -39,10 +39,15 @@ def remove_adapters(input_file_path_r1, input_file_path_r2, output_file_path_r1,
         "--unpaired2", filepath_merge_failed_not_passed_r2,
         "--merge",
         "--thread", str(threads),               # Number of threads
+
+        # length filtering options
         "--length_required" , "15",             #reads shorter than length_required will be discarded, default is 15. (int [=15])
-        #"--overlap_len_require", "5"            #the minimum length to detect overlapped region of PE reads. This will affect overlap analysis based PE merge, adapter trimming and correction. 30 by default. (int [=30])
+        
         "--trim_poly_x", "5",
-        "--qualified_quality_phred", "5",
+        # quality filtering options
+        "--qualified_quality_phred", "5",       #the quality value that a base is qualified. Default 15 means phred quality >=Q15 is qualified. (int [=15])
+        "--unqualified_percent_limit", "40",    #how many percents of bases are allowed to be unqualified (0~100). Default 40 means 40% (int [=40])"
+        "--n_base_limit", "5",                  #if one read's number of N base is >n_base_limit, then this read/pair is discarded. Default is 5 (int [=5])
         "--merged_out", output_file_path_r1,  # Output file for R1
         "--in1", input_file_path_r1,        # Input R1 file
         "--in2", input_file_path_r2         # Input R2 file
