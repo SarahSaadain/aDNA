@@ -44,7 +44,7 @@ def prepare():
         print_info(f"Found {len(fastq_files_per_pattern)} fastq files for pattern {pattern}")
 
         output_folder = get_folder_path_species_processed_prepared_for_ref_genome(FOLDER_BGER)
-        output_file_path = os.path.join(output_folder,f"{prefix}_{FILE_ENDING_FASTQ_GZ}")
+        output_file_path = os.path.join(output_folder,f"{prefix}{FILE_ENDING_FASTQ_GZ}")
 
         if os.path.exists(output_file_path):
             print_info(f"Output file {output_file_path} already exists. Skipping.")
