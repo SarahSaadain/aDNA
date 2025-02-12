@@ -20,6 +20,10 @@ def generate_fastq_patterns(file_paths):
         # Store the wildcard pattern
         patterns[prefix] = f"{prefix}*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}"
 
+        prefix = f"{filename.split('_')[0]}_{filename.split('_')[1]}"
+
+        patterns[prefix] = f"{prefix}*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}"
+
     return patterns
 
 def prepare():
