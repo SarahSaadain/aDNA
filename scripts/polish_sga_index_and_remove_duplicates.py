@@ -55,6 +55,10 @@ def polish_sga_for_species(species):
         reads_folder = get_folder_path_species_processed_quality_filtered(species)
         list_of_read_files = get_files_in_folder_matching_pattern(reads_folder, f"*{FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ}")
 
+        if len(list_of_read_files) == 0:
+            print_warning(f"No quality filtered reads found for species {species}. Skipping.")
+            return
+
         output_folder = get_folder_path_species_processed_duplicates_removed(species)
 
         for read_file_path in list_of_read_files:
