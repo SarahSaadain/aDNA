@@ -30,6 +30,10 @@ def fastqc_for_raw_data(species):
     if len(files_list) > 0:
         print_warning(f"Fastqc data already exists for species {species}. Skipping.")
         return
+    
+    if len(raw_reads_files) == 0:
+        print_warning(f"No raw reads found for species {species}. Skipping.")
+        return
 
     for raw_read_file in raw_reads_files:
         execute_fastqc(species, raw_read_file, output_folder)
