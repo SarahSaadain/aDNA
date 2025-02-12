@@ -7,6 +7,7 @@ import execute_multiqc as execute_multiqc
 import execute_fastp_adapter_remove_and_merge as execute_fastp_adapter_remove_and_merge
 import polish_fastp_quality_filter as polish_fastp_quality_filter
 import polish_fastp_deduplication as polish_fastp_deduplication
+import prepare_species_for_map_to_ref_genome as prepare_species_for_map_to_ref_genome
 
 def run_pipeline():
     
@@ -29,6 +30,8 @@ def run_pipeline():
     polish_fastp_deduplication.all_species_fastp_deduplication()
     execute_fastqc.all_species_fastqc_duplicates_removed()
     execute_multiqc.all_species_multiqc_duplicates_removed()
+
+    prepare_species_for_map_to_ref_genome.all_species_prepare()
 
 def main():
     run_pipeline()
