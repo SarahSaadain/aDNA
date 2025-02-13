@@ -87,6 +87,9 @@ FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ = "_duplicates_removed.fastq.gz"
 FILE_ENDING_FASTQC_HTML = "_fastqc.html"
 FILE_ENDING_SAM = ".sam"
 FILE_ENDING_BAM = ".bam"
+FILE_ENDING_SORTED_BAM = "_sorted.bam"
+FILE_ENDING_BAI = ".bai"
+FILE_ENDING_SORTED_BAI = "_sorted.bai"
 FILE_ENDING_CSV = ".csv"
 
 

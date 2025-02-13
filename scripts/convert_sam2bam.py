@@ -22,7 +22,7 @@ def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT):
         return
    
     # Sort BAM file
-    sorted_bam = os.path.join(output_dir, f"{bam_file_base_name}_sorted{FILE_ENDING_BAM}")
+    sorted_bam = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_SORTED_BAM}")
     print(f"Sorting {bam_file}...")
     
     try:
@@ -33,13 +33,13 @@ def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT):
         return
     
     # Index the sorted BAM file
-    indexed_bam = os.path.join(output_dir, f"{bam_file_base_name}_sorted.bai")
+    indexed_bam = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_SORTED_BAI}")
 
     print(f"Indexing {sorted_bam}...")
     
     try:
-        comand_index = f"samtools index -@ {threads} -o {indexed_bam} {sorted_bam}" 
-        subprocess.run(comand_index, shell=True, check=True)
+        command_index = f"samtools index -@ {threads} -o {indexed_bam} {sorted_bam}" 
+        subprocess.run(command_index, shell=True, check=True)
     except Exception as e:
         print_error(f"Failed to index {sorted_bam}: {e}")
         return

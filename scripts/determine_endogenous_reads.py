@@ -29,7 +29,7 @@ def determine_endogenous_reads_for_species(species):
     
     mapped_folder = get_folder_path_species_processed_mapped(species)
 
-    bam_files = get_files_in_folder_matching_pattern(mapped_folder, FILE_ENDING_BAM)
+    bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
     if len(bam_files) == 0:
         print_warning(f"No BAM files found for species {species}. Skipping.")
