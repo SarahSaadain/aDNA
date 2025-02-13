@@ -10,6 +10,8 @@ import polish_fastp_deduplication as polish_fastp_deduplication
 import prepare_species_for_map_to_ref_genome as prepare_species_for_map_to_ref_genome
 import map_aDNA_to_refgenome as map_aDNA_to_refgenome
 import convert_sam2bam as convert_sam2bam
+import determine_endogenous_reads as determine_endogenous_reads
+import extract_special_sequences as extract_special_sequences
 
 def run_pipeline():
     
@@ -38,6 +40,10 @@ def run_pipeline():
     map_aDNA_to_refgenome.all_species_map_aDNA_to_refgenome()
 
     convert_sam2bam.all_species_convert_sam_to_bam()
+
+    determine_endogenous_reads.all_species_determine_endogenous_reads()
+
+    extract_special_sequences.all_species_extract_special_sequences()
 
 
 def main():

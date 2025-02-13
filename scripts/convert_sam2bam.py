@@ -5,44 +5,55 @@ import argparse
 from common_aDNA_scripts import *
 
 def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT):
-    base_name = os.path.splitext(os.path.basename(sam_file))[0]
-    
+
     # Convert SAM to BAM
     bam_file_base_name = os.path.splitext(os.path.basename(sam_file))[0]
 
     bam_file = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_BAM}")
-    
-    print(f"Converting {sam_file} to BAM...")
 
-    try:
-        command_sam_to_bam = f"samtools view -@ {threads} -bS {sam_file} -o {bam_file}"
-        subprocess.run(command_sam_to_bam, shell=True, check=True)
-    except Exception as e:
-        print_error(f"Failed to convert {sam_file} to BAM: {e}")
-        return
-   
+    if not os.path.exists(bam_file):
+        print_info(f"Converting {sam_file} to BAM...")
+
+        try:
+            command_sam_to_bam = f"samtools view -@ {threads} -bS {sam_file} -o {bam_file}"
+            subprocess.run(command_sam_to_bam, shell=True, check=True)
+        except Exception as e:
+            print_error(f"Failed to convert {sam_file} to BAM: {e}")
+            return
+    else:
+        print_info(f"Conversion for {sam_file} already exists. Skipping.")
+
     # Sort BAM file
     sorted_bam = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_SORTED_BAM}")
-    print(f"Sorting {bam_file}...")
-    
-    try:
-        command_sort = f"samtools sort -@ {threads} {bam_file} -o {sorted_bam}"
-        subprocess.run(command_sort, shell=True, check=True)
-    except Exception as e:
-        print_error(f"Failed to sort {bam_file}: {e}")
-        return
+
+    if not os.path.exists(sorted_bam):
+        print_info(f"Sorting {bam_file}...")
+        
+        try:
+            command_sort = f"samtools sort -@ {threads} {bam_file} -o {sorted_bam}"
+            subprocess.run(command_sort, shell=True, check=True)
+        except Exception as e:
+            print_error(f"Failed to sort {bam_file}: {e}")
+            return
+    else:
+        print_info(f"Sort for {bam_file} already exists. Skipping.")
     
     # Index the sorted BAM file
     indexed_bam = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_SORTED_BAI}")
 
-    print(f"Indexing {sorted_bam}...")
+    if not os.path.exists(indexed_bam):
+        print_info(f"Indexing {sorted_bam}...")
+        
+        try:
+            command_index = f"samtools index -@ {threads} -o {indexed_bam} {sorted_bam}" 
+            subprocess.run(command_index, shell=True, check=True)
+        except Exception as e:
+            print_error(f"Failed to index {sorted_bam}: {e}")
+            return
+    else:
+        print_info(f"Index for {sorted_bam} already exists. Skipping.")
     
-    try:
-        command_index = f"samtools index -@ {threads} -o {indexed_bam} {sorted_bam}" 
-        subprocess.run(command_index, shell=True, check=True)
-    except Exception as e:
-        print_error(f"Failed to index {sorted_bam}: {e}")
-        return
+    print_success(f"Conversion and indexing of {sam_file} completed successfully.")
 
     # Optional cleanup of intermediate BAM file
     #os.remove(bam_file)

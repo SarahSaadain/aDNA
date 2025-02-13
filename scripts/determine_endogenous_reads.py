@@ -47,6 +47,10 @@ def determine_endogenous_reads_for_species(species):
 
         for bam_file in bam_files:
 
+            bam_filename = os.path.basename(bam_file)
+
+            print_info(f"Determining endogenous reads for {bam_filename}")
+
             proportion = 0.0
             
             mapped_reads = count_mapped_reads(bam_file)
@@ -55,8 +59,8 @@ def determine_endogenous_reads_for_species(species):
             if total_reads != 0:
                 proportion = mapped_reads / total_reads
 
-            print(f"Proportion of endogenous reads for {species}: {proportion:.4f}")
-            result_file.write(f"{bam_file},{mapped_reads},{total_reads},{proportion}\n")
+            print(f"Endogenous reads for {bam_filename}: {mapped_reads}/{total_reads} -> {proportion:.4f}")
+            result_file.write(f"{bam_filename},{mapped_reads},{total_reads},{proportion}\n")
 
 def all_species_determine_endogenous_reads():
 

@@ -10,18 +10,24 @@ import argparse
 from collections import Counter
 from common_aDNA_scripts import *
 
-DEPTH_THRESHOLD = 1000
+DEPTH_THRESHOLD = 2000
+MINIMUM_SEQUENCE_LENGTH = 100
+MAXIMUM_SEQUENCE_LENGTH = 5000
 
-def write_fasta_entry(special_reads_file_content, scaffold, start, end, sequence, depth_values):
+def write_fasta_entry(special_reads_file_content, scaffold, start, end, sequence, depth_values, minimum_sequence_length=MINIMUM_SEQUENCE_LENGTH):
     """Writes a sequence entry to the output FASTA file."""
     if sequence:
+
+        if len(sequence) < minimum_sequence_length:
+            return
+
         avg_depth = round(sum(depth_values) / len(depth_values), 2)
         max_depth = max(depth_values)
         special_reads_file_content.write(f">{scaffold}:{start}-{end};{avg_depth};{max_depth}\n")
         special_reads_file_content.write(f"{sequence}\n")
         print_info(f"Outputted sequence for scaffold {scaffold} from {start} to {end} (Avg Depth: {avg_depth}, Max Depth: {max_depth})")
 
-def execute_extract_special_sequences(bam_file_path:str, output_folder:str, depth_threshold: int = DEPTH_THRESHOLD, threads: int = THREADS_DEFAULT):
+def execute_extract_special_sequences(bam_file_path:str, output_folder:str, depth_threshold: int = DEPTH_THRESHOLD, minimum_sequence_length: int = MINIMUM_SEQUENCE_LENGTH, threads: int = THREADS_DEFAULT):
     
     output_filename = os.path.join(output_folder, os.path.basename(bam_file_path).replace(FILE_ENDING_BAM, f"_special_reads_depth_gt_{DEPTH_THRESHOLD}.fasta"))
     
@@ -49,7 +55,7 @@ def execute_extract_special_sequences(bam_file_path:str, output_folder:str, dept
             # If we are at a new scaffold, or depth is below threshold, output the current sequence (if any)
             if scaffold != current_scaffold or depth < depth_threshold:
                 if current_sequence:
-                    write_fasta_entry(special_reads_file_content, current_scaffold, current_start_position, position - 1, current_sequence, current_depth_values)
+                    write_fasta_entry(special_reads_file_content, current_scaffold, current_start_position, position - 1, current_sequence, current_depth_values, minimum_sequence_length)
                     total_sequences += 1                    
                     current_sequence = ""  # Reset sequence
                     current_start_position = None
@@ -73,24 +79,28 @@ def execute_extract_special_sequences(bam_file_path:str, output_folder:str, dept
 
         # If a sequence is still being built at the end, output it
         if current_sequence:
-            write_fasta_entry(special_reads_file_content, current_scaffold, current_start_position, position - 1, current_sequence, current_depth_values)                
+            write_fasta_entry(special_reads_file_content, current_scaffold, current_start_position, position - 1, current_sequence, current_depth_values, minimum_sequence_length)                
             total_sequences += 1
 
     print_success(f"Total sequences written for {bam_file_path}: {total_sequences}\n")
 
-def write_unmapped_region(txtfile, scaffold, start, end):
+def write_unmapped_region(txtfile, scaffold, start, end, minimum_sequence_length, maximum_sequence_length):
     """Writes an unmapped region entry to the output FASTA file."""
     if start is not None:
-        txtfile.write(f">{scaffold}:{start}-{end}\nN\n")
+        
+        if end - start + 1 < minimum_sequence_length or end - start + 1 > maximum_sequence_length:
+            return
+
+        txtfile.write(f"{scaffold}:{start}-{end}\n")
         print_info(f"Unmapped region found in {scaffold}: {start}-{end}")
 
-def execute_extract_unmapped_regions(bam_file_path, output_folder):
+def execute_extract_unmapped_regions(bam_file_path, output_folder, minimum_sequence_length: int = MINIMUM_SEQUENCE_LENGTH, maximum_sequence_length: int = MAXIMUM_SEQUENCE_LENGTH, threads: int = THREADS_DEFAULT):
     """Extracts regions of the reference genome with no coverage (depth = 0) from a BAM file."""
-    output_filename = os.path.join(output_folder, os.path.basename(bam_file_path).replace(".bam", "_unmapped_regions.fasta"))
+    output_filename = os.path.join(output_folder, os.path.basename(bam_file_path).replace(FILE_ENDING_BAM, "_unmapped_regions.txt"))
     
     print_info(f"Extracting unmapped regions from {bam_file_path}. Output: {output_filename}")
 
-    with pysam.AlignmentFile(bam_file_path, 'rb') as bamfile, open(output_filename, 'w') as txtfile:
+    with pysam.AlignmentFile(bam_file_path, 'rb', threads=threads) as bamfile, open(output_filename, 'w') as txtfile:
         total_regions = 0
         
         # Iterate over all reference scaffolds
@@ -107,13 +117,13 @@ def execute_extract_unmapped_regions(bam_file_path, output_folder):
                 else:
                     if uncovered_start is not None:
                         # End of an uncovered region found
-                        write_unmapped_region(txtfile, scaffold, uncovered_start, position - 1)
+                        write_unmapped_region(txtfile, scaffold, uncovered_start, position - 1, minimum_sequence_length, maximum_sequence_length)
                         total_regions += 1
                         uncovered_start = None
 
             # If the scaffold ends with an uncovered region, write it out
-            write_unmapped_region(txtfile, scaffold, uncovered_start, scaffold_length)
-            if uncovered_start:
+            if uncovered_start is not None:
+                write_unmapped_region(txtfile, scaffold, uncovered_start, scaffold_length, minimum_sequence_length, maximum_sequence_length)
                 total_regions += 1
 
     print_info(f"Total unmapped regions written for {bam_file_path}: {total_regions}\n")
@@ -129,7 +139,7 @@ def extract_special_sequences_for_species(species, depth_threshold: int = DEPTH_
 
     for bam_file in bam_files:
         execute_extract_special_sequences(bam_file, target_folder, depth_threshold)
-        execute_extract_unmapped_regions(bam_file, target_folder)
+        execute_extract_unmapped_regions(bam_file, target_folder, 1000, 10000)
     
     print_info(f"Finished extracting special sequences for species {species}")
 
