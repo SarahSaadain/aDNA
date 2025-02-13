@@ -51,6 +51,7 @@ FOLDER_DEPTH = "depth"
 FOLDER_BREADTH = "breadth"
 FOLDER_MITOCHONDRIA= "mitochondria"
 FOLDER_SPECIAL_SEQUENCES = "special_sequences"
+FOLDER_ENDOGENOUS_READS = "endogenous_reads"
 
 # main folders
 FOLDER_SCRIPTS = "scripts"
@@ -86,6 +87,7 @@ FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ = "_duplicates_removed.fastq.gz"
 FILE_ENDING_FASTQC_HTML = "_fastqc.html"
 FILE_ENDING_SAM = ".sam"
 FILE_ENDING_BAM = ".bam"
+FILE_ENDING_CSV = ".csv"
 
 
 #####################
@@ -366,6 +368,11 @@ def get_folder_path_species_results_mitochondria(species):
 def get_folder_path_species_results_special_sequences(species):
     path = os.path.join(get_folder_path_species_results(species), FOLDER_SPECIAL_SEQUENCES)
     check_folder_exists_or_create(path) 
+    return path
+
+def get_folder_path_species_results_endogenous_reads(species):
+    path = os.path.join(get_folder_path_species_results(species), FOLDER_ENDOGENOUS_READS)
+    check_folder_exists_or_create(path)
     return path
 
 #####################
