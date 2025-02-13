@@ -50,6 +50,7 @@ FOLDER_MULTIQC = "multiqc"
 FOLDER_DEPTH = "depth"
 FOLDER_BREADTH = "breadth"
 FOLDER_MITOCHONDRIA= "mitochondria"
+FOLDER_SPECIAL_SEQUENCES = "special_sequences"
 
 # main folders
 FOLDER_SCRIPTS = "scripts"
@@ -360,6 +361,11 @@ def get_folder_path_species_results_qc_breadth(species):
 def get_folder_path_species_results_mitochondria(species):
     path = os.path.join(get_folder_path_species_results(species), FOLDER_MITOCHONDRIA)
     check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_special_sequences(species):
+    path = os.path.join(get_folder_path_species_results(species), FOLDER_SPECIAL_SEQUENCES)
+    check_folder_exists_or_create(path) 
     return path
 
 #####################
