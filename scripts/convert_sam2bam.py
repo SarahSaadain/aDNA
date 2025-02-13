@@ -51,7 +51,7 @@ def convert_ref_genome_mapped_sam_to_bam_for_species(species):
     print_info(f"Converting ref genome mapped sam to bam for species {species}")
 
     mapped_folder = get_folder_path_species_processed_mapped(species)
-    sam_files = get_files_in_folder_matching_pattern(mapped_folder, FILE_ENDING_SAM)
+    sam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SAM}")
 
     if len(sam_files) == 0:
         print_warning(f"No SAM ref genome files found for species {species}. Skipping.")
