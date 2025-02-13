@@ -10,7 +10,7 @@ import argparse
 from collections import Counter
 from common_aDNA_scripts import *
 
-DEPTH_THRESHOLD = 2000
+DEPTH_THRESHOLD = 1000
 MINIMUM_SEQUENCE_LENGTH = 100
 MAXIMUM_SEQUENCE_LENGTH = 5000
 
