@@ -11,7 +11,7 @@ def prepare():
     print_info("Preparing Bger for ref genome mapping")
 
     # find all raw fastq files
-    duplicates_removed_folder = get_folder_path_species_processed_duplicates_removed(FOLDER_MUSMUSCULUS)
+    duplicates_removed_folder = get_folder_path_species_processed_duplicates_removed(FOLDER_MMUS)
     fastq_files = get_files_in_folder_matching_pattern(duplicates_removed_folder, f"*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}")
 
     # if no files are found, exit
@@ -21,7 +21,7 @@ def prepare():
     
     print_info(f"Found {len(fastq_files_per_pattern)} fastq files")
 
-    output_folder = get_folder_path_species_processed_prepared_for_ref_genome(FOLDER_MUSMUSCULUS)
+    output_folder = get_folder_path_species_processed_prepared_for_ref_genome(FOLDER_MMUS)
     output_file_path = os.path.join(output_folder, f"Mmus_combined{FILE_ENDING_FASTQ_GZ}")
 
     if os.path.exists(output_file_path):
