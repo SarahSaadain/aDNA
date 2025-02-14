@@ -1,6 +1,6 @@
 # aDNA
 
-This project contains a pipeline to analyze ancient DNA (aDNA) data. The pipeline includes various scripts to process, analyze, and generate reports on aDNA sequences.
+This project contains a pipeline to analyze raw ancient data, obtained from the sequencing facility. The pipeline includes various scripts to process, analyze, and generate reports on the sequence quality, which helps decide if an aDNA extraction and sequencing was successfull, and further polishes the data for downstream analyses.
 
 ## Project Structure
 
