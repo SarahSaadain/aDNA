@@ -10,22 +10,27 @@ Sequencing results were demultiplexed with bcl2fastq
 
 ## Requirements
 
+### FastQC
+```bash
+conda install -c bioconda fastqc 
+```
+
 ### MultiQC v2.35
 ```bash
-pip install multiqc
+conda install -c bioconda multiqc
 ```
 
-### cutadapt v5.0   
+### fastq  
 ```bash
-pip install cutadapt
+conda install bioconda::fastp
 ```
 
-### fastx_toolkit  
+### bwa-mem2
 ```bash
-conda install -c bioconda fastx_toolkit
+conda install bioconda::bwa-mem2
 ```
 
-### sga  
+### samtools
 ```bash
-conda install -c bioconda sga
+conda install bioconda::samtools
 ```
