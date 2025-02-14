@@ -19,7 +19,7 @@ def prepare():
         print_error("No duplicate removed fastq files found. Exiting.")
         return
     
-    print_info(f"Found {len(fastq_files_per_pattern)} fastq files")
+    print_info(f"Found {len(fastq_files)} fastq files")
 
     output_folder = get_folder_path_species_processed_prepared_for_ref_genome(FOLDER_DMEL)
     output_file_path = os.path.join(output_folder,f"Dmel_combined{FILE_ENDING_FASTQ_GZ}")
