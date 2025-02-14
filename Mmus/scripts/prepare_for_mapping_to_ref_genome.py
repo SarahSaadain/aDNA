@@ -28,7 +28,7 @@ def prepare():
         print_info(f"Output file {output_file_path} already exists. Skipping.")
         return
 
-    input_pattern_path = os.path.join(duplicates_removed_folder, f"Mmus_*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}")
+    input_pattern_path = os.path.join(duplicates_removed_folder, f"*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}")
 
     # call cat via subprocess
     try:
