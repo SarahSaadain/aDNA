@@ -7,8 +7,8 @@ import glob
 #####################
 # Constants
 #####################
-#PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
-PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
+PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
+#PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
 
 # config
 THREADS_DEFAULT = 10

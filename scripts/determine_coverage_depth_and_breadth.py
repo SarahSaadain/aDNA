@@ -55,7 +55,7 @@ def determine_coverage_depth_and_breath(species):
         return
     
     for coverage_file in list_of_coverage_files:
-        coverage_file_base_name = os.path.splitext(os.path.basename(coverage_file))
+        coverage_file_base_name = os.path.basename(coverage_file)
 
         analysis_file = coverage_file_base_name.replace("_samtools_depth.tsv", "_analysis.tsv")
         analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)

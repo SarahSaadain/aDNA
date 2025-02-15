@@ -42,3 +42,8 @@ conda install bioconda::samtools
 ```bash
 pip install pysam
 ```
+
+### pandas
+```bash
+pip install pandas
+```
