@@ -33,17 +33,28 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         # /mnt/data2/sarah/aDNA/Mmus/raw/reads/326862_S37_R1_001.fastq.gz  FASTQ   DNA   7,729,611  1,159,441,650      150      150      150
 
         # Read output into pandas DataFrame so that we can get the data we need
+
         output = result.stdout
 
-        # Convert output to a DataFrame
-        df = pd.read_csv(io.StringIO(output), sep="\t", skiprows=1)
+        # Print raw output to debug the format
 
-        # Rename columns
-        df.columns = ["file", "format", "type", "num_seqs", "sum_len", "min_len", "avg_len", "max_len"]
+        # Define the regular expression pattern to capture columns
+        pattern = r"([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([0-9,]+)\s+([0-9,]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)"
 
-        # Convert numeric columns
-        df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]] = df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]].apply(pd.to_numeric)
+        # Use regex to extract all lines matching the pattern
+        matches = re.findall(pattern, output)
 
+        # If no matches were found, raise an error
+        if not matches:
+            raise ValueError("No valid output found to parse.")
+
+        # Convert matches to a DataFrame
+        df = pd.DataFrame(matches, columns=["file", "format", "type", "num_seqs", "sum_len", "min_len", "avg_len", "max_len"])
+
+        # Convert numeric columns to correct types
+        df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]] = df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]].apply(lambda x: x.str.replace(',', '').astype(int))
+
+        # Extract number of sequences from the DataFrame
         sequences_count = df["num_seqs"].iloc[0]
 
         print_success(f"Seqkit stats complete for {input_file}: {sequences_count} reads")
@@ -51,6 +62,7 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         return sequences_count
     except Exception as e:
         print_error(f"Failed to process seqkit stats output: {e}")
+        return -1
 
     return -1
     
