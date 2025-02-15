@@ -24,6 +24,7 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
     
     except Exception as e:
         print_error(f"Failed to execute seqkit stats: {e}")
+        return -1
 
     try:
 
@@ -63,8 +64,6 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
     except Exception as e:
         print_error(f"Failed to process seqkit stats output: {e}")
         return -1
-
-    return -1
     
 
 def determine_reads_processing_result(species):
