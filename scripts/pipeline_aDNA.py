@@ -19,9 +19,6 @@ def run_pipeline():
     execute_fastqc.all_species_fastqc_raw()
     execute_multiqc.all_species_multiqc_raw()
 
-    #prepare_reads_for_GD.all_species_prepare_reads_for_GD()
-    prepare_reads_for_GD.species_prepare_reads_for_GD(FOLDER_BGER)
-
     #adapter_remove.all_species_adapter_remove()
     execute_fastp_adapter_remove_and_merge.all_species_fastp_adapter_remove_and_merge()
     execute_fastqc.all_species_fastqc_adapter_removed()
@@ -36,6 +33,9 @@ def run_pipeline():
     execute_multiqc.all_species_multiqc_duplicates_removed()
 
     prepare_species_for_map_to_ref_genome.all_species_prepare()
+
+    #prepare_reads_for_GD.all_species_prepare_reads_for_GD()
+    prepare_reads_for_GD.species_prepare_reads_for_GD(FOLDER_BGER)
 
     map_aDNA_to_refgenome.all_species_map_aDNA_to_refgenome()
 
