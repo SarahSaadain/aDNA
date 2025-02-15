@@ -1,3 +1,4 @@
+import io
 import os
 import subprocess
 import pandas as pd
@@ -20,10 +21,25 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         command = f"seqkit stats --threads {thread} {input_file}"
         result = subprocess.run( command, stdout=subprocess.PIPE, shell=True, check=True)
         print_success(f"Seqkit stats complete for {input_file}: {result.stdout} reads")
+
+        # Read output into pandas DataFrame
+        output = result.stdout
+
+        # Convert output to a DataFrame
+        df = pd.read_csv(io.StringIO(output), sep="\t", skiprows=1)
+
+        # Rename columns
+        df.columns = ["file", "format", "type", "num_seqs", "sum_len", "min_len", "avg_len", "max_len"]
+
+        # Convert numeric columns
+        df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]] = df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]].apply(pd.to_numeric)
+
+        return df["num_seqs"].iloc[0]
     except Exception as e:
         print_error(f"Failed to execute seqkit stats: {e}")
 
-    return result.stdout
+    return -1
+    
 
 def determine_reads_processing_result(species):
 
