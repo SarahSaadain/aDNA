@@ -19,7 +19,7 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
     try:
         command = f"seqkit stats --threads {thread} {input_file}"
         result = subprocess.run( command, stdout=subprocess.PIPE, shell=True, check=True)
-        print_success(f"Seqkit stats complete for {input_file}")
+        print_success(f"Seqkit stats complete for {input_file}: {result.stdout} reads")
     except Exception as e:
         print_error(f"Failed to execute seqkit stats: {e}")
 
@@ -59,15 +59,16 @@ def determine_reads_processing_result(species):
         protocol = reads_id.split("_")[1]
 
         #write to a df
-        output_df = output_df.append({
-            "reads_file": reads_id,
-            "individual": individual,
-            "protocol": protocol,
-            "raw_count": raw_count,
-            "adapter_removed_count": adapter_removed_count,
-            "quality_filtered_count": quality_filtered_count,
-            "duplicates_removed_count": duplicates_removed_count
-        }, ignore_index=True)
+        new_row = pd.DataFrame({
+            "reads_file": [reads_id],
+            "individual": [individual],
+            "protocol": [protocol],
+            "raw_count": [raw_count],
+            "adapter_removed_count": [adapter_removed_count],
+            "quality_filtered_count": [quality_filtered_count],
+            "duplicates_removed_count": [duplicates_removed_count]
+        })
+        output_df = pd.concat([output_df, new_row], ignore_index=True)
 
     output_df.to_csv(get_folder_path_species_results_qc_reads_processing(species), sep="\t", index=False)
 
