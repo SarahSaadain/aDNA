@@ -21,7 +21,12 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         command = f"seqkit stats --threads {thread} {input_file}"
         result = subprocess.run( command, stdout=subprocess.PIPE, shell=True, check=True)
 
-        # Read output into pandas DataFrame
+        # the result looks like this:
+        # seqkit stats -j 10 /mnt/data2/sarah/aDNA/Mmus/raw/reads/326862_S37_R1_001.fastq.gz
+        # file                                                             format  type   num_seqs        sum_len  min_len  avg_len  max_len
+        # /mnt/data2/sarah/aDNA/Mmus/raw/reads/326862_S37_R1_001.fastq.gz  FASTQ   DNA   7,729,611  1,159,441,650      150      150      150
+
+        # Read output into pandas DataFrame so that we can get the data we need
         output = result.stdout
 
         # Convert output to a DataFrame
