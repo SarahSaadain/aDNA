@@ -33,9 +33,11 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         # Convert numeric columns
         df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]] = df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]].apply(pd.to_numeric)
 
-        print_success(f"Seqkit stats complete for {input_file}: {df["num_seqs"].iloc[0]} reads")
+        sequences_count = df["num_seqs"].iloc[0]
 
-        return df["num_seqs"].iloc[0]
+        print_success(f"Seqkit stats complete for {input_file}: {sequences_count} reads")
+
+        return sequences_count
     except Exception as e:
         print_error(f"Failed to execute seqkit stats: {e}")
 
