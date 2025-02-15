@@ -82,20 +82,17 @@ def adapter_remove_and_merge_for_species(species):
             return
 
         for read_file_path in list_of_read_files:
-            
-            filename_merged = rename_read_file_to_adapter_trimmed(os.path.basename(read_file_path[0]))
 
-            adapter_removed_read_file = os.path.join(get_folder_path_species_processed_adapter_removed(species), filename_merged)
-            
+            adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, read_file_path)
+          
             remove_adapters_and_merge(read_file_path[0], read_file_path[1], adapter_removed_read_file)
         
     except Exception as e:
         print_error(e)
 
-def rename_read_file_to_adapter_trimmed(read_file_path):
-    filename_new = os.path.basename(read_file_path).replace("_R1_","_").replace("_R2_","_").replace(FILE_ENDING_FASTQ_GZ, FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ )
-    return filename_new
-
+def get_adapter_removed_path_for_paired_raw_reads(species, paired_read_file_path_list):
+    filename_new = os.path.basename(paired_read_file_path_list[0]).replace("_R1_","_").replace("_R2_","_").replace(FILE_ENDING_FASTQ_GZ, FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ )
+    return os.path.join(get_folder_path_species_processed_adapter_removed(species), filename_new)
 
 def main():
 

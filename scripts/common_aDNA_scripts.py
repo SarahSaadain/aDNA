@@ -44,13 +44,13 @@ FOLDER_GENOMEDELTA = "genome_delta"
 # if there is no follow up step, it is considered a result
 FOLDER_RESULTS = "results"
 FOLDER_QUALITYCONTROL = "qualitycontrol"
-FOlDER_POLY_NT = "poly_nt"
 FOLDER_FASTQC = "fastqc"
 FOLDER_MULTIQC = "multiqc"
 FOLDER_DEPTH_BREADTH = "depth_breadth"
 FOLDER_MITOCHONDRIA= "mitochondria"
 FOLDER_SPECIAL_SEQUENCES = "special_sequences"
 FOLDER_ENDOGENOUS_READS = "endogenous_reads"
+FOLDER_PROCESSED_READS = "processed_reads"
 
 # main folders
 FOLDER_SCRIPTS = "scripts"
@@ -264,11 +264,6 @@ def get_folder_path_species_results_qc(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_poly_nt(species):
-    path = os.path.join(get_folder_path_species_results_qc(species), FOlDER_POLY_NT)
-    check_folder_exists_or_create(path)
-    return path
-
 def get_folder_path_species_results_qc_fastqc(species):
     path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_FASTQC)
     check_folder_exists_or_create(path)
@@ -339,23 +334,16 @@ def get_folder_path_species_results_endogenous_reads(species):
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_results_qc_reads_processing(species):
+    path = os.path.join(get_folder_path_species_results(species), FOLDER_PROCESSED_READS)
+    check_folder_exists_or_create(path)
+    return path
+
+
 #####################
 # File paths
 #####################
 
-# def get_reference_genome_path_by_name(species, ref_genome_name):
-
-#     raw_species_ref_genome_directory = get_folder_path_species_raw_ref_genome(species)
-
-#     # look for ref genome file in directory of species
-#     for ref_genome_file_name in os.listdir(raw_species_ref_genome_directory):
-
-#         # check if file matches, if yes return, otherwise continue
-#         if ref_genome_file_name.startswith(ref_genome_name):
-#             return os.path.join(raw_species_ref_genome_directory, ref_genome_file_name)
-
-#     #if we reach this point, we did not find a ref genome -> Error
-#     raise RuntimeError(f"No reference genome found with name {ref_genome_name} for species {species}")
 
 def get_raw_reads_list_of_species(species):
      

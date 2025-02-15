@@ -48,9 +48,12 @@ def fastp_deduplication_for_species(species):
     reads_files_list = get_files_in_folder_matching_pattern(reads_folder, f"*{FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ}")
     
     for read_file_path in reads_files_list:
-        output_file = os.path.basename(read_file_path).replace(FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ, FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ)
-        output_file_path = os.path.join(output_folder, output_file)
+        output_file_path = get_deduplication_path_for_quality_filtered_reads(species, read_file_path)
         execute_fastp_deduplication(read_file_path, output_file_path)
+
+def get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file_path):
+    output_file = os.path.basename(quality_filtered_file_path).replace(FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ, FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ)
+    return os.path.join(get_folder_path_species_processed_duplicates_removed(species), output_file)
 
 def all_species_fastp_deduplication():
     print_info("Running fastp deduplication for all species")
