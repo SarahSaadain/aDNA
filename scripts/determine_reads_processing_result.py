@@ -20,7 +20,6 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
     try:
         command = f"seqkit stats --threads {thread} {input_file}"
         result = subprocess.run( command, stdout=subprocess.PIPE, shell=True, check=True)
-        print_success(f"Seqkit stats complete for {input_file}: {result.stdout} reads")
 
         # Read output into pandas DataFrame
         output = result.stdout
@@ -33,6 +32,8 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
 
         # Convert numeric columns
         df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]] = df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]].apply(pd.to_numeric)
+
+        print_success(f"Seqkit stats complete for {input_file}: {df["num_seqs"].iloc[0]} reads")
 
         return df["num_seqs"].iloc[0]
     except Exception as e:
