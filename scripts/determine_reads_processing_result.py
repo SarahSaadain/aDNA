@@ -21,6 +21,11 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         command = ["seqkit", "stats", "--threads", str(thread), input_file]
 
         result = subprocess.run( command, capture_output=True, text=True, check=True)
+    
+    except Exception as e:
+        print_error(f"Failed to execute seqkit stats: {e}")
+
+    try:
 
         # the result looks like this:
         # seqkit stats -j 10 /mnt/data2/sarah/aDNA/Mmus/raw/reads/326862_S37_R1_001.fastq.gz
@@ -45,7 +50,7 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
 
         return sequences_count
     except Exception as e:
-        print_error(f"Failed to execute seqkit stats: {e}")
+        print_error(f"Failed to process seqkit stats output: {e}")
 
     return -1
     
