@@ -18,7 +18,8 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         raise Exception(f"Input file {input_file} does not exist!")
 
     try:
-        command = f"seqkit stats --threads {thread} {input_file}"
+        command = ["seqkit", "stats", "--threads", str(thread), input_file]
+
         result = subprocess.run( command, capture_output=True, text=True, check=True)
 
         # the result looks like this:
@@ -102,11 +103,11 @@ def determine_reads_processing_result(species):
 
 
 def all_species_determine_determine_reads_processing_result():
-    print_info("Determine coverage depth and breadth for all species")
+    print_info("Determine reads processing result for all species")
     for species in FOLDER_SPECIES: 
         determine_reads_processing_result(species)
 
-    print_info("Finished determining coverage depth and breadth for all species")
+    print_info("Finished determining reads processing result for all species")
 
 def main():
     all_species_determine_determine_reads_processing_result()
