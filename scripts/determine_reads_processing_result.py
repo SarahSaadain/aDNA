@@ -60,6 +60,12 @@ def determine_reads_processing_result(species):
         print_warning(f"No raw reads found for species {species}. Skipping.")
         return
     
+    output_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species), f"{species}_reads_processing_result{FILE_ENDING_TSV}")
+
+    if os.path.exists(output_file_path):
+        print_info(f"Result file already exists for species {species}. Skipping.")
+        return
+    
     # create output dataframe
     output_df = pd.DataFrame(columns=["reads_file", "individual", "protocol", "raw_count", "adapter_removed_count", "quality_filtered_count", "duplicates_removed_count"])
 
@@ -95,8 +101,7 @@ def determine_reads_processing_result(species):
         })
         output_df = pd.concat([output_df, new_row], ignore_index=True)
 
-    output_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species), f"{species}_reads_processing_result{FILE_ENDING_TSV}")
-
+    
     output_df.to_csv(output_file_path, sep="\t", index=False)
 
     print_info(f"Finished determining reads processing result for {species}")
