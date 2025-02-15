@@ -31,7 +31,7 @@ def multiqc_for_raw_data(species):
     files_list = get_files_in_folder_matching_pattern(output_folder, "*.html")
 
     if len(files_list) > 0:
-        print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        print_info(f"Multiqc for raw already exists for species {species}. Skipping.")
         return
 
     run_multiqc(species, raw_fastqc_folder, output_folder)
@@ -54,7 +54,7 @@ def multiqc_for_quality_filtered_data(species):
     files_list_multiqc_check = get_files_in_folder_matching_pattern(output_folder, "*.html")
 
     if len(files_list_multiqc_check) > 0:
-        print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        print_info(f"Multiqc for quality filtered already exists for species {species}. Skipping.")
         return
 
     run_multiqc(species, quality_filtered_fastqc_folder, output_folder)
@@ -77,7 +77,7 @@ def multiqc_for_duplicates_removed_data(species):
     files_list = get_files_in_folder_matching_pattern(output_folder, "*.html")
 
     if len(files_list) > 0:
-        print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        print_info(f"Multiqc for duplicates already exists for species {species}. Skipping.")
         return
 
     run_multiqc(species, duplicates_removed_fastqc_folder, output_folder)
@@ -101,7 +101,7 @@ def multiqc_for_adapter_removed_data(species):
     files_list = get_files_in_folder_matching_pattern(output_folder, "*.html")
 
     if len(files_list) > 0:
-        print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        print_info(f"Multiqc for adapter removed already exists for species {species}. Skipping.")
         return
 
     run_multiqc(species, trimmed_fastqc_folder, output_folder)

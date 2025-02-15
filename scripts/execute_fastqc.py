@@ -28,7 +28,7 @@ def fastqc_for_raw_data(species):
     files_list = get_files_in_folder_matching_pattern(output_folder, f"*{FILE_ENDING_FASTQC_HTML}")
 
     if len(files_list) > 0:
-        print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        print_info(f"Fastqc for raw already exists for species {species}. Skipping.")
         return
     
     if len(raw_reads_files) == 0:
@@ -51,7 +51,7 @@ def fastqc_for_quality_filtered_data(species):
     files_list = get_files_in_folder_matching_pattern(output_folder, f"*{FILE_ENDING_FASTQC_HTML}")
 
     if len(files_list) > 0:
-        print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        print_info(f"Fastqc for quality filtered already exists for species {species}. Skipping.")
         return
     
     if len(quality_filtered_reads) == 0:
@@ -64,7 +64,7 @@ def fastqc_for_quality_filtered_data(species):
     print_success(f"fastqc for species {species} quality filtered data complete")
 
 def fastqc_for_adapter_removed_data(species):
-    print_info(f"Running fastqc for species {species} trimmed data")
+    print_info(f"Running fastqc for species {species} adapter removed data")
 
     #adapter removed data
     trimmed_reads_folder = get_folder_path_species_processed_adapter_removed(species)
@@ -75,7 +75,7 @@ def fastqc_for_adapter_removed_data(species):
     files_list = get_files_in_folder_matching_pattern(output_folder, f"*{FILE_ENDING_FASTQC_HTML}")
 
     if len(files_list) > 0:
-        print_warning(f"fastqc data already exists for species {species}. Skipping.")
+        print_info(f"fastqc for adapter removed already exists for species {species}. Skipping.")
         return
     
     if len(adapter_removed_reads) == 0:
@@ -85,7 +85,7 @@ def fastqc_for_adapter_removed_data(species):
     for trimmed_read in adapter_removed_reads:
         execute_fastqc(species, trimmed_read, output_folder)
 
-    print_success(f"fastqc for species {species} trimmed data complete")
+    print_success(f"fastqc for species {species} adapter removed data complete")
 
 def fastqc_for_duplicates_removed_data(species):
     print_info(f"Running fastqc for species {species} duplicates removed data")
@@ -98,7 +98,7 @@ def fastqc_for_duplicates_removed_data(species):
     files_list = get_files_in_folder_matching_pattern(output_folder, f"*{FILE_ENDING_FASTQC_HTML}")
 
     if len(files_list) > 0:
-        print_warning(f"Fastqc data already exists for species {species}. Skipping.")
+        print_info(f"Fastqc for duplicates removed already exists for species {species}. Skipping.")
         return
     
     if len(duplicates_removed_reads) == 0:
