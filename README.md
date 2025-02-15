@@ -37,3 +37,8 @@ conda install bioconda::bwa-mem2
 ```bash
 conda install bioconda::samtools
 ```
+
+### pysam
+```bash
+pip install pysam
+```

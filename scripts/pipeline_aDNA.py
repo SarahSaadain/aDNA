@@ -12,6 +12,7 @@ import map_aDNA_to_refgenome as map_aDNA_to_refgenome
 import convert_sam2bam as convert_sam2bam
 import determine_endogenous_reads as determine_endogenous_reads
 import extract_special_sequences as extract_special_sequences
+import determine_coverage_depth_and_breadth as determine_coverage_depth_and_breadth
 
 def run_pipeline():
     
@@ -42,6 +43,8 @@ def run_pipeline():
     convert_sam2bam.all_species_convert_sam_to_bam()
 
     determine_endogenous_reads.all_species_determine_endogenous_reads()
+
+    determine_coverage_depth_and_breadth.all_species_determine_coverage_depth_and_breath()
 
     extract_special_sequences.all_species_extract_special_sequences()
 
