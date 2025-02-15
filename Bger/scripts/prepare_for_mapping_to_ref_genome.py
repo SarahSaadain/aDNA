@@ -21,9 +21,9 @@ def generate_fastq_patterns(file_paths):
         patterns[prefix] = f"{prefix}*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}"
 
         # Extract the prefix (C1_##, C2_##, C3_##...) and remove the last charater with [:-1] so it is C1_S ...
-        prefix = f"{filename.split('_')[0]}_{filename.split('_')[1][:-1]}"
+        #prefix = f"{filename.split('_')[0]}_{filename.split('_')[1][:-1]}"
 
-        patterns[prefix] = f"{prefix}*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}"
+        #patterns[prefix] = f"{prefix}*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}"
 
     return patterns
 
