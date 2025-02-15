@@ -90,6 +90,7 @@ FILE_ENDING_SORTED_BAM = "_sorted.bam"
 FILE_ENDING_BAI = ".bai"
 FILE_ENDING_SORTED_BAI = "_sorted.bai"
 FILE_ENDING_CSV = ".csv"
+FILE_ENDING_TSV = ".tsv"
 
 
 #####################

@@ -19,7 +19,7 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
 
     try:
         command = f"seqkit stats --threads {thread} {input_file}"
-        result = subprocess.run( command, stdout=subprocess.PIPE, shell=True, check=True)
+        result = subprocess.run( command, capture_output=True, text=True, check=True)
 
         # the result looks like this:
         # seqkit stats -j 10 /mnt/data2/sarah/aDNA/Mmus/raw/reads/326862_S37_R1_001.fastq.gz
@@ -94,7 +94,9 @@ def determine_reads_processing_result(species):
         })
         output_df = pd.concat([output_df, new_row], ignore_index=True)
 
-    output_df.to_csv(get_folder_path_species_results_qc_reads_processing(species), sep="\t", index=False)
+    output_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species), f"{species}_reads_processing_result{FILE_ENDING_TSV}")
+
+    output_df.to_csv(output_file_path, sep="\t", index=False)
 
     print_info(f"Finished determining reads processing result for {species}")
 
