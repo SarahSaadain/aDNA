@@ -50,7 +50,7 @@ def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT):
         print_info(f"Indexing {sorted_bam}...")
         
         try:
-            command_index = f"samtools index -@ {threads} -o {indexed_bam} {sorted_bam}" 
+            command_index = f"samtools index -@ {threads} {sorted_bam} {indexed_bam}" 
             subprocess.run(command_index, shell=True, check=True)
             print_success(f"Indexing of {sorted_bam} completed successfully.")
         except Exception as e:

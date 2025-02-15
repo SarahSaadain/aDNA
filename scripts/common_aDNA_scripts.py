@@ -7,8 +7,8 @@ import glob
 #####################
 # Constants
 #####################
-PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
-#PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
+#PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
+PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
 
 # config
 THREADS_DEFAULT = 10
@@ -47,8 +47,7 @@ FOLDER_QUALITYCONTROL = "qualitycontrol"
 FOlDER_POLY_NT = "poly_nt"
 FOLDER_FASTQC = "fastqc"
 FOLDER_MULTIQC = "multiqc"
-FOLDER_DEPTH = "depth"
-FOLDER_BREADTH = "breadth"
+FOLDER_DEPTH_BREADTH = "depth_breadth"
 FOLDER_MITOCHONDRIA= "mitochondria"
 FOLDER_SPECIAL_SEQUENCES = "special_sequences"
 FOLDER_ENDOGENOUS_READS = "endogenous_reads"
@@ -122,39 +121,6 @@ def is_sam_file_sorted(sam_file: str) -> bool:
         print(f"Error reading header: {e}")
         # Return False in case of an error
         return False
-
-def convert_sam_to_bam(sam_file, bam_file, threads=20):
-
-    print_info(f"Converting SAM to BAM: {sam_file} -> {bam_file}")
-
-    try:
-
-        if is_sam_file_sorted(sam_file):
-            print(f"{sam_file} is already sorted. Skipping sorting step.")
-            # Convert directly to BAM if needed
-            subprocess.run(
-                [PROGRAM_PATH_SAMTOOLS, 'view', '-bS', sam_file, '-o', bam_file],
-                check=True
-            )
-        else:
-            # Convert and sort SAM to BAM in one step
-            subprocess.run(
-                [PROGRAM_PATH_SAMTOOLS, 'sort', '-@', str(threads), '-o', bam_file, sam_file],
-                check=True
-            )
-            print("SAM to BAM conversion and sorting completed.")
-
-        # Index the BAM file using samtools index with multiple threads
-        subprocess.run(
-            [PROGRAM_PATH_SAMTOOLS, 'index', '-@', str(threads), bam_file], 
-            check=True, 
-            stderr=sys.stderr
-        )
-        
-        print(f"Conversion and indexing of {sam_file} completed successfully with {threads} threads.")
-
-    except subprocess.CalledProcessError as e:
-        print(f"Error occurred: {e}", file=sys.stderr)
 
 def is_fasta_file(file_name):
     return file_name.endswith("fna") or file_name.endswith("fa") or file_name.endswith("fasta")
@@ -353,13 +319,8 @@ def get_folder_path_species_results_qc_multiqc_duplicates_removed(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_depth(species):
-    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_DEPTH)
-    check_folder_exists_or_create(path)
-    return path
-
-def get_folder_path_species_results_qc_breadth(species):
-    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_BREADTH)
+def get_folder_path_species_results_qc_depth_breath(species):
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_DEPTH_BREADTH)
     check_folder_exists_or_create(path)
     return path
 
