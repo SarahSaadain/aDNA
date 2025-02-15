@@ -54,7 +54,7 @@ def combine_fastq_files(file_list: list, output_file_path: str):
         # Example:
         # gunzip -c file1 file2 file3 > output_file
 
-        command = f"gunzip -c {file_string} > {output_file_path}"
+        command = f"cat {file_string} > {output_file_path}"
         subprocess.run(command, shell=True, check=True)
         print_success(f"Files combined into {output_file_path}")
     except subprocess.CalledProcessError as e:
@@ -91,7 +91,8 @@ def species_prepare_reads_for_GD(species):
     print_info(f"Preparing reads for species {species}")
 
     # Get the list of read files for this species
-    list_of_read_files = get_raw_reads_list_of_species(species)
+    prepared_for_ref_genome_folder = get_folder_path_species_processed_prepared_for_ref_genome(species)
+    list_of_read_files = get_files_in_folder_matching_pattern(prepared_for_ref_genome_folder, "C[1-3].fastq.gz")
 
     # Create the output file name
     output_file_path = os.path.join(get_folder_path_species_processed_genomedelta(species), f"{species}_combined_all_reads.fastq")
