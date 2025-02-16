@@ -53,7 +53,7 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         df = pd.DataFrame(matches, columns=["file", "format", "type", "num_seqs", "sum_len", "min_len", "avg_len", "max_len"])
 
         # Convert numeric columns to correct types
-        df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]] = df[["num_seqs", "sum_len", "min_len", "avg_len", "max_len"]].apply(lambda x: x.str.replace(',', '').astype(int))
+        df[["num_seqs", "sum_len", "min_len", "max_len"]] = df[["num_seqs", "sum_len", "min_len", "max_len"]].apply(lambda x: x.str.replace(',', '').astype(int))
 
         # Extract number of sequences from the DataFrame
         sequences_count = df["num_seqs"].iloc[0]
