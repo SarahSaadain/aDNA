@@ -51,6 +51,7 @@ FOLDER_MITOCHONDRIA= "mitochondria"
 FOLDER_SPECIAL_SEQUENCES = "special_sequences"
 FOLDER_ENDOGENOUS_READS = "endogenous_reads"
 FOLDER_PROCESSED_READS = "processed_reads"
+FOLDER_PLOTS = "plots"
 
 # main folders
 FOLDER_SCRIPTS = "scripts"
@@ -77,10 +78,12 @@ PROGRAM_PATH_SAMTOOLS = "samtools"
 FILE_PATTERN_R1_FASTQ_GZ = "*_R1*.fastq.gz"
 FILE_PATTERN_R2_FASTQ_GZ = "*_R2*.fastq.gz"
 FILE_PATTERN_UNDETERMINED_FOLDER = "*/undetermined/*"
-FILE_PATTERN_LIST_FASTA = ["*.fna", "*.fasta", "*.fa"]
 
 FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ = "_merged_trimmed.fastq.gz"
 FILE_ENDING_FASTQ_GZ = ".fastq.gz"
+FILE_ENDING_FASTA = ".fasta"
+FILE_ENDING_FNA = ".fna"
+FILE_ENDING_FA = ".fa"
 FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ = "_quality_filtered.fastq.gz"
 FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ = "_duplicates_removed.fastq.gz"
 FILE_ENDING_FASTQC_HTML = "_fastqc.html"
@@ -91,6 +94,10 @@ FILE_ENDING_BAI = ".bai"
 FILE_ENDING_SORTED_BAI = "_sorted.bai"
 FILE_ENDING_CSV = ".csv"
 FILE_ENDING_TSV = ".tsv"
+FILE_ENDING_HTML = ".html"
+
+FILE_PATTERN_LIST_FASTA = [f"*{FILE_ENDING_FNA}", f"*{FILE_ENDING_FASTA}", f"*{FILE_ENDING_FA}"]
+
 
 
 #####################

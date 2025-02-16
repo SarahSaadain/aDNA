@@ -13,6 +13,7 @@ import convert_sam2bam as convert_sam2bam
 import determine_endogenous_reads as determine_endogenous_reads
 import extract_special_sequences as extract_special_sequences
 import determine_coverage_depth_and_breadth as determine_coverage_depth_and_breadth
+import generate_quality_check_report as generate_quality_check_report
 
 def run_pipeline():
     
@@ -32,6 +33,8 @@ def run_pipeline():
     polish_fastp_deduplication.all_species_fastp_deduplication()
     execute_fastqc.all_species_fastqc_duplicates_removed()
     execute_multiqc.all_species_multiqc_duplicates_removed()
+
+    generate_quality_check_report.all_species_generate_quality_check_report()
 
     prepare_species_for_map_to_ref_genome.all_species_prepare()
 
