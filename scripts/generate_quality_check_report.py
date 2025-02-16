@@ -93,5 +93,5 @@ def get_html_list_of_files(species, files):
         # remove leading slash
         file = file[1:]
 
-        html_list += f"<li><a href='{file}'>{os.path.basename(file)}</a></li>"
+        html_list += f"<li><a href='{file}'>{file}</a></li>"
     return html_list
