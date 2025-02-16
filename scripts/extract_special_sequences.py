@@ -139,7 +139,7 @@ def extract_special_sequences_for_species(species, depth_threshold: int = DEPTH_
 
     for bam_file in bam_files:
         execute_extract_special_sequences(bam_file, target_folder, depth_threshold)
-        execute_extract_unmapped_regions(bam_file, target_folder, 1000, 10000)
+        #execute_extract_unmapped_regions(bam_file, target_folder, 1000, 10000)
     
     print_info(f"Finished extracting special sequences for species {species}")
 
