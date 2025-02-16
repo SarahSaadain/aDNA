@@ -62,7 +62,7 @@ def determine_coverage_depth_and_breath(species):
 
         extended_analysis(coverage_file, analysis_file_path)
 
-    print_success(f"Determine coverage depth and breadth for species {species} complete")
+    print_info(f"Determine coverage depth and breadth for species {species} complete")
 
 def extended_analysis(coverage_file, analysis_file_path):
 
