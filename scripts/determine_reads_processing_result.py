@@ -40,7 +40,7 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         # Print raw output to debug the format
 
         # Define the regular expression pattern to capture columns
-        pattern = r"([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([0-9,]+)\s+([0-9,]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)"
+        pattern = r"([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([0-9,]+)\s+([0-9,]+)\s+([0-9,]+)\s+([0-9,\.]+)\s+([0-9,]+)"
 
         # Use regex to extract all lines matching the pattern
         matches = re.findall(pattern, output)
