@@ -2,19 +2,18 @@ import os
 from common_aDNA_scripts import *
 
 
+def get_html_list_of_files(species, files):
+    html_list = ""
+    for file in files:
 
-def main():
-    all_species_generate_quality_check_report()
+        # make path relative to report folder
+        file = file[len(get_folder_path_species_results_qc(species)):]
 
-if __name__ == "__main__":
-    main()
+        # remove leading slash
+        file = file[1:]
 
-def all_species_generate_quality_check_report():
-    print_info("Generating quality check report for all species")
-    for species in FOLDER_SPECIES:
-        species_generate_quality_check_report(species)
-
-    print_info("Finished generating quality check report for all species")
+        html_list += f"<li><a href='{file}'>{file}</a></li>"
+    return html_list
 
 def species_generate_quality_check_report(species):
     print_info("Generating quality check report for species: %s" % species)
@@ -83,15 +82,18 @@ def species_generate_quality_check_report(species):
 
     print_info("Quality check report generated for species: %s" % species)
 
-def get_html_list_of_files(species, files):
-    html_list = ""
-    for file in files:
 
-        # make path relative to report folder
-        file = file[len(get_folder_path_species_results_qc(species)):]
 
-        # remove leading slash
-        file = file[1:]
+def all_species_generate_quality_check_report():
+    print_info("Generating quality check report for all species")
+    for species in FOLDER_SPECIES:
+        species_generate_quality_check_report(species)
 
-        html_list += f"<li><a href='{file}'>{file}</a></li>"
-    return html_list
+    print_info("Finished generating quality check report for all species")
+
+def main():
+    all_species_generate_quality_check_report()
+
+if __name__ == "__main__":
+    main()
+
