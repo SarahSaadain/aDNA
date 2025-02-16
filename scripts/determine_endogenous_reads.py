@@ -1,22 +1,22 @@
 import os
 from common_aDNA_scripts import *
 
-def count_mapped_reads(bam_file, threads=THREADS_DEFAULT):
+def execute_samtools_count_mapped_reads(bam_file, threads=THREADS_DEFAULT):
     """Counts the number of mapped reads in a BAM file."""
     try:
         result = subprocess.run(
-            ["samtools", "view", "-@", str(threads), "-c", "-F", "4", bam_file], 
+            [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_VIEW, "-@", str(threads), "-c", "-F", "4", bam_file], 
             capture_output=True, text=True, check=True
         )
         return int(result.stdout.strip())
     except Exception as e:
         print_error(f"Failed to count mapped reads in {bam_file}: {e}")
     return 0
-def count_total_reads(bam_file, threads=THREADS_DEFAULT):
+def execute_samtools_count_total_reads(bam_file, threads=THREADS_DEFAULT):
     """Counts the total number of reads in a BAM file (mapped and unmapped)."""
     try:
         result = subprocess.run(
-            ["samtools", "view", "-@", str(threads), "-c", bam_file], 
+            [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_VIEW, "-@", str(threads), "-c", bam_file], 
             capture_output=True, text=True, check=True
         )
         return int(result.stdout.strip())
@@ -53,8 +53,8 @@ def determine_endogenous_reads_for_species(species):
 
             proportion = 0.0
             
-            mapped_reads = count_mapped_reads(bam_file)
-            total_reads = count_total_reads(bam_file)
+            mapped_reads = execute_samtools_count_mapped_reads(bam_file)
+            total_reads = execute_samtools_count_total_reads(bam_file)
 
             if total_reads != 0:
                 proportion = mapped_reads / total_reads

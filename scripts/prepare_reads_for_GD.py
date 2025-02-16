@@ -104,6 +104,8 @@ def species_prepare_reads_for_GD(species):
     # Combine the files
     combine_fastq_files(list_of_read_files, output_file_path)
 
+    print_info(f"Reads prepared for species {species}")
+
 
 def main():
     all_species_prepare_reads_for_GD()

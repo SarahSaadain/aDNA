@@ -2,7 +2,7 @@ import os
 import subprocess
 from common_aDNA_scripts import *
 
-def execute_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, output_file_path:str, threads:int = THREADS_DEFAULT):
+def execute_bwa_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, output_file_path:str, threads:int = THREADS_DEFAULT):
     
     print_info(f"Mapping {input_file_path} to reference genome ...")
 
@@ -16,10 +16,11 @@ def execute_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, outp
         print_info(f"Output file {output_file_path} already exists! Skipping!")
         return
     
-    command_bwa = f"bwa mem -t {str(threads)} {ref_genome_path} {input_file_path} > {output_file_path}"
+    command_bwa = f"{PROGRAM_PATH_BWA} {PROGRAM_PATH_BWA_MEM} -t {str(threads)} {ref_genome_path} {input_file_path} > {output_file_path}"
 
     try:
         subprocess.run(command_bwa, shell=True, check=True)
+        print_success(f"Mapping {input_file_path} to reference genome complete")
     except Exception as e:
         print_error(f"Failed to run bwa for {input_file_path}: {e}")
 
@@ -55,16 +56,18 @@ def map_aDNA_to_refgenome_for_species(species):
             read_name = os.path.splitext(os.path.basename(read_file_path))[0]
             output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}.sam")
 
-            execute_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
+            execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
         
 
     print_success(f"Mapping aDNA to reference genome for species {species} complete")
 
 def all_species_map_aDNA_to_refgenome():
-    print_info("Mapping aDNA to reference genome for all species")
+    print("Mapping aDNA to reference genome for all species")
 
     for species in FOLDER_SPECIES: 
         map_aDNA_to_refgenome_for_species(species)
+
+    print_info("Mapping aDNA to reference genome for all species complete")
 
 def main():
     all_species_map_aDNA_to_refgenome()

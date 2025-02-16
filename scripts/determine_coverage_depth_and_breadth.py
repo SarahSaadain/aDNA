@@ -39,7 +39,7 @@ def determine_coverage_depth_and_breath(species):
 
         mapped_bam_file_base_name = os.path.basename(mapped_bam_file)
 
-        coverage_file_name = mapped_bam_file_base_name.replace(FILE_ENDING_SORTED_BAM, "_samtools_depth.tsv")
+        coverage_file_name = mapped_bam_file_base_name.replace(FILE_ENDING_SORTED_BAM, FILE_ENDING_SAMTOOLS_DEPTH_TSV)
 
         coverage_output_file = os.path.join(depth_breath_output_folder, coverage_file_name)
 
@@ -48,7 +48,7 @@ def determine_coverage_depth_and_breath(species):
 
     print_info(f"Performing extended analysis for species {species}")
 
-    list_of_coverage_files = get_files_in_folder_matching_pattern(depth_breath_output_folder, "*_samtools_depth.tsv")
+    list_of_coverage_files = get_files_in_folder_matching_pattern(depth_breath_output_folder, f"*{FILE_ENDING_SAMTOOLS_DEPTH_TSV}")
 
     if len(list_of_coverage_files) == 0:
         print_error(f"No coverage files found for species {species}. Skipping.")
@@ -57,7 +57,7 @@ def determine_coverage_depth_and_breath(species):
     for coverage_file in list_of_coverage_files:
         coverage_file_base_name = os.path.basename(coverage_file)
 
-        analysis_file = coverage_file_base_name.replace("_samtools_depth.tsv", "_analysis.tsv")
+        analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_ANALYSIS_TSV)
         analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
 
         extended_analysis(coverage_file, analysis_file_path)

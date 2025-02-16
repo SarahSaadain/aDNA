@@ -52,16 +52,20 @@ def fastp_quality_filter_for_species(species):
         output_file_path = get_quality_filtered_path_for_adapter_removed_reads(species, read_file_path)
         execute_fastp_quality_filter(read_file_path, output_file_path)
 
+    print_info(f"fastp quality filter for {species} complete")
+
 def get_quality_filtered_path_for_adapter_removed_reads(species, adapter_removed_file_path):
     output_file = os.path.basename(adapter_removed_file_path).replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ)
     return os.path.join(get_folder_path_species_processed_quality_filtered(species), output_file)
 
 def all_species_fastp_quality_filter():
 
-    print_info("Running fastp quality filter for all species")
+    print("Running fastp quality filter for all species")
 
     for species in FOLDER_SPECIES: 
         fastp_quality_filter_for_species(species)
+
+    print_info("fastp quality filter for all species complete")
 
 def main():
     all_species_fastp_quality_filter()

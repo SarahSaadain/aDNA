@@ -131,11 +131,15 @@ def all_species_fastqc():
     for species in FOLDER_SPECIES: 
         fastqc_for_species(species)
 
+    print_info("Fastqc for all species before and after adapter removal completed successfully.")
+
 def all_species_fastqc_raw():
     print("Running fastqc for all species raw data")
 
     for species in FOLDER_SPECIES: 
         fastqc_for_raw_data(species)
+
+    print_info("Fastqc for all species raw data completed successfully.")
 
 def all_species_fastqc_adapter_removed():
     print("Running fastqc for all species trimmed data")
@@ -143,17 +147,23 @@ def all_species_fastqc_adapter_removed():
     for species in FOLDER_SPECIES: 
        fastqc_for_adapter_removed_data(species)
 
+    print_info("Fastqc for all species trimmed data completed successfully.")
+
 def all_species_fastqc_quality_filtered():
     print("Running fastqc for all species quality filtered data")
 
     for species in FOLDER_SPECIES: 
         fastqc_for_quality_filtered_data(species)
 
+    print_info("Fastqc for all species quality filtered data completed successfully.")
+
 def all_species_fastqc_duplicates_removed():
     print("Running fastqc for all species duplicates removed data")
 
     for species in FOLDER_SPECIES: 
         fastqc_for_duplicates_removed_data(species)
+
+    print_info("Fastqc for all species duplicates removed data completed successfully.")
 
 
 def main():

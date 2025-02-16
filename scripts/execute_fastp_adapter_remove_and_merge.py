@@ -7,7 +7,7 @@ from common_aDNA_scripts import *
 R1_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
 R2_ADAPTER_SEQUENCE = "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
 
-def remove_adapters_and_merge(input_file_path_r1, input_file_path_r2, output_file_path_r1, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE, threads:int = THREADS_DEFAULT):
+def execute_fastp_remove_adapters_and_merge(input_file_path_r1, input_file_path_r2, output_file_path_r1, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE, threads:int = THREADS_DEFAULT):
 
     print_info(f"Removing adapters from {input_file_path_r1} and {input_file_path_r2} ...")
 
@@ -71,6 +71,8 @@ def all_species_fastp_adapter_remove_and_merge():
     for species in FOLDER_SPECIES:
         adapter_remove_and_merge_for_species(species)
 
+    print_info("Adapter removal and merge for all species completed successfully.")
+
 def adapter_remove_and_merge_for_species(species):
     print_info(f"Running adapter removal and merge for species {species}")
 
@@ -85,10 +87,12 @@ def adapter_remove_and_merge_for_species(species):
 
             adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, read_file_path)
           
-            remove_adapters_and_merge(read_file_path[0], read_file_path[1], adapter_removed_read_file)
+            execute_fastp_remove_adapters_and_merge(read_file_path[0], read_file_path[1], adapter_removed_read_file)
         
     except Exception as e:
         print_error(e)
+
+    print_info(f"Adapter removal and merge for species {species} completed successfully.")
 
 def get_adapter_removed_path_for_paired_raw_reads(species, paired_read_file_path_list):
     filename_new = os.path.basename(paired_read_file_path_list[0]).replace("_R1_","_").replace("_R2_","_").replace(FILE_ENDING_FASTQ_GZ, FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ )

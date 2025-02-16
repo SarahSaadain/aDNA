@@ -18,7 +18,7 @@ def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT):
             print_info(f"Converting {sam_file} to BAM...")
 
             try:
-                command_sam_to_bam = f"samtools view -@ {threads} -bS {sam_file} -o {bam_file}"
+                command_sam_to_bam = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -@ {threads} -bS {sam_file} -o {bam_file}"
                 subprocess.run(command_sam_to_bam, shell=True, check=True)
             except Exception as e:
                 print_error(f"Failed to convert {sam_file} to BAM: {e}")
@@ -30,7 +30,7 @@ def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT):
         print_info(f"Sorting {bam_file}...")
         
         try:
-            command_sort = f"samtools sort -@ {threads} {bam_file} -o {sorted_bam}"
+            command_sort = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_SORT} -@ {threads} {bam_file} -o {sorted_bam}"
             subprocess.run(command_sort, shell=True, check=True)
 
             print_success(f"Conversion and sorting of {sam_file} completed successfully.")
@@ -50,7 +50,7 @@ def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT):
         print_info(f"Indexing {sorted_bam}...")
         
         try:
-            command_index = f"samtools index -@ {threads} {sorted_bam} {indexed_bam}" 
+            command_index = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_INDEX} -@ {threads} {sorted_bam} {indexed_bam}" 
             subprocess.run(command_index, shell=True, check=True)
             print_success(f"Indexing of {sorted_bam} completed successfully.")
         except Exception as e:
@@ -79,12 +79,15 @@ def convert_ref_genome_mapped_sam_to_bam_for_species(species):
 def convert_sam_to_bam_for_species(species):
     print_info(f"Converting sam to bam for species {species}")
     convert_ref_genome_mapped_sam_to_bam_for_species(species)
+    print_info(f"Conversion of sam to bam for species {species} completed successfully.")
 
 def all_species_convert_sam_to_bam():
     print("Convert sam to bam files for all species")
 
     for species in FOLDER_SPECIES: 
         convert_sam_to_bam_for_species(species)
+
+    print_info("Conversion of sam to bam files for all species completed successfully.")
 
 def main():
     all_species_convert_sam_to_bam()

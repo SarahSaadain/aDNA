@@ -70,7 +70,12 @@ PROGRAM_PATH_FASTX_QUALITY_FILTER = "fastq_quality_filter"
 PROGRAM_PATH_SGA = "sga"
 PROGRAM_PATH_MULTIQC = "multiqc"
 PROGRAM_PATH_FASTQC = "fastqc"
+PROGRAM_PATH_BWA = "bwa"
+PROGRAM_PATH_BWA_MEM = "mem"
 PROGRAM_PATH_SAMTOOLS = "samtools"
+PROGRAM_PATH_SAMTOOLS_VIEW =  "view"
+PROGRAM_PATH_SAMTOOLS_SORT = "sort"
+PROGRAM_PATH_SAMTOOLS_INDEX = "index"
 
 #"doi.org/10.1093/bioinformatics/btt193" to check damage, include to pipeline
 
@@ -95,6 +100,8 @@ FILE_ENDING_SORTED_BAI = "_sorted.bai"
 FILE_ENDING_CSV = ".csv"
 FILE_ENDING_TSV = ".tsv"
 FILE_ENDING_HTML = ".html"
+FILE_ENDING_SAMTOOLS_DEPTH_TSV = "_samtools_depth.tsv"
+FILE_ENDING_ANALYSIS_TSV = "_analysis.tsv"
 
 FILE_PATTERN_LIST_FASTA = [f"*{FILE_ENDING_FNA}", f"*{FILE_ENDING_FASTA}", f"*{FILE_ENDING_FA}"]
 

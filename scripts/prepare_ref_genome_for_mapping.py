@@ -23,6 +23,8 @@ def species_prepare_ref_genome(species):
     for reference_genome_path in reference_genome:
         execute_bwa_index_reference_genome(reference_genome_path)
 
+    print_info(f"Finished preparing reference genome for {species} for mapping")
+
 def execute_bwa_index_reference_genome(reference_genome_path):
     print_info(f"Indexing reference genome {reference_genome_path} ...")
 

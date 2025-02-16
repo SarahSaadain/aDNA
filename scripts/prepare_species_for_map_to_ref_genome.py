@@ -27,6 +27,8 @@ def call_prepare_script(species, prepare_script_full_path):
 
     # Print the captured output
     print(output.getvalue())
+
+    print_info(f"Finished running {FILE_NAME_PREPARE_SCRIPT} script for species {species}.")
         
 
 def all_species_prepare():
@@ -38,6 +40,8 @@ def all_species_prepare():
 
         prepare_script_path = os.path.join(scripts_folder, FILE_NAME_PREPARE_SCRIPT)
         call_prepare_script(species, prepare_script_path)
+
+    print_info(f"Finished running {FILE_NAME_PREPARE_SCRIPT} for all species")
         
 
 def main():
