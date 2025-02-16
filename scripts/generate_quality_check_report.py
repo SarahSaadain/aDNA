@@ -30,7 +30,7 @@ def species_generate_quality_check_report(species):
     multiqc_quality_filtered_html_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_multiqc_quality_filtered(species), f"*{FILE_ENDING_HTML}")
     multiqc_duplicates_removed_html_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_multiqc_duplicates_removed(species), f"*{FILE_ENDING_HTML}")
 
-    report_folder = get_folder_path_species_results_qc_fastqc_raw(species)
+    report_folder = get_folder_path_species_results_qc(species)
     report_file = f"quality_check_report_{species}.html"
 
     # create report as html file
@@ -42,23 +42,6 @@ def species_generate_quality_check_report(species):
             </head>
             <body>
                 <h1>Quality Check Report: {species}</h1>
-                <h2>FastQC</h2>
-                <h3>Raw Reads</h3>
-                <ul>
-                    {get_html_list_of_files(species, fastqc_raw_html_files)}
-                </ul>
-                <h3>Trimmed Reads</h3>
-                <ul>
-                    {get_html_list_of_files(species, fastqc_trimmed_html_files)}
-                </ul>   
-                <h3>Quality Filtered Reads</h3>
-                <ul>
-                    {get_html_list_of_files(species, fastqc_quality_filtered_html_files)}
-                </ul>   
-                <h3>Duplicates Removed Reads</h3>
-                <ul>
-                    {get_html_list_of_files(species, fastqc_duplicates_removed_html_files)}
-                </ul>   
                 <h2>MultiQC</h2>
                 <h3>Raw Reads</h3>
                 <ul>
@@ -76,11 +59,28 @@ def species_generate_quality_check_report(species):
                 <ul>
                     {get_html_list_of_files(species, multiqc_duplicates_removed_html_files)}    
                 </ul>   
+                <h2>FastQC</h2>
+                <h3>Raw Reads</h3>
+                <ul>
+                    {get_html_list_of_files(species, fastqc_raw_html_files)}
+                </ul>
+                <h3>Trimmed Reads</h3>
+                <ul>
+                    {get_html_list_of_files(species, fastqc_trimmed_html_files)}
+                </ul>   
+                <h3>Quality Filtered Reads</h3>
+                <ul>
+                    {get_html_list_of_files(species, fastqc_quality_filtered_html_files)}
+                </ul>   
+                <h3>Duplicates Removed Reads</h3>
+                <ul>
+                    {get_html_list_of_files(species, fastqc_duplicates_removed_html_files)}
+                </ul>   
             </body>
         </html>
         """)
 
-    print_info("Quality check report generated for species: %s" % species)
+    print_info(f"Quality check report generated for species: {species}")
 
 
 
