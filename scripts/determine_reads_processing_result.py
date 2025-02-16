@@ -87,10 +87,8 @@ def determine_reads_processing_result(species):
 
     for raw_read in paired_raw_reads:
 
-        r1_count = execute_seqkit_stats_count_reads(raw_read[0])
+        raw_count = execute_seqkit_stats_count_reads(raw_read[0])
         #r2_count = execute_seqkit_stats_count_reads(raw_read[1])
-
-        raw_count = r1_count
 
         adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, raw_read)
         adapter_removed_count = execute_seqkit_stats_count_reads(adapter_removed_file)
