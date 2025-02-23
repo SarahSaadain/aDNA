@@ -65,6 +65,8 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         print_error(f"Failed to process seqkit stats output: {e}")
         return -1
     
+def get_file_name_reads_processing(species):
+    return f"{species}_reads_processing_result{FILE_ENDING_TSV}"
 
 def determine_reads_processing_result(species):
 
@@ -76,7 +78,7 @@ def determine_reads_processing_result(species):
         print_warning(f"No raw reads found for species {species}. Skipping.")
         return
     
-    output_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species), f"{species}_reads_processing_result{FILE_ENDING_TSV}")
+    output_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species), )
 
     if os.path.exists(output_file_path):
         print_info(f"Result file already exists for species {species}. Skipping.")

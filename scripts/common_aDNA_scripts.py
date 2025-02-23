@@ -99,12 +99,15 @@ FILE_ENDING_BAI = ".bai"
 FILE_ENDING_SORTED_BAI = "_sorted.bai"
 FILE_ENDING_CSV = ".csv"
 FILE_ENDING_TSV = ".tsv"
+FILE_ENDING_PNG = ".png"
 FILE_ENDING_HTML = ".html"
 FILE_ENDING_SAMTOOLS_DEPTH_TSV = "_samtools_depth.tsv"
 FILE_ENDING_ANALYSIS_TSV = "_analysis.tsv"
 
 FILE_PATTERN_LIST_FASTA = [f"*{FILE_ENDING_FNA}", f"*{FILE_ENDING_FASTA}", f"*{FILE_ENDING_FA}"]
 
+#R Scripts
+R_SCRIPT_PLOT_READS_BEFORE_AFTER_PROCESSING  ="plot_comparison_reads_before_after_processing.R"
 
 
 #####################
@@ -206,6 +209,11 @@ def get_folder_path_species_results(species):
 
 def get_folder_path_species_scripts(species):
     path = os.path.join(get_folder_path_species(species), FOLDER_SCRIPTS)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_scripts_plots(species):
+    path = os.path.join(get_folder_path_species_scripts(species), FOLDER_PLOTS)
     check_folder_exists_or_create(path)
     return path
 
@@ -339,6 +347,16 @@ def get_folder_path_species_results_mitochondria(species):
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_results_plots(species):
+    path = os.path.join(get_folder_path_species_results(species), FOLDER_PLOTS)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_plots_reads_processing(species):
+    path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_PROCESSED_READS)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_results_special_sequences(species):
     path = os.path.join(get_folder_path_species_results(species), FOLDER_SPECIAL_SEQUENCES)
     check_folder_exists_or_create(path) 
@@ -358,6 +376,15 @@ def get_folder_path_species_results_qc_reads_processing(species):
 #####################
 # File paths
 #####################
+
+def get_r_script(species, r_script_name):
+
+    r_script_path = os.path.join(get_folder_path_species_scripts_plots(species), r_script_name)
+
+    if not os.path.exists(r_script_path):
+        raise Exception(f"Invalid R script: {r_script_path}")   
+    
+    return r_script_path
 
 
 def get_raw_reads_list_of_species(species):
