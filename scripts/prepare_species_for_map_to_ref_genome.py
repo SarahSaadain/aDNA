@@ -68,9 +68,11 @@ def call_prepare_script(species, prepare_script_full_path):
 
 def all_species_prepare():
 
-    print_info(f"Preparing fastq files for {species} for ref genome mapping")
+    print_info("Preparing fastq files for ref genome mapping for all species")
 
     for species in FOLDER_SPECIES: 
+
+        print_info(f"Preparing fastq files for {species} for ref genome mapping")
         scripts_folder = get_folder_path_species_scripts(species)
 
         prepare_script_path = os.path.join(scripts_folder, FILE_NAME_PREPARE_SCRIPT)
@@ -82,8 +84,8 @@ def all_species_prepare():
         else:
             print_info(f"No {FILE_NAME_PREPARE_SCRIPT} script found for species {species}.")
             merge_all_fastq_files(species)
-
-    print_info(f"Finished running {FILE_NAME_PREPARE_SCRIPT} for all species")
+    
+    print_success("Finished preparing fastq files for ref genome mapping for all species")
         
 
 def main():
