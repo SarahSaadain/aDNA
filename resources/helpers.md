@@ -23,3 +23,20 @@ grep ERROR adapter_remove.log
 ```bash
 nohup python -u scripts/pipeline_aDNA.py > pipeline.log 2>&1 &
 ```
+
+example how to copy the files to the right directory
+```bash
+for folder in 340134 340146 340154 340155; do
+    mv /mnt/data2/sarah/aDNA/batch1_failed_trialrun/$folder /mnt/data2/sarah/aDNA/Sepsis/raw/reads/original/
+done
+```
+
+then copy the R1 or R2 files to reads directory
+```bash
+find /mnt/data2/sarah/aDNA/Dsim/raw/reads/original/ -type f \( -name "*R1*.fastq.gz" -o -name "*R2*.fastq.gz" \) -exec mv {} /mnt/data2/sarah/aDNA/Dsim/raw/reads/ \;
+```
+
+get ref genomes
+```bash
+wget --content-disposition "https://api.ncbi.nlm.nih.gov/datasets/v2/genome/accession/GCF_016746395.2/download?include_annotation_type=GENOME_FASTA&include_annotation_type=GENOME_GFF&include_annotation_type=RNA_FASTA&include_annotation_type=CDS_FASTA&include_annotation_type=PROT_FASTA&include_annotation_type=SEQUENCE_REPORT&hydrated=FULLY_HYDRATED"
+```
