@@ -151,16 +151,23 @@ def adapter_remove_for_species_single_reads(species):
         print_error(e)
 
 def adapter_remove_for_species(species):
-    print_info(f"Running adapter removal and merge for species {species}")
+    print_info(f"Running adapter removal for species {species}")
 
     #check if R2 files are present
+    list_of_r1_read_files = get_files_in_folder_matching_pattern(get_folder_path_species_raw_reads(species), FILE_PATTERN_R1_FASTQ_GZ)
     list_of_r2_read_files = get_files_in_folder_matching_pattern(get_folder_path_species_raw_reads(species), FILE_PATTERN_R2_FASTQ_GZ)
 
+    if len(list_of_r1_read_files) == 0 and len(list_of_r2_read_files) == 0:
+        print_warning(f"No reads found for species {species}.")
+        return
+
+    # if R2 files are not present then treat reads as single-end reads otherwise treat reads as paired-end reads
     if len(list_of_r2_read_files) == 0:
         print_warning(f"No R2 reads found for species {species}.")
         print_info("Treating reads as single-end reads.")
         adapter_remove_for_species_single_reads(species)
     else:
+        print_info("Treating reads as paired-end reads.")
         adapter_remove_for_species_paired_reads(species)            
     
     print_info(f"Adapter removal for species {species} completed successfully.")
