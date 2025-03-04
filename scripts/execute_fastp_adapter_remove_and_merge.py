@@ -64,8 +64,6 @@ def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1, inp
     except subprocess.CalledProcessError as e:
         raise Exception(f"Removed adapters error for {input_file_path_r1} and {input_file_path_r2} : {e}")
 
-import os
-import subprocess
 
 def execute_fastp_single_reads_remove_adapters(input_file_path, output_file_path, adapter_sequence: str = R1_ADAPTER_SEQUENCE, threads: int = THREADS_DEFAULT):
     
