@@ -14,8 +14,11 @@ import determine_endogenous_reads as determine_endogenous_reads
 import extract_special_sequences as extract_special_sequences
 import determine_coverage_depth_and_breadth as determine_coverage_depth_and_breadth
 import generate_quality_check_report as generate_quality_check_report
+import generate_plots as generate_plots
 
 def run_pipeline():
+
+    print("Starting pipeline.")
     
     prepare.all_species_prepare()
     execute_fastqc.all_species_fastqc_raw()
@@ -50,6 +53,10 @@ def run_pipeline():
     determine_coverage_depth_and_breadth.all_species_determine_coverage_depth_and_breath()
 
     extract_special_sequences.all_species_extract_special_sequences()
+
+    generate_plots.all_species_generate_plots()
+
+    print_success("Pipeline completed successfully.")
 
 
 def main():
