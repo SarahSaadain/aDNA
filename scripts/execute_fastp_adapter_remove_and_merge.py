@@ -82,8 +82,8 @@ def execute_fastp_single_reads_remove_adapters(input_file_path, output_file_path
     command_fastp = [
         PROGRAM_PATH_FASTP,
         "--adapter_sequence", adapter_sequence,  # Adapter sequence for single-end reads
-        "--i", input_file_path,  # Input file
-        "--o", output_file_path,  # Output file
+        "-i", input_file_path,  # Input file
+        "-o", output_file_path,  # Output file
         "--json", filepath_json_report,
         "--html", filepath_html_report,
         "--thread", str(threads),  # Number of threads
