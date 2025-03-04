@@ -7,8 +7,8 @@ import glob
 #####################
 # Constants
 #####################
-PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
-#PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
+#PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
+PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
 
 # config
 THREADS_DEFAULT = 10
@@ -47,6 +47,8 @@ FOLDER_QUALITYCONTROL = "qualitycontrol"
 FOLDER_FASTQC = "fastqc"
 FOLDER_MULTIQC = "multiqc"
 FOLDER_DEPTH_BREADTH = "depth_breadth"
+FOLDER_DEPTH = "depth"
+FOLDER_BREADTH = "breadth"
 FOLDER_MITOCHONDRIA= "mitochondria"
 FOLDER_SPECIAL_SEQUENCES = "special_sequences"
 FOLDER_ENDOGENOUS_READS = "endogenous_reads"
@@ -108,6 +110,7 @@ FILE_PATTERN_LIST_FASTA = [f"*{FILE_ENDING_FNA}", f"*{FILE_ENDING_FASTA}", f"*{F
 
 #R Scripts
 R_SCRIPT_PLOT_READS_BEFORE_AFTER_PROCESSING  ="plot_comparison_reads_before_after_processing.R"
+R_SCRIPT_PLOT_DEPTH = "plot_coverage_depth.R"
 
 
 #####################
@@ -181,6 +184,17 @@ def check_folder_exists_or_create(folder_path):
 
 def get_folder_aDNA():
     return PATH_ADNA_PROJECT
+
+def get_folder_path_scripts():
+    path = os.path.join(get_folder_aDNA(), FOLDER_SCRIPTS)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_scripts_plots():
+    path = os.path.join(get_folder_path_scripts(), FOLDER_PLOTS)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_raw(species):
     if not is_species_folder(species):
         raise Exception(f"Invalid species folder: {species}")
@@ -212,10 +226,6 @@ def get_folder_path_species_scripts(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_scripts_plots(species):
-    path = os.path.join(get_folder_path_species_scripts(species), FOLDER_PLOTS)
-    check_folder_exists_or_create(path)
-    return path
 
 def get_folder_path_species_logs(species):
     path = os.path.join(get_folder_path_species(species), FOLDER_LOGS)
@@ -357,6 +367,21 @@ def get_folder_path_species_results_plots_reads_processing(species):
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_results_plots_depth(species):
+    path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_DEPTH)
+    check_folder_exists_or_create(path) 
+    return path
+
+def get_folder_path_species_results_plots_depth_sample(species, sample_name):
+    path = os.path.join(get_folder_path_species_results_plots_depth(species), sample_name)
+    check_folder_exists_or_create(path) 
+    return path
+
+def get_folder_path_species_results_plots_breadth(species):
+    path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_BREADTH)
+    check_folder_exists_or_create(path) 
+    return path
+
 def get_folder_path_species_results_special_sequences(species):
     path = os.path.join(get_folder_path_species_results(species), FOLDER_SPECIAL_SEQUENCES)
     check_folder_exists_or_create(path) 
@@ -377,9 +402,9 @@ def get_folder_path_species_results_qc_reads_processing(species):
 # File paths
 #####################
 
-def get_r_script(species, r_script_name):
+def get_r_script(r_script_name):
 
-    r_script_path = os.path.join(get_folder_path_species_scripts_plots(species), r_script_name)
+    r_script_path = os.path.join(get_folder_path_scripts_plots(), r_script_name)
 
     if not os.path.exists(r_script_path):
         raise Exception(f"Invalid R script: {r_script_path}")   
