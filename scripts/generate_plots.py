@@ -60,11 +60,35 @@ def plot_depth_analysis(species):
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
 
+def plot_endogenous_reads(species):
+    print_info(f"Plotting endogenous reads for species {species}")
+
+    analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_endogenous_reads(species), f"*_endogenous_reads{FILE_ENDING_CSV}")
+
+    if analysis_files == 0:
+        print_warning(f"No endogenous reads files found for species {species}. Skipping.")
+        return
+
+    r_script = get_r_script(R_SCRIPT_PLOT_ENDOGENOUS_READS)
+
+    for analysis_file in analysis_files:
+        
+        r_script = get_r_script(R_SCRIPT_PLOT_ENDOGENOUS_READS)
+
+        output_folder_path = get_folder_path_species_results_plots_endogenous_reads(species)
+
+        print_info(f"Plotting endogenous reads for file {analysis_file} to {output_folder_path}")
+
+        call_r_script(r_script, species, analysis_file, output_folder_path)
+
+        
+
 def species_generate_plots(species):
     print_info(f"Generating plots for species {species}")
 
     plot_reads_processing_result(species)
     plot_depth_analysis(species)
+    plot_endogenous_reads(species)
 
     print_info(f"Finished generating plots for species {species}")
 

@@ -18,10 +18,11 @@ def species_prepare_ref_genome(species):
     print_info(f"Preparing reference genome for {species} for mapping")
 
     # get reference genome
+    # add fna files to reference genome list
     reference_genome = get_files_in_folder_matching_pattern(get_folder_path_species_raw_ref_genome(species), f"*{FILE_ENDING_FNA}")
-    # add fasta files to reference genome
+    # add fasta files to reference genome list
     reference_genome += get_files_in_folder_matching_pattern(get_folder_path_species_raw_ref_genome(species), f"*{FILE_ENDING_FASTA}")
-    # add fa files to reference genome
+    # add fa files to reference genome list
     reference_genome += get_files_in_folder_matching_pattern(get_folder_path_species_raw_ref_genome(species), f"*{FILE_ENDING_FA}")
 
     for reference_genome_path in reference_genome:

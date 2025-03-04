@@ -51,11 +51,11 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
 
 
 # FOR TESTING
-plot_endogenous_reads(
-  "Bger",
-  "/Users/ssaadain/Documents/aDNA/Bger/results/endogenous_reads/Bger_endogenous_reads.csv",
-  "/Users/ssaadain/Documents/aDNA/Bger/results/plots/endogenous_reads"
-)
+#plot_endogenous_reads(
+#  "Bger",
+#  "/Users/ssaadain/Documents/aDNA/Bger/results/endogenous_reads/Bger_endogenous_reads.csv",
+#  "/Users/ssaadain/Documents/aDNA/Bger/results/plots/endogenous_reads"
+#)
 
 
 # Ensure you capture command-line arguments

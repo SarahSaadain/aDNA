@@ -110,6 +110,7 @@ FILE_PATTERN_LIST_FASTA = [f"*{FILE_ENDING_FNA}", f"*{FILE_ENDING_FASTA}", f"*{F
 #R Scripts
 R_SCRIPT_PLOT_READS_BEFORE_AFTER_PROCESSING  ="plot_comparison_reads_before_after_processing.R"
 R_SCRIPT_PLOT_DEPTH = "plot_coverage_depth.R"
+R_SCRIPT_PLOT_ENDOGENOUS_READS = "plot_endogenous_reads.R"
 
 
 #####################
@@ -379,6 +380,11 @@ def get_folder_path_species_results_plots_depth_sample(species, sample_name):
 def get_folder_path_species_results_plots_breadth(species):
     path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_BREADTH)
     check_folder_exists_or_create(path) 
+    return path
+
+def get_folder_path_species_results_plots_endogenous_reads(species):
+    path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_ENDOGENOUS_READS)
+    check_folder_exists_or_create(path)
     return path
 
 def get_folder_path_species_results_special_sequences(species):
