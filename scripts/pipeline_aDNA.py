@@ -13,6 +13,7 @@ import convert_sam2bam as convert_sam2bam
 import determine_endogenous_reads as determine_endogenous_reads
 import extract_special_sequences as extract_special_sequences
 import determine_coverage_depth_and_breadth as determine_coverage_depth_and_breadth
+import determine_reads_processing_result as determine_reads_processing_result
 import generate_quality_check_report as generate_quality_check_report
 import generate_plots as generate_plots
 
@@ -49,7 +50,7 @@ def run_pipeline():
     convert_sam2bam.all_species_convert_sam_to_bam()
 
     determine_endogenous_reads.all_species_determine_endogenous_reads()
-
+    determine_reads_processing_result.all_species_determine_determine_reads_processing_result()
     determine_coverage_depth_and_breadth.all_species_determine_coverage_depth_and_breath()
 
     extract_special_sequences.all_species_extract_special_sequences()
