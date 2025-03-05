@@ -1,6 +1,5 @@
 library(tidyverse)
 library(ggpubr)
-library(ShortRead)
 library(dplyr)
 library(purrr)
 library(ggplot2)
