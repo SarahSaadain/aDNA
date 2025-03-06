@@ -5,14 +5,6 @@ from common_aDNA_scripts import *
 import determine_reads_processing_result as determine_reads_processing_result
 
 def call_r_script(script_path, *args):
-    """
-    Calls an R script with optional arguments.
-    
-    :param script_path: Path to the R script (e.g., "script.R").
-    :param args: Additional arguments to pass to the R script.
-    :return: None (raises an error if execution fails).
-    """
-
     if not os.path.exists(script_path):
         raise FileNotFoundError(f"R script not found: {script_path}")
 
@@ -42,7 +34,7 @@ def plot_reads_processing_result(species):
 def plot_depth_analysis(species):
     print_info(f"Plotting depth analysis for species {species}")
 
-    analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_depth_breath(species), f"*{FILE_ENDING_TSV}")
+    analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_depth_breath(species), f"*{FILE_ENDING_ANALYSIS_TSV}")
 
     if analysis_files == 0:
         print_warning(f"No depth analysis files found for species {species}. Skipping.")
