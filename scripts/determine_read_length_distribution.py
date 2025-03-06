@@ -34,9 +34,9 @@ def determine_read_length_distribution(species):
 
     all_dfs = []  # List to store DataFrames for each read file
 
-    paired_raw_reads = get_raw_paired_reads_list_of_species(species)
+    raw_reads = get_files_in_folder_matching_pattern(get_folder_path_species_raw_reads(species), FILE_PATTERN_R1_FASTQ_GZ)
 
-    if len(paired_raw_reads) == 0:
+    if len(raw_reads) == 0:
         print_warning(f"No raw reads found for species {species}. Skipping.")
         return
     
@@ -49,9 +49,9 @@ def determine_read_length_distribution(species):
     # create output dataframe
     output_df = pd.DataFrame(columns=["reads_file", "individual", "protocol", "raw_count", "adapter_removed_count", "quality_filtered_count", "duplicates_removed_count"])
 
-    for raw_read in paired_raw_reads:
+    for raw_read in raw_reads:
 
-        raw_distribution = get_read_length_distribution(raw_read[0])
+        raw_distribution = get_read_length_distribution(raw_read)
         #r2_count = execute_seqkit_stats_count_reads(raw_read[1])
 
         adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, raw_read)
