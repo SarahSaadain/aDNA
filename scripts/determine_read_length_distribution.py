@@ -67,6 +67,8 @@ def determine_read_length_distribution(species):
         print_info(f"Processing duplicates removed file {duplicates_removed_file}")
         duplicates_removed_distribution = get_read_length_distribution(duplicates_removed_file)
 
+        print_info(f"Combining read length distributions}")
+
         reads_file = os.path.basename(raw_read[0]).split(".")[0]
         individual = reads_file.split("_")[0]
         protocol = reads_file.split("_")[1]
