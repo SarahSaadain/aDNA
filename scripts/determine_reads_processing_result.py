@@ -81,7 +81,7 @@ def determine_reads_processing_result(species):
     output_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species),  get_file_name_reads_processing(species))
 
     if os.path.exists(output_file_path):
-        print_infp(f"Reads processing result file already exists for species {species}. Skipping.")
+        print_info(f"Reads processing result file already exists for species {species}. Skipping.")
         return
     
     # create output dataframe
