@@ -52,6 +52,7 @@ FOLDER_MITOCHONDRIA= "mitochondria"
 FOLDER_SPECIAL_SEQUENCES = "special_sequences"
 FOLDER_ENDOGENOUS_READS = "endogenous_reads"
 FOLDER_PROCESSED_READS = "processed_reads"
+FOLDER_READ_LENGTH_DISTRIBUTION = "read_length_distribution"
 FOLDER_PLOTS = "plots"
 
 # main folders
@@ -398,7 +399,12 @@ def get_folder_path_species_results_endogenous_reads(species):
     return path
 
 def get_folder_path_species_results_qc_reads_processing(species):
-    path = os.path.join(get_folder_path_species_results(species), FOLDER_PROCESSED_READS)
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_PROCESSED_READS)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_read_length_distribution(species):
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_READ_LENGTH_DISTRIBUTION)
     check_folder_exists_or_create(path)
     return path
 
