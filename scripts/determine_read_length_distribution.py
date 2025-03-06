@@ -55,7 +55,7 @@ def determine_read_length_distribution(species):
         raw_distribution = get_read_length_distribution(raw_read)
         #r2_count = execute_seqkit_stats_count_reads(raw_read[1])
         
-        adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, raw_read)
+        adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, [raw_read])
         print_info(f"Processing adapter removed file {adapter_removed_file}")
         adapter_removed_distribution = get_read_length_distribution(adapter_removed_file)
 

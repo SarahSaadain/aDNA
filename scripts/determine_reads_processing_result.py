@@ -92,7 +92,7 @@ def determine_reads_processing_result(species):
         raw_count = execute_seqkit_stats_count_reads(raw_read)
         #r2_count = execute_seqkit_stats_count_reads(raw_read[1])
 
-        adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, raw_read)
+        adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, [raw_read])
         adapter_removed_count = execute_seqkit_stats_count_reads(adapter_removed_file)
 
         quality_filtered_file = get_quality_filtered_path_for_adapter_removed_reads(species, adapter_removed_file)
