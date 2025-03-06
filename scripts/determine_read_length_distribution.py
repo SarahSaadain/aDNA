@@ -51,17 +51,21 @@ def determine_read_length_distribution(species):
 
     for raw_read in raw_reads:
 
+        print_info(f"Processing read file {raw_read}")")
         raw_distribution = get_read_length_distribution(raw_read)
         #r2_count = execute_seqkit_stats_count_reads(raw_read[1])
-
+        
         adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, raw_read)
+        print_info(f"Processing adapter removed file {adapter_removed_file}")
         adapter_removed_distribution = get_read_length_distribution(adapter_removed_file)
 
         quality_filtered_file = get_quality_filtered_path_for_adapter_removed_reads(species, adapter_removed_file)
+        print_info(f"Processing quality filtered file {quality_filtered_file}")
         quality_filtered_distribution = get_read_length_distribution(quality_filtered_file)
 
         duplicates_removed_file = get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file)
-        duplicates_removed_distributiont = get_read_length_distribution(duplicates_removed_file)
+        print_info(f"Processing duplicates removed file {duplicates_removed_file}")
+        duplicates_removed_distribution = get_read_length_distribution(duplicates_removed_file)
 
         reads_file = os.path.basename(raw_read[0]).split(".")[0]
         individual = reads_file.split("_")[0]
