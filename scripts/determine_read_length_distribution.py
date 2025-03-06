@@ -51,7 +51,7 @@ def determine_read_length_distribution(species):
 
     for raw_read in raw_reads:
 
-        print_info(f"Processing read file {raw_read}")")
+        print_info(f"Processing read file {raw_read}")
         raw_distribution = get_read_length_distribution(raw_read)
         #r2_count = execute_seqkit_stats_count_reads(raw_read[1])
         
@@ -67,9 +67,9 @@ def determine_read_length_distribution(species):
         print_info(f"Processing duplicates removed file {duplicates_removed_file}")
         duplicates_removed_distribution = get_read_length_distribution(duplicates_removed_file)
 
-        print_info(f"Combining read length distributions}")
+        print_info("Combining read length distributions")
 
-        reads_file = os.path.basename(raw_read[0]).split(".")[0]
+        reads_file = os.path.basename(raw_read).split(".")[0]
         individual = reads_file.split("_")[0]
         protocol = reads_file.split("_")[1]
 

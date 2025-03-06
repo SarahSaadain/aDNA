@@ -101,7 +101,7 @@ def determine_reads_processing_result(species):
         duplicates_removed_file = get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file)
         duplicates_removed_count = execute_seqkit_stats_count_reads(duplicates_removed_file)
 
-        reads_id = os.path.basename(raw_read[0]).split(".")[0]
+        reads_id = os.path.basename(raw_read).split(".")[0]
         individual = reads_id.split("_")[0]
         protocol = reads_id.split("_")[1]
 
