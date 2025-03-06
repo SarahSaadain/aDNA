@@ -78,10 +78,10 @@ def determine_reads_processing_result(species):
         print_warning(f"No raw reads found for species {species}. Skipping.")
         return
     
-    output_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species), )
+    output_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species),  get_file_name_reads_processing(species))
 
     if os.path.exists(output_file_path):
-        print_info(f"Result file already exists for species {species}. Skipping.")
+        print_infp(f"Reads processing result file already exists for species {species}. Skipping.")
         return
     
     # create output dataframe
@@ -124,11 +124,11 @@ def determine_reads_processing_result(species):
 
 
 def all_species_determine_determine_reads_processing_result():
-    print_info("Determine reads processing result for all species")
+    print("Determine reads processing result for all species")
     for species in FOLDER_SPECIES: 
         determine_reads_processing_result(species)
 
-    print_info("Finished determining reads processing result for all species")
+    print_success("Finished determining reads processing result for all species")
 
 def main():
     all_species_determine_determine_reads_processing_result()
