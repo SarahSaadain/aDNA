@@ -25,16 +25,16 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
     
     # Create a long format for the row (pie chart data)
     row_long <- data.frame(
-      read_type = c("reads_total", "reads_endogenous"),
-      count = c(row_data$reads_total, row_data$reads_endogenous)
+      read_type = c("Endogenous", "Non-Endogenous"),
+      count = c(row_data$reads_endogenous, row_data$reads_total - row_data$reads_endogenous)
     )
     
     # Create the pie chart
     p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
       geom_bar(stat = "identity", width = 1) +
       coord_polar(theta = "y") +  # Create the pie chart by converting to polar coordinates
-      scale_fill_manual(values = c("reads_total" = "#2ca02c",    # Blue
-                                   "reads_endogenous" = "#ff7f0e")) +  # Orange
+      scale_fill_manual(values = c("Endogenous" = "#ff7f0e",  # Orange
+                             "Non-Endogenous" = "#2ca02c"))  # Green
       labs(x = NULL, y = NULL, fill = "Read Type") +
       theme_void() +  # Remove background and axis labels
       theme(legend.position = "bottom")  # Place legend at the bottom
