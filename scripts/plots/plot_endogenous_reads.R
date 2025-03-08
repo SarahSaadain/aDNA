@@ -59,9 +59,8 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
         axis.text.x = element_blank()    # Remove x-axis labels if needed
       )
 
-
     # Create file name and path for each chart
-    file_name <- paste0(row_data$protocol, "_endogenous_reads_pie_chart.png")
+    file_name <- paste0(row_data$file, "_endogenous_reads_pie_chart.png")
     file_path <- file.path(target_folder, file_name)
     
     # Save the plot
