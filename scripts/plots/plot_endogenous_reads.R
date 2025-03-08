@@ -16,7 +16,7 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
     source_file, 
     sep =",", 
     header = FALSE, 
-    col.names = c("protocol", "reads_endogenous", "reads_total", "percent_endogenous"))
+    col.names = c("file", "reads_endogenous", "reads_total", "percent_endogenous"))
   
   # Add the Non-Endogenous reads and their percentages to the original dataframe
   df <- df %>%
@@ -46,7 +46,7 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
                 position = position_stack(vjust = 0.5), size = 5, color = "white") +
       scale_fill_manual(values = c("Endogenous" = "#209557",  # Green
                                   "Non-Endogenous" = "#1f5bb4")) + # Blue
-      labs(x = NULL, y = NULL, fill = "Read Type", title = paste("Endogenous vs Non-Endogenous Reads - Protocol:", row_data$protocol)) +  # Include protocol in title
+      labs(x = NULL, y = NULL, fill = "Read Type", title = paste("Endogenous vs Non-Endogenous Reads:", row_data$file)) +  # Include protocol in title
       theme_bw() +  # Apply the black-and-white theme
       theme(
         panel.grid = element_blank(),
