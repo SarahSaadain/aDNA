@@ -8,7 +8,7 @@ plot_coverage_breadth <- function(species, filepath, target_folder) {
   df <- read_tsv(filepath)
   
   # Bin the scaffolds based on their length (total_bases)
-  bins <- c(0, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000, 20000000)  # Updated bins for scaffold length
+  bins <- c(0, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000, 20000000, Inf)  # Updated bins for scaffold length
   bin_labels <- c('0-100k', '100k-250k', '250k-500k', '500k-1M', '1M-2.5M', '2.5M-5M', '5M-10M', '10M-20M', '20M+')
   
   # Create a new column for the length bin
