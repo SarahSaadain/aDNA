@@ -69,7 +69,7 @@ def plot_breadth_analysis(species):
 
         sample = os.path.basename(analysis_file).replace(FILE_ENDING_ANALYSIS_TSV, "")
 
-        output_folder_path = get_folder_path_species_results_plots_depth_sample(species, sample)
+        output_folder_path = get_folder_path_species_results_plots_breadth_sample(species, sample)
 
         print_info(f"Plotting breadth analysis for file {analysis_file} to {output_folder_path}")
 
