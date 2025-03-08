@@ -54,7 +54,7 @@ plot_compare_reads_before_after_processing <- function(species, source_file, tar
     theme(panel.grid.major = element_line(color = "grey90"),  # Light grid lines
           panel.grid.minor = element_blank())
   
-    file_name <- paste(species, "read_count_comparison.png")
+    file_name <- paste0(species, "_read_count_comparison.png")
     file_path <- file.path(target_folder, file_name)
     
     # Save the plot

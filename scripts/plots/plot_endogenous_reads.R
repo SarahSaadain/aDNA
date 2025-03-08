@@ -45,14 +45,13 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
       geom_text(aes(label = paste0(round(percent, 1), "%")), 
                 position = position_stack(vjust = 0.5), size = 5, color = "white") +
       scale_fill_manual(values = c("Endogenous" = "#209557",  # Green
-                                   "Non-Endogenous" = "#1f5bb4")) + # Blue
-      scale_y_continuous(labels = comma) +
+                                  "Non-Endogenous" = "#1f5bb4")) + # Blue
+      scale_y_continuous(labels = scales::comma) +
       labs(x = NULL, y = NULL, fill = "Read Type") +
-      theme_void() +  # Remove background and axis labels
-      theme(legend.position = "bottom", 
-            panel.grid = element_blank(),
-            panel.background = element_rect(fill = "white", color = NA))  # White background
-    
+      theme_bw() +
+      theme(
+        legend.position = "bottom"
+      )
 
     # Create file name and path for each chart
     file_name <- paste0(row_data$protocol, "_endogenous_reads_pie_chart.png")

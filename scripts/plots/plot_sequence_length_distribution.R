@@ -4,6 +4,7 @@ library(tidyr)
 library(readr)
 library(tools)  # For file path manipulation
 library(dplyr)  # For data manipulation
+library(scales)  # For number formatting
 
 # Function to generate and save plots
 plot_read_length_distribution <- function(species, source_file, output_folder) {
@@ -41,13 +42,18 @@ plot_read_length_distribution <- function(species, source_file, output_folder) {
     p <- ggplot(df_subset, aes(x = read_length, y = Count, color = Processing_Step, group = Processing_Step)) +
       geom_line() +
       geom_point() +
-      theme_minimal() +
       labs(title = paste("Read Length Distribution:", file_name),
-           x = "Read Length",
-           y = "Count",
-           color = "Processing Step") +
-      scale_x_continuous(breaks = seq(min(df_subset$read_length, na.rm = TRUE), max(df_subset$read_length, na.rm = TRUE), by = 5))
-    
+          x = "Read Length",
+          y = "Count",
+          color = "Processing Step") +
+      scale_x_continuous(
+        breaks = seq(min(df_subset$read_length, na.rm = TRUE), max(df_subset$read_length, na.rm = TRUE), by = 10),
+        labels = label_number()  # This will prevent scientific notation
+      ) +
+      theme_bw() +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels to avoid overlap
+      )
     # Generate output filename
     output_file <- file.path(output_folder, paste0(file_name, ".png"))
     
