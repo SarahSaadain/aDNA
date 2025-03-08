@@ -22,7 +22,6 @@ def get_read_length_distribution(fastq_file):
         for record in SeqIO.parse(handle, "fastq"):
             read_lengths[len(record.seq)] += 1  # Count occurrences of each read length
 
-
     return read_lengths
     
 def get_file_name_read_length_distribution(species):

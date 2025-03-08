@@ -1,63 +1,59 @@
-library(tidyverse)
-library(ggpubr)
-library(dplyr)
-library(purrr)
 library(ggplot2)
+library(dplyr)
+library(readr)
+library(tools)
 
-setwd("/Users/ssaadain/Documents/cockroach/aDNA/plots/Coverage/breadth/")
-
-# breadth coverage for each scaffold
-breadth <- read.table("breadth_coverage_mapBger2.txt", header = FALSE, 
-                            col.names = c("scaffolds", "start", "end", "num_reads", "bases_covered", "bin_size", "coverage_fraction"))
-
-max_length_of_scaffold <- max(breadth$bin_size, na.rm = TRUE)
-
-breadth$percent_coverage <- round(breadth$coverage_fraction*100,0)
-
-# Define the function
-plot_breadth_coverage <- function(breadth, bin_size_range) {
+plot_coverage_breadth <- function(species, filepath, target_folder) {
+  # Read the TSV file into a data frame
+  df <- read_tsv(filepath)
   
-  # Filter based on bin size range
-  breadth_filtered <- breadth[breadth$bin_size >= bin_size_range[1] & breadth$bin_size <= bin_size_range[2], ]
+  # Bin the scaffolds based on their length (total_bases)
+  bins <- c(0, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000, 20000000)  # Updated bins for scaffold length
+  bin_labels <- c('0-100k', '100k-250k', '250k-500k', '500k-1M', '1M-2.5M', '2.5M-5M', '5M-10M', '10M-20M')
   
-  breadth_filtered_summary <- breadth_filtered %>%
-    group_by(percent_coverage) %>%
-    summarise(nr_scaffolds=n())
+  # Create a new column for the length bin
+  df$length_bin <- cut(df$total_bases, breaks = bins, labels = bin_labels, right = FALSE)
   
-  # Generate the plot
-  breadth_plot <- ggplot(breadth_filtered_summary, aes(x = percent_coverage, y = nr_scaffolds)) +
-    geom_line(size = 0.3) +
-    labs(title = paste(
-            "Breadth Coverage of Scaffolds",  
-            " (Scaffold length from ",  
-            format(bin_size_range[1], big.mark = ",", scientific = FALSE), 
-            " - ", 
-            format(bin_size_range[2], big.mark = ",", scientific = FALSE), 
-            ")", 
-            sep = ""), 
-         subtitle = paste( 
-          format(nrow(breadth_filtered), big.mark = ",", scientific = FALSE), 
-          " of ",
-          format(nrow(breadth), big.mark = ",", scientific = FALSE), 
-          " Scaffolds",
-          sep = ""), 
-         x = "breadth coverage in %", y = "number of scaffolds") +
-    theme_bw() +
-    theme(legend.position = "none")
+  # Calculate the average percent_covered, count of scaffolds, and standard deviation for each bin
+  avg_coverage_by_bin <- df %>%
+    group_by(length_bin) %>%
+    summarise(
+      avg_coverage = mean(percent_covered, na.rm = TRUE),
+      scaffold_count = n(),
+      std_dev = sd(percent_covered, na.rm = TRUE)
+    )
   
-  # Return the plot
-  return(breadth_plot)
+  # Extract the filename without extension
+  filename <- file_path_sans_ext(basename(filepath))
+  
+  # Check if the target folder exists; if not, create it
+  if (!dir.exists(target_folder)) {
+    dir.create(target_folder, recursive = TRUE)
+    print(paste("Created directory:", target_folder))
+  }
+  
+  # Create the plot with error bars for standard deviation
+  plot <- ggplot(avg_coverage_by_bin, aes(x = length_bin, y = avg_coverage, group = 1)) +
+    geom_bar(stat = "identity", fill = "skyblue", color = "black") +
+    geom_errorbar(aes(ymin = avg_coverage - std_dev, ymax = avg_coverage + std_dev), 
+                  width = 0.2, color = "black") +  # Error bars for standard deviation
+    labs(x = "Scaffold Length Bin", y = "Average Percent Covered", 
+         title = paste("Average Coverage by Scaffold Length Bin:", filename)) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+  
+  # Save the plot as a PNG file in the target folder
+  output_filepath <- file.path(target_folder, paste0(filename, ".png"))
+  ggsave(output_filepath, plot = plot, width = 10, height = 6)
+  
+  # Print message with the output path
+  print(paste("Plot saved as:", output_filepath))
 }
 
-plot_BreadthCoverageOfAllScaffolds <- plot_breadth_coverage(breadth, c(0, max_length_of_scaffold))
-plot_BreadthCoverageOfSuperSmallcaffolds <- plot_breadth_coverage(breadth, c(0, 1000) )
-plot_BreadthCoverageOfSmallcaffolds <- plot_breadth_coverage(breadth, c(1001, 10000))
-plot_BreadthCoverageOfMediumScaffolds <- plot_breadth_coverage(breadth, c(10001, 100000))
-plot_BreadthCoverageOfLargeScaffolds <- plot_breadth_coverage(breadth, c(100001, max_length_of_scaffold))
+# Command-line arguments
+args <- commandArgs(trailingOnly = TRUE)
+species <- args[1]  # Species (not used in the plot but passed as an argument)
+filepath <- args[2]  # Path to the input TSV file
+target_folder <- args[3]  # Target folder for saving the plot
 
-ggsave("/Users/ssaadain/Documents/cockroach/aDNA/plots/Coverage/breadth/plot_BreadthCoverageOfAllScaffolds.png", plot = plot_BreadthCoverageOfAllScaffolds, width = 10, height = 6)
-ggsave("/Users/ssaadain/Documents/cockroach/aDNA/plots/Coverage/breadth/plot_BreadthCoverageOfLargeScaffolds.png", plot = plot_BreadthCoverageOfLargeScaffolds, width = 10, height = 6)
-ggsave("/Users/ssaadain/Documents/cockroach/aDNA/plots/Coverage/breadth/plot_BreadthCoverageOfMediumScaffolds.png", plot = plot_BreadthCoverageOfMediumScaffolds, width = 10, height = 6)
-ggsave("/Users/ssaadain/Documents/cockroach/aDNA/plots/Coverage/breadth/plot_BreadthCoverageOfSmallScaffolds.png", plot = plot_BreadthCoverageOfSmallcaffolds, width = 10, height = 6)
-ggsave("/Users/ssaadain/Documents/cockroach/aDNA/plots/Coverage/breadth/plot_BreadthCoverageOfSuperSmallcaffolds.png", plot = plot_BreadthCoverageOfSuperSmallcaffolds, width = 10, height = 6)
-
+plot_coverage_breadth(species, filepath, target_folder)

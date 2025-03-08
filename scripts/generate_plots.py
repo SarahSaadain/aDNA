@@ -52,6 +52,31 @@ def plot_depth_analysis(species):
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
 
+    print_info(f"Finished plotting depth analysis for species {species}")
+
+def plot_breadth_analysis(species):
+    print_info(f"Plotting breadth analysis for species {species}")
+
+    analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_depth_breath(species), f"*{FILE_ENDING_ANALYSIS_TSV}")
+
+    if analysis_files == 0:
+        print_warning(f"No breadth analysis files found for species {species}. Skipping.")
+        return
+
+    r_script = get_r_script(R_SCRIPT_PLOT_BREADTH)
+
+    for analysis_file in analysis_files:
+
+        sample = os.path.basename(analysis_file).replace(FILE_ENDING_ANALYSIS_TSV, "")
+
+        output_folder_path = get_folder_path_species_results_plots_depth_sample(species, sample)
+
+        print_info(f"Plotting breadth analysis for file {analysis_file} to {output_folder_path}")
+
+        call_r_script(r_script, species, analysis_file, output_folder_path)
+
+    print_info(f"Finished plotting breadth analysis for species {species}")
+
 def plot_endogenous_reads(species):
     print_info(f"Plotting endogenous reads for species {species}")
 
@@ -73,14 +98,33 @@ def plot_endogenous_reads(species):
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
 
+    print_info(f"Finished plotting endogenous reads for species {species}")
+
+def plot_sequence_length_distribution(species):
+    print_info(f"Plotting sequence length distribution for species {species}")   
+
+    analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_read_length_distribution(species), f"*{FILE_ENDING_ANALYSIS_TSV}")
+
+    r_script = get_r_script(R_SCRIPT_PLOT_ENDOGENOUS_READS)
+
+    for analysis_file in analysis_files:
         
+        output_folder_path = get_folder_path_species_results_plots_read_length_distribution(species)
+
+        print_info(f"Plotting sequence length distribution for file {analysis_file} to {output_folder_path}")
+
+        call_r_script(r_script, species, analysis_file, output_folder_path)
+
+    print_info(f"Finished plotting sequence length distribution for species {species}")
 
 def species_generate_plots(species):
     print_info(f"Generating plots for species {species}")
 
     plot_reads_processing_result(species)
     plot_depth_analysis(species)
+    plot_breadth_analysis(species)
     plot_endogenous_reads(species)
+    plot_sequence_length_distribution(species)
 
     print_info(f"Finished generating plots for species {species}")
 
