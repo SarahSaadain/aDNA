@@ -54,7 +54,8 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
         panel.border = element_blank(),  # Remove border around the panel
         plot.border = element_blank(),   # Remove border around the entire plot
         axis.text.y = element_blank(),   # Remove y-axis text
-        axis.title.y = element_blank()   # Remove y-axis title
+        axis.title.y = element_blank(),  # Remove y-axis title
+        axis.ticks.y = element_blank()   # Remove y-axis ticks
       )
 
 
