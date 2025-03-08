@@ -11,7 +11,7 @@ def call_r_script(script_path, *args):
     command = ["Rscript", script_path] + list(args)
     try:
         subprocess.run(command, check=True)
-        print(f"Successfully executed {script_path} with arguments {args}")
+        print(f"Successfully executed {command}")
     except subprocess.CalledProcessError as e:
         print(f"Error executing {script_path}: {e}")
 
