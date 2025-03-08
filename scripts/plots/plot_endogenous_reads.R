@@ -16,7 +16,15 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
     source_file, 
     sep =",", 
     header = FALSE, 
-    col.names = c("protocol", "reads_total", "reads_endogenous", "percent_endogenous"))
+    col.names = c("protocol", "reads_endogenous", "reads_total", "percent_endogenous"))
+  
+  # Add the Non-Endogenous reads and their percentages to the original dataframe
+  df <- df %>%
+    mutate(
+      reads_non_endogenous = reads_total - reads_endogenous,  # Calculate Non-Endogenous reads
+      percent_endogenous = percent_endogenous * 100, 
+      percent_non_endogenous = (reads_non_endogenous / reads_total) * 100  # Calculate percentage
+    )
   
   # Loop over each row of the dataframe
   for(i in 1:nrow(df)) {
@@ -26,11 +34,9 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
     # Create a long format for the row (pie chart data)
     row_long <- data.frame(
       read_type = c("Endogenous", "Non-Endogenous"),
-      count = c(row_data$reads_endogenous, row_data$reads_total - row_data$reads_endogenous)
+      count = c(row_data$reads_endogenous, row_data$reads_non_endogenous),
+      percent = c(row_data$percent_endogenous, row_data$percent_non_endogenous)
     )
-    
- # Compute percentages correctly: make reads_total = 100%
-row_long$percent <- row_long$count / row_data$reads_total * 100
 
     # Create the pie chart
     p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
@@ -46,6 +52,7 @@ row_long$percent <- row_long$count / row_data$reads_total * 100
       theme(legend.position = "bottom", 
             panel.grid = element_blank(),
             panel.background = element_rect(fill = "white", color = NA))  # White background
+    
 
     # Create file name and path for each chart
     file_name <- paste0(row_data$protocol, "_endogenous_reads_pie_chart.png")
@@ -57,11 +64,11 @@ row_long$percent <- row_long$count / row_data$reads_total * 100
 }
 
 # FOR TESTING
-#plot_endogenous_reads(
-#  "Bger",
-#  "/Users/ssaadain/Documents/aDNA/Bger/results/endogenous_reads/Bger_endogenous_reads.csv",
-#  "/Users/ssaadain/Documents/aDNA/Bger/results/plots/endogenous_reads"
-#)
+plot_endogenous_reads(
+ "Bger",
+ "/Users/ssaadain/Documents/aDNA/Bger/results/endogenous_reads/Bger_endogenous_reads.csv",
+ "/Users/ssaadain/Documents/aDNA/Bger/results/plots/endogenous_reads"
+)
 
 
 # Ensure you capture command-line arguments
