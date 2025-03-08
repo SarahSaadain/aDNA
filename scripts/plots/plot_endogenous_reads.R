@@ -28,7 +28,9 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
       read_type = c("Endogenous", "Non-Endogenous"),
       count = c(row_data$reads_endogenous, row_data$reads_total - row_data$reads_endogenous)
     )
-    
+ # Calculate percentages for labels
+    row_long$percent <- row_long$count / sum(row_long$count) * 100
+
     # Create the pie chart
     p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
       geom_bar(stat = "identity", width = 1) +
@@ -36,17 +38,24 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
       scale_fill_manual(values = c("Endogenous" = "#209557",  # Green
                              "Non-Endogenous" = "#1f5bb4")) + # Blue
       scale_y_continuous(labels = comma) +
-      labs(x = NULL, y = NULL, fill = "Read Type") +
-      theme_void() +  # Remove background and axis labels
+      geom_text(aes(label = paste0(round(percent, 1), "%")), 
+          position = position_stack(vjust = 0.5), 
+          size = 6, color = "white") +  # Label with percentages
+      labs(title = paste0("Protocol: ", row_data$protocol),
+           subtitle = paste0("Total Reads: ", format(row_data$reads_total, big.mark = ",")), 
+           fill = "Read Type") + # nolint: indentation_linter.
+      theme_minimal(base_size = 14) +  # Set white background
       theme(legend.position = "bottom", 
-        panel.grid = element_blank())
-    
+            panel.grid = element_blank(),
+            plot.title = element_text(hjust = 0.5, face = "bold"),
+            plot.subtitle = element_text(hjust = 0.5))
+            
     # Create file name and path for each chart
     file_name <- paste0(row_data$protocol, "_endogenous_reads_pie_chart.png")
     file_path <- file.path(target_folder, file_name)
     
     # Save the plot
-    ggsave(file_path, plot = p, width = 6, height = 6, dpi = 300)
+ggsave(file_path, plot = p, width = 6, height = 6, dpi = 300, bg = "white")
   }
 }
 
