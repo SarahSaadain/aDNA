@@ -28,38 +28,30 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
       read_type = c("Endogenous", "Non-Endogenous"),
       count = c(row_data$reads_endogenous, row_data$reads_total - row_data$reads_endogenous)
     )
- # Calculate percentages for labels
-    row_long$percent <- row_long$count / sum(row_long$count) * 100
+# Calculate the percentage correctly
+row_long$percent <- (row_long$count / sum(row_long$count)) * 100
 
-    # Create the pie chart
-    p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
-      geom_bar(stat = "identity", width = 1) +
-      coord_polar(theta = "y") +  # Create the pie chart by converting to polar coordinates
-      scale_fill_manual(values = c("Endogenous" = "#209557",  # Green
-                             "Non-Endogenous" = "#1f5bb4")) + # Blue
-      scale_y_continuous(labels = comma) +
-      geom_text(aes(label = paste0(round(percent, 1), "%")), 
-          position = position_stack(vjust = 0.5), 
-          size = 6, color = "white") +  # Label with percentages
-      labs(title = paste0("Protocol: ", row_data$protocol),
-           subtitle = paste0("Total Reads: ", format(row_data$reads_total, big.mark = ",")), 
-           fill = "Read Type") + # nolint: indentation_linter.
-      theme_minimal(base_size = 14) +  # Set white background
-      theme(legend.position = "bottom", 
-            panel.grid = element_blank(),
-            plot.title = element_text(hjust = 0.5, face = "bold"),
-            plot.subtitle = element_text(hjust = 0.5))
-            
+# Create the pie chart
+p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  scale_fill_manual(values = c("Endogenous" = "#209557", "Non-Endogenous" = "#1f5bb4")) +
+  geom_text(aes(label = paste0(round(percent, 1), "%")), 
+            position = position_stack(vjust = 0.5), 
+            size = 6, color = "white") +  
+  theme_void() +  
+  theme(legend.position = "bottom", 
+        panel.grid = element_blank(),
+        axis.text = element_blank(),  # Removes numbers on the outside
+        axis.ticks = element_blank(),
+        plot.title = element_blank())  # Removes header
+
     # Create file name and path for each chart
     file_name <- paste0(row_data$protocol, "_endogenous_reads_pie_chart.png")
     file_path <- file.path(target_folder, file_name)
     
-    # Save the plot
+# Save with white background
 ggsave(file_path, plot = p, width = 6, height = 6, dpi = 300, bg = "white")
-  }
-}
-
-
 
 # FOR TESTING
 #plot_endogenous_reads(
