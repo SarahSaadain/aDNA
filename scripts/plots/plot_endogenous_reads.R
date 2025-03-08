@@ -33,11 +33,13 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
     p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
       geom_bar(stat = "identity", width = 1) +
       coord_polar(theta = "y") +  # Create the pie chart by converting to polar coordinates
-      scale_fill_manual(values = c("Endogenous" = "#ff7f0e",  # Orange
-                             "Non-Endogenous" = "#2ca02c"))  # Green
+      scale_fill_manual(values = c("Endogenous" = "#209557",  # Green
+                             "Non-Endogenous" = "#1f5bb4")) + # Blue
+      scale_y_continuous(labels = comma) +
       labs(x = NULL, y = NULL, fill = "Read Type") +
       theme_void() +  # Remove background and axis labels
-      theme(legend.position = "bottom")  # Place legend at the bottom
+      theme(legend.position = "bottom", 
+        panel.grid = element_blank())
     
     # Create file name and path for each chart
     file_name <- paste0(row_data$protocol, "_endogenous_reads_pie_chart.png")
