@@ -48,9 +48,12 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
                                   "Non-Endogenous" = "#1f5bb4")) + # Blue
       scale_y_continuous(labels = scales::comma) +
       labs(x = NULL, y = NULL, fill = "Read Type") +
-      theme_bw() +
+      theme_bw() +  # Apply the black-and-white theme
       theme(
-        legend.position = "bottom"
+        panel.grid = element_blank(),
+        legend.position = "bottom",
+        panel.border = element_blank(),  # Remove border around the panel
+        plot.border = element_blank()    # Remove border around the entire plot
       )
 
     # Create file name and path for each chart

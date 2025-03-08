@@ -50,6 +50,7 @@ plot_read_length_distribution <- function(species, source_file, output_folder) {
         breaks = seq(min(df_subset$read_length, na.rm = TRUE), max(df_subset$read_length, na.rm = TRUE), by = 10),
         labels = label_number()  # This will prevent scientific notation
       ) +
+      scale_y_continuous(labels = scales::comma) +  # Format y-axis labels with commas
       theme_bw() +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels to avoid overlap
@@ -82,6 +83,7 @@ plot_read_length_distribution <- function(species, source_file, output_folder) {
         breaks = seq(min(df_subset$read_length, na.rm = TRUE), max(df_subset$read_length, na.rm = TRUE), by = 10),
         labels = label_number()  # This will prevent scientific notation
       ) +
+      scale_y_continuous(labels = scales::comma) +  # Format y-axis labels with commas+
       theme_bw() +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels to avoid overlap
