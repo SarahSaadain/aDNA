@@ -78,8 +78,14 @@ plot_read_length_distribution <- function(species, source_file, output_folder) {
          x = "Read Length",
          y = "Total Count",
          color = "Processing Step") +
-    scale_x_continuous(breaks = seq(min(df_combined$read_length, na.rm = TRUE), max(df_combined$read_length, na.rm = TRUE), by = 5))
-
+    scale_x_continuous(
+        breaks = seq(min(df_subset$read_length, na.rm = TRUE), max(df_subset$read_length, na.rm = TRUE), by = 10),
+        labels = label_number()  # This will prevent scientific notation
+      ) +
+      theme_bw() +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels to avoid overlap
+      )
   # Generate output filename for the combined plot (same as input file, replacing .tsv with .png)
   combined_output_file <- file.path(output_folder, paste0(file_path_sans_ext(basename(source_file)), ".png"))
 
