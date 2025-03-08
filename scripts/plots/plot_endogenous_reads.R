@@ -46,7 +46,6 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
                 position = position_stack(vjust = 0.5), size = 5, color = "white") +
       scale_fill_manual(values = c("Endogenous" = "#209557",  # Green
                                   "Non-Endogenous" = "#1f5bb4")) + # Blue
-      scale_y_continuous(labels = scales::comma) +
       labs(x = NULL, y = NULL, fill = "Read Type", title = paste("Endogenous vs Non-Endogenous Reads - Protocol:", row_data$protocol)) +  # Include protocol in title
       theme_bw() +  # Apply the black-and-white theme
       theme(
