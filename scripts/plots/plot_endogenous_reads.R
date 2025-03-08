@@ -38,7 +38,7 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
       percent = c(row_data$percent_endogenous, row_data$percent_non_endogenous)
     )
 
-    # Create the pie chart
+# Create the pie chart
     p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
       geom_bar(stat = "identity", width = 1) +
       coord_polar(theta = "y") +  # Create the pie chart by converting to polar coordinates
@@ -53,8 +53,10 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
         panel.grid = element_blank(),
         legend.position = "bottom",
         panel.border = element_blank(),  # Remove border around the panel
-        plot.border = element_blank()    # Remove border around the entire plot
-      )
+        plot.border = element_blank(),   # Remove border around the entire plot
+        axis.text.y = element_blank(),   # Remove y-axis text
+        axis.title.y = element_blank()   # Remove y-axis title
+      ) +
 
     # Create file name and path for each chart
     file_name <- paste0(row_data$protocol, "_endogenous_reads_pie_chart.png")
