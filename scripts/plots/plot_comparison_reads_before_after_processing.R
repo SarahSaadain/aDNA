@@ -7,9 +7,9 @@ library(tidyr)
 library(scales)  # for number formatting
 
 
-plot_sequence_length_distribution <- function(species, source_file, target_folder) {
+plot_compare_reads_before_after_processing <- function(species, source_file, target_folder) {
   
-  print("Executing plot_sequence_length_distribution")
+  print("Executing plot_compare_reads_before_after_processing")
   
   # Read the source file
   file <- read.table(source_file, header = TRUE)
@@ -62,7 +62,7 @@ plot_sequence_length_distribution <- function(species, source_file, target_folde
 }
 
 # FOR TESTING
-# plot_sequence_length_distribution(
+# plot_compare_reads_before_after_processing(
 #   "Bger",
 #   "/Users/ssaadain/Documents/aDNA/Bger/results/processed_reads/Bger_reads_processing_result.tsv",
 #   "/Users/ssaadain/Documents/aDNA/Bger/results/plots/processed_reads"
@@ -82,7 +82,7 @@ species <- args[1]
 reads_analysis_file <- args[2]
 target_folder <- args[3]
 
-plot_sequence_length_distribution(
+plot_compare_reads_before_after_processing(
   species,
   reads_analysis_file,
   target_folder

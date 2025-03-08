@@ -89,8 +89,6 @@ def plot_endogenous_reads(species):
     r_script = get_r_script(R_SCRIPT_PLOT_ENDOGENOUS_READS)
 
     for analysis_file in analysis_files:
-        
-        r_script = get_r_script(R_SCRIPT_PLOT_ENDOGENOUS_READS)
 
         output_folder_path = get_folder_path_species_results_plots_endogenous_reads(species)
 

@@ -7,6 +7,10 @@ library(dplyr)  # For data manipulation
 
 # Function to generate and save plots
 plot_read_length_distribution <- function(species, source_file, output_folder) {
+
+  print("Executing plot_read_length_distribution")
+  message("Generating read length distribution plots for species: ", species)
+
    # Read the TSV data
   df <- read_tsv(source_file, col_types = cols(), show_col_types = FALSE)  # Suppress messages
   
@@ -29,6 +33,9 @@ plot_read_length_distribution <- function(species, source_file, output_folder) {
   # Generate a plot for each unique file
   unique_files <- unique(df$reads_file)
   for (file_name in unique_files) {
+
+    message("Generating plot for file: ", file_name)
+
     df_subset <- df_long %>% filter(reads_file == file_name)  # Filter data for this file
     
     p <- ggplot(df_subset, aes(x = read_length, y = Count, color = Processing_Step, group = Processing_Step)) +
