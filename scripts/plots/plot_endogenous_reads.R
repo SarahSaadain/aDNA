@@ -28,30 +28,29 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
       read_type = c("Endogenous", "Non-Endogenous"),
       count = c(row_data$reads_endogenous, row_data$reads_total - row_data$reads_endogenous)
     )
-# Calculate the percentage correctly
-row_long$percent <- (row_long$count / sum(row_long$count)) * 100
-
-# Create the pie chart
-p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
-  geom_bar(stat = "identity", width = 1) +
-  coord_polar(theta = "y") +
-  scale_fill_manual(values = c("Endogenous" = "#209557", "Non-Endogenous" = "#1f5bb4")) +
-  geom_text(aes(label = paste0(round(percent, 1), "%")), 
-            position = position_stack(vjust = 0.5), 
-            size = 6, color = "white") +  
-  theme_void() +  
-  theme(legend.position = "bottom", 
-        panel.grid = element_blank(),
-        axis.text = element_blank(),  # Removes numbers on the outside
-        axis.ticks = element_blank(),
-        plot.title = element_blank())  # Removes header
-
+    
+    # Create the pie chart
+    p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
+      geom_bar(stat = "identity", width = 1) +
+      coord_polar(theta = "y") +  # Create the pie chart by converting to polar coordinates
+      scale_fill_manual(values = c("Endogenous" = "#209557",  # Green
+                             "Non-Endogenous" = "#1f5bb4")) + # Blue
+      scale_y_continuous(labels = comma) +
+      labs(x = NULL, y = NULL, fill = "Read Type") +
+      theme_void() +  # Remove background and axis labels
+      theme(legend.position = "bottom", 
+        panel.grid = element_blank())
+    
     # Create file name and path for each chart
     file_name <- paste0(row_data$protocol, "_endogenous_reads_pie_chart.png")
     file_path <- file.path(target_folder, file_name)
     
-# Save with white background
-ggsave(file_path, plot = p, width = 6, height = 6, dpi = 300, bg = "white")
+    # Save the plot
+    ggsave(file_path, plot = p, width = 6, height = 6, dpi = 300)
+  }
+}
+
+
 
 # FOR TESTING
 #plot_endogenous_reads(
