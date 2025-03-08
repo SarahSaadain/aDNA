@@ -54,7 +54,7 @@ plot_sequence_length_distribution <- function(species, source_file, target_folde
     theme(panel.grid.major = element_line(color = "grey90"),  # Light grid lines
           panel.grid.minor = element_blank())
   
-    file_name <- paste(species, "_sequence_length_distribution.png")
+    file_name <- paste(species, "read_count_comparison.png")
     file_path <- file.path(target_folder, file_name)
     
     # Save the plot

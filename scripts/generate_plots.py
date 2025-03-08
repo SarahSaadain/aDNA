@@ -105,7 +105,7 @@ def plot_sequence_length_distribution(species):
 
     analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_read_length_distribution(species), f"*{FILE_ENDING_ANALYSIS_TSV}")
 
-    r_script = get_r_script(R_SCRIPT_PLOT_ENDOGENOUS_READS)
+    r_script = get_r_script(R_SCRIPT_PLOT_SEQUENCE_LENGTH_DISTRIBUTION)
 
     for analysis_file in analysis_files:
         
