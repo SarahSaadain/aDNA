@@ -29,9 +29,9 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
       count = c(row_data$reads_endogenous, row_data$reads_total - row_data$reads_endogenous)
     )
     
- # Compute percentages
-    row_long$percent <- row_long$count / sum(row_long$count) * 100
-    
+ # Compute percentages correctly: make reads_total = 100%
+row_long$percent <- row_long$count / row_data$reads_total * 100
+
     # Create the pie chart
     p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
       geom_bar(stat = "identity", width = 1) +
