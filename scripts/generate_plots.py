@@ -101,7 +101,11 @@ def plot_endogenous_reads(species):
 def plot_sequence_length_distribution(species):
     print_info(f"Plotting sequence length distribution for species {species}")   
 
-    analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_read_length_distribution(species), f"*{FILE_ENDING_ANALYSIS_TSV}")
+    analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_read_length_distribution(species), f"*{FILE_ENDING_TSV}")
+
+    if analysis_files == 0:
+        print_warning(f"No sequence length distribution files found for species {species}. Skipping.")
+        return
 
     r_script = get_r_script(R_SCRIPT_PLOT_SEQUENCE_LENGTH_DISTRIBUTION)
 
