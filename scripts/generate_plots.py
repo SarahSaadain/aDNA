@@ -34,9 +34,11 @@ def plot_reads_processing_result(species):
 def plot_depth_analysis(species):
     print_info(f"Plotting depth analysis for species {species}")
 
+# gives a list with the path and file names
     analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_depth_breath(species), f"*{FILE_ENDING_ANALYSIS_TSV}")
 
-    if analysis_files == 0:
+# here have multiple files, one for each sample, hence the list
+    if len(analysis_files) == 0:
         print_warning(f"No depth analysis files found for species {species}. Skipping.")
         return
 
@@ -59,7 +61,7 @@ def plot_breadth_analysis(species):
 
     analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_depth_breath(species), f"*{FILE_ENDING_ANALYSIS_TSV}")
 
-    if analysis_files == 0:
+    if len(analysis_files) == 0:
         print_warning(f"No breadth analysis files found for species {species}. Skipping.")
         return
 
@@ -82,7 +84,7 @@ def plot_endogenous_reads(species):
 
     analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_endogenous_reads(species), f"*_endogenous_reads{FILE_ENDING_CSV}")
 
-    if analysis_files == 0:
+    if len(analysis_files) == 0:
         print_warning(f"No endogenous reads files found for species {species}. Skipping.")
         return
 
@@ -103,7 +105,7 @@ def plot_sequence_length_distribution(species):
 
     analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_read_length_distribution(species), f"*{FILE_ENDING_TSV}")
 
-    if analysis_files == 0:
+    if len(analysis_files) == 0:
         print_warning(f"No sequence length distribution files found for species {species}. Skipping.")
         return
 

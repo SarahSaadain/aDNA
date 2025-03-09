@@ -1,6 +1,4 @@
 import os
-import re
-import subprocess
 import pandas as pd
 
 import gzip
@@ -45,23 +43,23 @@ def determine_read_length_distribution(species):
         print_info(f"Reads length distribution file already exists for species {species}. Skipping.")
         return
     
-    # create output dataframe
-    output_df = pd.DataFrame(columns=["reads_file", "individual", "protocol", "raw_count", "adapter_removed_count", "quality_filtered_count", "duplicates_removed_count"])
-
     for raw_read in raw_reads:
 
         print_info(f"Processing read file {raw_read}")
         raw_distribution = get_read_length_distribution(raw_read)
         #r2_count = execute_seqkit_stats_count_reads(raw_read[1])
         
+        # [] to define its a list of ome entry, as the adapter removed still has R1 and R2 (later we have only one file as its merged)
         adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, [raw_read])
         print_info(f"Processing adapter removed file {adapter_removed_file}")
         adapter_removed_distribution = get_read_length_distribution(adapter_removed_file)
 
+        #relies on script before
         quality_filtered_file = get_quality_filtered_path_for_adapter_removed_reads(species, adapter_removed_file)
         print_info(f"Processing quality filtered file {quality_filtered_file}")
         quality_filtered_distribution = get_read_length_distribution(quality_filtered_file)
 
+        #relies on script before
         duplicates_removed_file = get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file)
         print_info(f"Processing duplicates removed file {duplicates_removed_file}")
         duplicates_removed_distribution = get_read_length_distribution(duplicates_removed_file)
@@ -79,6 +77,8 @@ def determine_read_length_distribution(species):
         df_dedup = pd.DataFrame(duplicates_removed_distribution.items(), columns=["read_length", "read_count_duplicates_removed"])
 
         # Merge on read_length (Outer Join)
+        # merges the raw, adapter removed, quality filtered and duplicates removed DataFrames for one read file
+        # on to merge next to each other (based on read_length) instead of on top
         df = df_raw.merge(df_adapter, on="read_length", how="outer") \
                 .merge(df_quality, on="read_length", how="outer") \
                 .merge(df_dedup, on="read_length", how="outer")
@@ -95,6 +95,7 @@ def determine_read_length_distribution(species):
         all_dfs.append(df)
 
     # Concatenate all DataFrames into a single one
+    # Concatenates the dataframes of all read files into one dataframe
     final_df = pd.concat(all_dfs, ignore_index=True)
     final_df.to_csv(output_file_path, sep="\t", index=False)
 
