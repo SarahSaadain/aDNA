@@ -54,7 +54,7 @@ def main():
     args = parser.parse_args()
     
     # check if script is run in the folder aDNA
-    if not os.path.dirname(os.path.realpath(__file__)).endswith("aDNA"):
+    if not os.getcwd().endswith("aDNA"):
         print("Please run this script in the aDNA folder")
         exit()
 
@@ -101,9 +101,9 @@ def main():
         "Bger/resources/mapping_folder_to_lane.csv",
         "Bger/resources/mapping_runID_to_name.csv",
 
-        "resources/helpers/update_local_scripts_from_github.py",
-        "resources/helpers/rename.py",
-        "resources/helpers/rename.csv"
+        "resources/update_local_scripts_from_github.py",
+        "resources/rename.py",
+        "resources/rename.csv"
 
     ]
 
