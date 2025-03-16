@@ -9,3 +9,4 @@ __pycache__
 update_local_scripts_from_github.py
 scripts/try_and_error/
 batch1_failed_trialrun/
+batch2_failed_trialrun/
