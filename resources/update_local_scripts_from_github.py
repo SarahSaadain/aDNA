@@ -4,40 +4,40 @@ import argparse
 
 def download_files(file_url, target_file, force_update=False):
 
-        print(f'Downloading {file_url} to {target_file} ...')
+    print(f'Downloading {file_url} to {target_file} ...')
 
-        try:
-            # Download the file
-            file_content = get_remote_file_content(file_url)
+    try:
+        # Download the file
+        file_content = get_remote_file_content(file_url)
 
-            print(f"Downloaded {file_url}")
-            #print(f"Content: {file_content}")
+        print(f"Downloaded {file_url}")
+        #print(f"Content: {file_content}")
 
-            #check if content of the file is up to date 
-            if os.path.exists(target_file):
-                with open(target_file, 'rb') as f:
-                    if f.read() == file_content:
-                        print(f"File {target_file} is up to date")
-                        return
-                    
-            # if file already exists and must be update. get confirmation by the user
-            if os.path.exists(target_file) and not force_update:
-                print(f"File {target_file} already exists. Do you want to overwrite it? (y/n)")
-                choice = input().lower()    
-                if choice != 'y':
-                    print("File not overwritten")    
+        #check if content of the file is up to date 
+        if os.path.exists(target_file):
+            with open(target_file, 'rb') as f:
+                if f.read() == file_content:
+                    print(f"File {target_file} is up to date")
                     return
                 
-            #check if directory exists, if not create it
-            target_dir = os.path.dirname(target_file)
-            if not os.path.exists(target_dir):
-                os.makedirs(target_dir)
+        # if file already exists and must be update. get confirmation by the user
+        if os.path.exists(target_file) and not force_update:
+            print(f"File {target_file} already exists. Do you want to overwrite it? (y/n)")
+            choice = input().lower()    
+            if choice != 'y':
+                print("File not overwritten")    
+                return
+            
+        #check if directory exists, if not create it
+        target_dir = os.path.dirname(target_file)
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
 
-            # Save the file to the target directory
-            with open(target_file, 'wb') as f:
-                f.write(file_content)
-        except Exception as e:
-            print(f"Failed to download file: {e}")
+        # Save the file to the target directory
+        with open(target_file, 'wb') as f:
+            f.write(file_content)
+    except Exception as e:
+        print(f"Failed to download file: {e}")
 
 def get_remote_file_content(file_url):
     response = requests.get(file_url)
@@ -97,7 +97,6 @@ def main():
         "scripts/plots/plot_sequence_length_distribution.R",
 
         "Bger/scripts/prepare_for_processing.py",
-        "Bger/scripts/prepare_for_mapping_to_ref_genome.py",
         "Bger/resources/mapping_folder_to_lane.csv",
         "Bger/resources/mapping_runID_to_name.csv",
 
