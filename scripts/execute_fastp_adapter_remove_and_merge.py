@@ -116,59 +116,47 @@ def all_species_fastp_adapter_remove_and_merge():
 
     print_info("Adapter removal and merge for all species completed successfully.")
 
-def adapter_remove_for_species_paired_reads(species):
-    try:
-        list_of_read_files = get_raw_paired_reads_list_of_species(species)
-
-        if len(list_of_read_files) == 0:
-            print_warning(f"No reads found for species {species}.")
-            return
-
-        for read_file_path in list_of_read_files:
-
-            adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, read_file_path)
-          
-            execute_fastp_paired_reads_remove_adapters_and_merge(read_file_path[0], read_file_path[1], adapter_removed_read_file)
-        
-    except Exception as e:
-        print_error(e)
-
-def adapter_remove_for_species_single_reads(species):
-    try:
-        list_of_r1_read_files = get_files_in_folder_matching_pattern(get_folder_path_species_raw_reads(species), FILE_PATTERN_R1_FASTQ_GZ)
-
-        if len(list_of_r1_read_files) == 0:
-            print_warning(f"No reads found for species {species}.")
-            return
-
-        for read_file_path in list_of_r1_read_files:
-
-            adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, [read_file_path])
-            
-            execute_fastp_single_reads_remove_adapters(read_file_path, adapter_removed_read_file)
-        
-    except Exception as e:
-        print_error(e)
-
 def adapter_remove_for_species(species):
     print_info(f"Running adapter removal for species {species}")
 
-    #check if R2 files are present
-    list_of_r1_read_files = get_files_in_folder_matching_pattern(get_folder_path_species_raw_reads(species), FILE_PATTERN_R1_FASTQ_GZ)
-    list_of_r2_read_files = get_files_in_folder_matching_pattern(get_folder_path_species_raw_reads(species), FILE_PATTERN_R2_FASTQ_GZ)
+    # Get lists of R1 and R2 read files
+    raw_reads_folder = get_folder_path_species_raw_reads(species)
+    list_of_r1_read_files = get_files_in_folder_matching_pattern(raw_reads_folder, FILE_PATTERN_R1_FASTQ_GZ)
+    list_of_r2_read_files = get_files_in_folder_matching_pattern(raw_reads_folder, FILE_PATTERN_R2_FASTQ_GZ)
 
-    if len(list_of_r1_read_files) == 0 and len(list_of_r2_read_files) == 0:
+    if not list_of_r1_read_files and not list_of_r2_read_files:
         print_warning(f"No reads found for species {species}.")
         return
 
-    # if R2 files are not present then treat reads as single-end reads otherwise treat reads as paired-end reads
-    if len(list_of_r2_read_files) == 0:
-        print_warning(f"No R2 reads found for species {species}.")
-        print_info("Treating reads as single-end reads.")
-        adapter_remove_for_species_single_reads(species)
-    else:
-        print_info("Treating reads as paired-end reads.")
-        adapter_remove_for_species_paired_reads(species)            
+    # Create a set of base filenames to identify paired reads
+    paired_reads = set()
+    single_reads = set(list_of_r1_read_files)  # Assume all R1 files are single initially
+
+    for r1 in list_of_r1_read_files:
+        r2 = r1.replace("_R1_", "_R2_")  # Generate expected R2 filename
+        if r2 in list_of_r2_read_files:
+            paired_reads.add((r1, r2))
+            single_reads.discard(r1)  # Remove from single-end list if paired
+
+    # Process paired reads
+    if paired_reads:
+        print_info("Processing paired-end reads.")
+        try:
+            for r1, r2 in paired_reads:
+                adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, [r1, r2])
+                execute_fastp_paired_reads_remove_adapters_and_merge(r1, r2, adapter_removed_read_file)
+        except Exception as e:
+            print_error(e)
+    
+    # Process single-end reads
+    if single_reads:
+        print_info("Processing single-end reads.")
+        try:
+            for read_file_path in single_reads:
+                adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, [read_file_path])
+                execute_fastp_single_reads_remove_adapters(read_file_path, adapter_removed_read_file)
+        except Exception as e:
+            print_error(e)
     
     print_info(f"Adapter removal for species {species} completed successfully.")
 
