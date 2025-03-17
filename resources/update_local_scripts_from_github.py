@@ -101,9 +101,9 @@ def main():
         "Bger/resources/mapping_folder_to_lane.csv",
         "Bger/resources/mapping_runID_to_name.csv",
 
-        "update_local_scripts_from_github.py",
-        "rename.py",
-        "rename.csv"
+        "resources/update_local_scripts_from_github.py",
+        "resources/rename.py",
+        "resources/rename.csv"
 
     ]
 
@@ -114,7 +114,7 @@ def main():
         relative_path = os.path.relpath(file_url, path)
 
         # set script folder of current folder as target directory
-        target_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), relative_path)
+        target_dir = os.path.join(os.getcwd(), relative_path)
 
         download_files(file_url, target_dir, args.force_update)
 
