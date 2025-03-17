@@ -60,6 +60,7 @@ FOLDER_ENDOGENOUS_READS = "endogenous_reads"
 FOLDER_PROCESSED_READS = "processed_reads"
 FOLDER_READ_LENGTH_DISTRIBUTION = "read_length_distribution"
 FOLDER_PLOTS = "plots"
+FOLDER_REGIONS = "regions"
 
 # main folders
 FOLDER_SCRIPTS = "scripts"
@@ -266,6 +267,16 @@ def get_folder_path_species_processed_mapped(species):
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_processed_coigene(species):
+    path = os.path.join(get_folder_path_species_processed(species), FOLDER_COI_GENE)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_processed_coigene_mapped(species):
+    path = os.path.join(get_folder_path_species_processed_coigene(species), FOLDER_MAPPED)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_processed_adapter_removed(species):
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_ADAPTER_REMOVED)
     check_folder_exists_or_create(path)
@@ -303,6 +314,16 @@ def get_folder_path_species_processed_non_concatenated(species):
 
 def get_folder_path_species_results_genomedelta(species):
     path = os.path.join(get_folder_path_species_results(species), FOLDER_GENOMEDELTA)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_coigene(species):
+    path = os.path.join(get_folder_path_species_results(species), FOLDER_COI_GENE)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_coigene_regions(species):
+    path = os.path.join(get_folder_path_species_results(species), FOLDER_REGIONS)
     check_folder_exists_or_create(path)
     return path
 

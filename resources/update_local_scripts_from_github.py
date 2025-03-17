@@ -69,15 +69,13 @@ def main():
         #'scripts/adapter_remove_aDNA.py',
         "scripts/common_aDNA_scripts.py",
         #"scripts/determine_poly_nt_count.py",
+        "scripts/determine_coi_check_s1_map_to_ref_genome.py"
         "scripts/determine_coverage_depth_and_breadth.py",
         #"scripts/extract_most_common_sequence_to_fasta.py"
         "scripts/map_aDNA_to_refgenome.py",
         "scripts/execute_multiqc.py",
         "scripts/execute_fastqc.py",
         "scripts/pipeline_aDNA.py",
-        "scripts/prepare_reads_for_GD.py",
-        "scripts/prepare_species_for_processing.py",
-        "scripts/prepare_species_for_map_to_ref_genome.py",
         "scripts/polish_fastp_quality_filter.py",
         "scripts/polish_fastp_deduplication.py",
         "scripts/execute_fastp_adapter_remove_and_merge.py",
@@ -87,6 +85,9 @@ def main():
         "scripts/determine_reads_processing_result.py",
         "scripts/determine_read_length_distribution.py",
         "scripts/generate_quality_check_report.py",
+        "scripts/prepare_reads_for_GD.py",
+        "scripts/prepare_species_for_processing.py",
+        "scripts/prepare_species_for_map_to_ref_genome.py",
         "scripts/prepare_ref_genome_for_mapping.py",
         "scripts/generate_plots.py",
 
