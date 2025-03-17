@@ -18,7 +18,6 @@ import determine_read_length_distribution as determine_read_length_distribution
 import generate_quality_check_report as generate_quality_check_report
 import generate_plots as generate_plots
 import scripts.determine_coi_step1_map_to_ref_genome as determine_coi_step1_map_to_ref_genome
-import scripts.determine_coi_step2_determine_regions as determine_coi_step2_determine_regions
 
 def run_pipeline():
 
@@ -58,7 +57,6 @@ def run_pipeline():
     determine_coverage_depth_and_breadth.all_species_determine_coverage_depth_and_breath()
 
     determine_coi_step1_map_to_ref_genome.all_species_map_coi_to_refgenome()
-    determine_coi_step2_determine_regions.all_species_coi_get_regions()
 
     extract_special_sequences.all_species_extract_special_sequences()
 
