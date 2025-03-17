@@ -69,7 +69,7 @@ def main():
         #'scripts/adapter_remove_aDNA.py',
         "scripts/common_aDNA_scripts.py",
         #"scripts/determine_poly_nt_count.py",
-        "scripts/determine_coi_step1_map_to_ref_genome.py"
+        "scripts/determine_coi_step1_map_to_ref_genome.py",
         "scripts/determine_coverage_depth_and_breadth.py",
         #"scripts/extract_most_common_sequence_to_fasta.py"
         "scripts/map_aDNA_to_refgenome.py",
