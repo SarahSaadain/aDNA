@@ -1,5 +1,9 @@
 # aDNA
 
+```bash
+nohup python -u scripts/pipeline_aDNA.py > pipeline.log 2>&1 &
+```
+
 prepare read list  
 ```bash
 find . -type f \( -name "*_R1_*.fastq.gz" -o -name "*_R2_*.fastq.gz" \) ! -path "*/undetermined/*" | sort | awk 'NR%2{printf "%s,", $0} NR%2==0{print $0}' > reads_list.txt
@@ -90,9 +94,7 @@ grep SUCCESS adapter_remove.log
 grep ERROR adapter_remove.log
 ````
 
-```bash
-nohup python -u scripts/pipeline_aDNA.py > pipeline.log 2>&1 &
-```
+
 
 # get ref genomes
 ```bash

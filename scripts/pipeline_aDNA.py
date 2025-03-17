@@ -17,7 +17,7 @@ import determine_reads_processing_result as determine_reads_processing_result
 import determine_read_length_distribution as determine_read_length_distribution
 import generate_quality_check_report as generate_quality_check_report
 import generate_plots as generate_plots
-import scripts.determine_coi_step1_map_to_ref_genome as determine_coi_step1_map_to_ref_genome
+import determine_coi_step1_map_to_ref_genome as determine_coi_step1_map_to_ref_genome
 
 def run_pipeline():
 
