@@ -101,9 +101,9 @@ def main():
         "Bger/resources/mapping_folder_to_lane.csv",
         "Bger/resources/mapping_runID_to_name.csv",
 
-        "resources/update_local_scripts_from_github.py",
-        "resources/rename.py",
-        "resources/rename.csv"
+        "update_local_scripts_from_github.py",
+        "rename.py",
+        "rename.csv"
 
     ]
 
