@@ -10,7 +10,7 @@ def map_coi_to_refgenome_for_species(species):
 
     #get reads
     read_folder = get_folder_path_species_raw_coigene(species)
-    list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FNA}")
+    list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FASTQ_GZ}")
 
     if len(list_of_read_files) == 0:
         print_warning(f"No reads found for species {species}. Skipping.")
@@ -38,6 +38,9 @@ def map_coi_to_refgenome_for_species(species):
             output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}{FILE_ENDING_SAM}")
 
             execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
+
+            if not os.path.exists(output_file_path):
+                continue
 
             execute_convert_sam_to_bam(output_file_path, output_folder, THREADS_DEFAULT)
 
