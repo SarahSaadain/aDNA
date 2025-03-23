@@ -2,20 +2,25 @@ import os
 from common_aDNA_scripts import *
 
 def execute_samtools_get_read_regions(bam_file, output_file, threads=THREADS_DEFAULT):
+
+    if not os.path.exists(bam_file):
+        raise Exception(f"BAM file {bam_file} does not exist.")
+    
+    if os.path.exists(output_file):
+        print_warning(f"Output file {output_file} already exists. Skipping.")
+        return
     
     command = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -@ {threads} {bam_file} | awk '{{print $3, $4}}' > {output_file}"
   
     try:
       # Execute the command
         subprocess.run(command, shell=True, check=True)
-
         print(f"Regions have been written to {output_file}")
     except Exception as e:
         print_error(f"Failed to extract regions for {bam_file}: {e}")
-    return 0
 
 def coi_get_regions_for_species(species):
-    print(f"Determining endogenous reads for species: {species}")
+    print_info(f"Determining coi regions for species: {species}")
     
     mapped_folder = get_folder_path_species_processed_mapped(species)
 
@@ -33,13 +38,16 @@ def coi_get_regions_for_species(species):
         return
     
     execute_samtools_get_read_regions(bam_files[0], result_file_path)
+
+    print_info(f"Finished determining coi regions for species {species}")
     
    
 def all_species_coi_get_regions():
 
-    print("Determining endogenous reads for all species")
+    print("Determining coi regions for all species")
     for species in FOLDER_SPECIES: 
         coi_get_regions_for_species(species)
+    print_info("Finished determining coi regions for all species")
 
 def main():
     all_species_coi_get_regions()

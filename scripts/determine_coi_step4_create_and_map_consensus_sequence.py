@@ -18,6 +18,11 @@ def execute_angsd_create_and_map_consensus_sequence(input_file, output_dir):
 
     # create consensus fasta
     out_file_path = os.path.join(output_dir, f"{base_name}_consensus.fasta")
+
+    if os.path.exists(out_file_path):
+        print_info(f"Consensus sequence {out_file_path} already exists. Skipping.")
+        return
+
     print_info(f"Creating consensus sequence of {input_file}...")
     try:
         subprocess.run([PROGRAM_PATH_ANGSD, "-out", out_file_path, "-i", input_file, "-doFasta", "2", "-doCounts", "1"])
