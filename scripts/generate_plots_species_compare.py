@@ -33,6 +33,7 @@ def plot_endogenous_reads(species: list):
     print_info(f"Finished plotting endogenous reads comparison for species {species_string}")
 
 def species_generate_comparison_plots(species: list):
+    
     plot_reads_processing_result(species)
     plot_depth_breadth_analysis(species)
     plot_endogenous_reads(species)
