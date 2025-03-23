@@ -349,7 +349,7 @@ def get_folder_path_species_results_coigene(species):
     return path
 
 def get_folder_path_species_results_coigene_regions(species):
-    path = os.path.join(get_folder_path_species_results(species), FOLDER_REGIONS)
+    path = os.path.join(get_folder_path_species_results_coigene(species), FOLDER_REGIONS)
     check_folder_exists_or_create(path)
     return path
 
