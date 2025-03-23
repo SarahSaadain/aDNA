@@ -106,3 +106,15 @@ wget --content-disposition "https://api.ncbi.nlm.nih.gov/datasets/v2/genome/acce
 
 # important notes
 reads longer than 150 after adapter removal, filtering and duplicate removal are due to merging of overlapping reads in fastq
+
+# fix Phortica COI gene file
+there was an error while using the fasta file for mapping. when converting the sam to bam i got this error:
+```
+[E::sam_parse1] SEQ and QUAL are of different length 
+````
+
+i used below command to add a dummy quality score
+
+```bash
+awk 'BEGIN {OFS="\n"} /^>/ {header=$0; getline seq; qual=""; for(i=1;i<=length(seq);i++) qual=qual "I"; print header, seq, "+", qual}' phortica_coi.fna > phortica_coi.fastq
+```
