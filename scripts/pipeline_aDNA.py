@@ -57,8 +57,8 @@ def run_pipeline():
     determine_read_length_distribution.all_species_determine_read_length_distribution()
     determine_coverage_depth_and_breadth.all_species_determine_coverage_depth_and_breath()
 
-    determine_coi_step1_map_to_ref_genome.all_species_map_coi_to_refgenome()
-    determine_coi_step2_determine_regions.all_species_coi_get_regions()
+    determine_coi_step1_map_to_ref_genome.all_species_map_mtdna_to_refgenome()
+    determine_coi_step2_determine_regions.all_species_mtdna_get_regions()
     #determine_coi_step3_extract_coi_regions.()
     determine_coi_step4_create_and_map_consensus_sequence.all_species_create_and_map_consensus_sequence()
 
