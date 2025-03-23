@@ -27,6 +27,10 @@ def plot_reads_processing_result(species):
 
     output_folder_path = get_folder_path_species_results_plots_reads_processing(species)
 
+    if os.path.exists(output_folder_path):
+        print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
+        return
+
     r_script = get_r_script(R_SCRIPT_PLOT_READS_BEFORE_AFTER_PROCESSING)
 
     call_r_script(r_script, species, input_file_path, output_folder_path)
@@ -49,6 +53,10 @@ def plot_depth_analysis(species):
         sample = os.path.basename(analysis_file).replace(FILE_ENDING_ANALYSIS_TSV, "")
 
         output_folder_path = get_folder_path_species_results_plots_depth_sample(species, sample)
+
+        if os.path.exists(output_folder_path):
+            print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
+            continue
 
         print_info(f"Plotting depth analysis for file {analysis_file} to {output_folder_path}")
 
@@ -73,6 +81,10 @@ def plot_breadth_analysis(species):
 
         output_folder_path = get_folder_path_species_results_plots_breadth_sample(species, sample)
 
+        if os.path.exists(output_folder_path):
+            print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
+            continue
+
         print_info(f"Plotting breadth analysis for file {analysis_file} to {output_folder_path}")
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
@@ -94,6 +106,10 @@ def plot_endogenous_reads(species):
 
         output_folder_path = get_folder_path_species_results_plots_endogenous_reads(species)
 
+        if os.path.exists(output_folder_path):
+            print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
+            continue
+
         print_info(f"Plotting endogenous reads for file {analysis_file} to {output_folder_path}")
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
@@ -114,6 +130,10 @@ def plot_sequence_length_distribution(species):
     for analysis_file in analysis_files:
         
         output_folder_path = get_folder_path_species_results_plots_read_length_distribution(species)
+
+        if os.path.exists(output_folder_path):
+            print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
+            continue
 
         print_info(f"Plotting sequence length distribution for file {analysis_file} to {output_folder_path}")
 
