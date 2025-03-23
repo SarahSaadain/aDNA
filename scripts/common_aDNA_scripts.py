@@ -31,7 +31,7 @@ FOLDER_SPECIES = [FOLDER_BGER, FOLDER_DSIM, FOLDER_PHORTICA, FOLDER_SEPSIS, FOLD
 FOLDER_RAW = "raw"
 FOLDER_READS = "reads"
 FOLDER_REFERENCE_GENOMES = "ref_genome"
-FOLDER_COI_GENE = "coi_gene"
+FOLDER_COI_MTDNA = "coi_gene"
 
 # processed folders
 # if there is a follow up step, it is considered processed
@@ -46,6 +46,7 @@ FOLDER_DUPLICATES_REMOVED = "duplicates_removed"
 FOLDER_GENOMEDELTA = "genome_delta"
 FOLDER_CONSENSUS_SEQUENCES = "consensus_sequences"
 FOLDER_CONSENSUS_SEQUENCES_MAPPED = "consensus_sequences_mapped"
+FOLDER_EXTRACTED_SEQUENCES = "extracted_sequences"
 
 # results folders
 # if there is no follow up step, it is considered a result
@@ -271,8 +272,8 @@ def get_folder_path_species_raw_reads(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_raw_coigene(species):
-    path = os.path.join(get_folder_path_species_raw(species), FOLDER_COI_GENE)
+def get_folder_path_species_raw_mtdna(species):
+    path = os.path.join(get_folder_path_species_raw(species), FOLDER_COI_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
@@ -286,23 +287,28 @@ def get_folder_path_species_processed_mapped(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_coigene(species):
-    path = os.path.join(get_folder_path_species_processed(species), FOLDER_COI_GENE)
+def get_folder_path_species_processed_mtdna(species):
+    path = os.path.join(get_folder_path_species_processed(species), FOLDER_COI_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_coigene_mapped(species):
-    path = os.path.join(get_folder_path_species_processed_coigene(species), FOLDER_MAPPED)
+def get_folder_path_species_processed_mtdna_extracted_sequence(species):
+    path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_EXTRACTED_SEQUENCES)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_coigene_consensus_sequences(species):
-    path = os.path.join(get_folder_path_species_processed_coigene(species), FOLDER_CONSENSUS_SEQUENCES)
+def get_folder_path_species_processed_mtdna_mapped(species):
+    path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_MAPPED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_coigene_consensus_sequences_mapped(species):
-    path = os.path.join(get_folder_path_species_processed_coigene(species), FOLDER_CONSENSUS_SEQUENCES_MAPPED)
+def get_folder_path_species_processed_mtdna_consensus_sequences(species):
+    path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_CONSENSUS_SEQUENCES)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_processed_mtdna_consensus_sequences_mapped(species):
+    path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_CONSENSUS_SEQUENCES_MAPPED)
     check_folder_exists_or_create(path)
     return path
 
@@ -346,13 +352,13 @@ def get_folder_path_species_results_genomedelta(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_coigene(species):
-    path = os.path.join(get_folder_path_species_results(species), FOLDER_COI_GENE)
+def get_folder_path_species_results_mtdna(species):
+    path = os.path.join(get_folder_path_species_results(species), FOLDER_COI_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_coigene_regions(species):
-    path = os.path.join(get_folder_path_species_results_coigene(species), FOLDER_REGIONS)
+def get_folder_path_species_results_mtdna_regions(species):
+    path = os.path.join(get_folder_path_species_results_mtdna(species), FOLDER_REGIONS)
     check_folder_exists_or_create(path)
     return path
 

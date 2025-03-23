@@ -42,7 +42,7 @@ def create_consensus_sequence_for_species(species):
         print_warning(f"No mapped reads found for species {species}. Skipping.")
         return
     
-    output_folder_consensus_seq = get_folder_path_species_processed_coigene_consensus_sequences(species)
+    output_folder_consensus_seq = get_folder_path_species_processed_mtdna_consensus_sequences(species)
 
     for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files:
 
@@ -57,14 +57,14 @@ def map_consensus_sequence_for_species(species):
     print_info(f"Mapping aDNA consensus sequence to reference genome for species {species} ...")
 
     #get reads
-    read_folder = get_folder_path_species_processed_coigene_consensus_sequences(species)
+    read_folder = get_folder_path_species_processed_mtdna_consensus_sequences(species)
     list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FASTQ_GZ}")
 
     if len(list_of_read_files) == 0:
         print_warning(f"No reads found for species {species}. Skipping.")
         return
     
-    output_folder = get_folder_path_species_processed_coigene_consensus_sequences_mapped(species)
+    output_folder = get_folder_path_species_processed_mtdna_consensus_sequences_mapped(species)
 
       # get ref genome
     ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
@@ -74,7 +74,7 @@ def map_consensus_sequence_for_species(species):
         print_warning(f"No reference genome found for species {species}. Skipping.")
         return
 
-    output_folder = get_folder_path_species_processed_coigene_mapped(species)
+    output_folder = get_folder_path_species_processed_mtdna_mapped(species)
 
     for ref_genome_path in ref_genome_files:
 
