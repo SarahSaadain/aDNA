@@ -10,8 +10,12 @@ def execute_samtools_get_read_regions(bam_file, output_file, threads=THREADS_DEF
         print_warning(f"Output file {output_file} already exists. Skipping.")
         return
     
-    command = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -@ {threads} {bam_file} | awk '{{print $3, $4}}' > {output_file}"
-  
+    command = (
+        f"{PROGRAM_PATH_SAMTOOLS} view -@ {threads} {bam_file} | "
+        f"bedtools bamtobed -i - > {output_file}"
+    )
+    #print_info(f"Running command: {command}")
+    
     try:
       # Execute the command
         subprocess.run(command, shell=True, check=True)
@@ -31,7 +35,7 @@ def coi_get_regions_for_species(species):
         return
 
     result_folder = get_folder_path_species_results_coigene_regions(species)
-    result_file_path = os.path.join(result_folder, f"{species}_coi_regions{FILE_ENDING_CSV}")
+    result_file_path = os.path.join(result_folder, f"{species}_coi_regions{FILE_ENDING_BED}")
 
     if os.path.exists(result_file_path):
         print_info(f"Result file already exists for species {species}. Skipping.")
