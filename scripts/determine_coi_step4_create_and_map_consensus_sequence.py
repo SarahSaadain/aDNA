@@ -32,7 +32,7 @@ def execute_angsd_create_and_map_consensus_sequence(input_file, output_dir):
         print_error(f"Failed to create consensus sequence of {input_file}: {e}")
 
 def create_consensus_sequence_for_species(species):
-    print_info(f"Mapping aDNA to reference genome for species {species} ...")
+    print_info(f"Creating consensus sequence for species {species} ...")
 
     #get reads
     read_folder = get_folder_path_species_processed_mapped(species)
