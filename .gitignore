@@ -9,5 +9,4 @@ aDNA.code-workspace
 results/
 __pycache__
 scripts/try_and_error/
-batch1_failed_trialrun/
-batch2_failed_trialrun/
+sequencing_data/

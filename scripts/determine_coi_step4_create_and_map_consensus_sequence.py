@@ -35,20 +35,20 @@ def create_consensus_sequence_for_species(species):
     print_info(f"Creating consensus sequence for species {species} ...")
 
     #get reads
-    read_folder = get_folder_path_species_processed_mapped(species)
-    list_of_mapped_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_SORTED_BAM}")
+    aDNA_reads_folder = get_folder_path_species_processed_mapped(species)
+    list_of_mapped_aDNA_files = get_files_in_folder_matching_pattern(aDNA_reads_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
-    if len(list_of_mapped_files) == 0:
+    if len(list_of_mapped_aDNA_files) == 0:
         print_warning(f"No mapped reads found for species {species}. Skipping.")
         return
     
     output_folder_consensus_seq = get_folder_path_species_processed_coigene_consensus_sequences(species)
 
-    for mapped_read_file_path in list_of_mapped_files:
+    for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files:
 
-        print_info(f"Creating consensus sequence for {mapped_read_file_path} ...")
+        print_info(f"Creating consensus sequence for {mapped_aDNA_read_file_path} ...")
 
-        execute_angsd_create_and_map_consensus_sequence(mapped_read_file_path, output_folder_consensus_seq)
+        execute_angsd_create_and_map_consensus_sequence(mapped_aDNA_read_file_path, output_folder_consensus_seq)
 
     print_info(f"Creating consensus sequence for species {species} complete")
 

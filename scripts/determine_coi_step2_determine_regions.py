@@ -22,8 +22,8 @@ def execute_samtools_get_read_regions(bam_file, output_file, threads=THREADS_DEF
 def coi_get_regions_for_species(species):
     print_info(f"Determining coi regions for species: {species}")
     
-    mapped_folder = get_folder_path_species_processed_mapped(species)
-
+    mapped_folder = get_folder_path_species_processed_coigene_mapped(species)
+    
     bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
     if len(bam_files) == 0:

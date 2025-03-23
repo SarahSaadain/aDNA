@@ -6,8 +6,6 @@ library(ggplot2)
 library(tidyr)
 library(scales)  # for number formatting
 
-dev.off()  # Close any open graphic devices
-
 plot_endogenous_reads <- function(species, source_file, target_folder) {
   
   print("Executing plot_endogenous_reads")
