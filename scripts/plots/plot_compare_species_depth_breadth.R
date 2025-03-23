@@ -106,10 +106,16 @@ process_and_plot_depth_breadth <- function(root_folder, species_list, output_fol
   ggsave(file.path(output_folder, paste0("plot_depth_", paste(species_list, collapse = "_"), ".png")), plot_depth, width = 12, height = 8, dpi = 300)
 }
 
-# Example usage
-root_folder <- "/Users/ssaadain/Documents/aDNA"
-species_list <- c("Bger", "trial_Bger", "trial_Mmus", "trial_Phortica", "trial_Dsim", "trial_Dmel")
-output_folder <- "/Users/ssaadain/Documents/aDNA/plots"
+# Command line argument handling
+args <- commandArgs(trailingOnly = TRUE)
+
+if (length(args) < 3) {
+  stop("Usage: Rscript script_name.R <root_folder> <species_list (comma-separated)> <output_folder>")
+}
+
+root_folder <- args[1]
+species_list <- unlist(strsplit(args[2], ","))
+output_folder <- args[3]
 
 # Create the output directory if it doesn't exist
 if (!dir.exists(output_folder)) {
