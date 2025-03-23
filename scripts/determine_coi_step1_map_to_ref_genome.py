@@ -10,10 +10,10 @@ def map_coi_to_refgenome_for_species(species):
 
     #get reads
     read_folder = get_folder_path_species_raw_coigene(species)
-    list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FASTQ_GZ}")
+    list_of_mtrna_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FASTA}")
 
-    if len(list_of_read_files) == 0:
-        print_warning(f"No reads found for species {species}. Skipping.")
+    if len(list_of_mtrna_files) == 0:
+        print_warning(f"No coi reads found for species {species}. Skipping.")
         return
 
     # get ref genome
@@ -30,22 +30,22 @@ def map_coi_to_refgenome_for_species(species):
 
         ref_genome_filename = os.path.splitext(os.path.basename(ref_genome_path))[0]
 
-        for read_file_path in list_of_read_files:
+        for mtrna_read_file_path in list_of_mtrna_files:
 
-            print_info(f"Mapping {read_file_path} to reference genome {ref_genome_path} ...")
+            print_info(f"Mapping {mtrna_read_file_path} to reference genome {ref_genome_path} ...")
 
-            read_name = os.path.splitext(os.path.basename(read_file_path))[0]
+            read_name = os.path.splitext(os.path.basename(mtrna_read_file_path))[0]
             output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}{FILE_ENDING_SAM}")
 
             try:
-                execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
+                execute_bwa_map_aDNA_to_refgenome(mtrna_read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
 
                 if not os.path.exists(output_file_path):
                     continue
 
                 execute_convert_sam_to_bam(output_file_path, output_folder, THREADS_DEFAULT)
             except Exception as e:
-                print_error(f"Failed to map {read_file_path} to reference genome {ref_genome_path}: {e}")
+                print_error(f"Failed to map {mtrna_read_file_path} to reference genome {ref_genome_path}: {e}")
 
     print_success(f"Mapping coi to reference genome for species {species} complete")
 
