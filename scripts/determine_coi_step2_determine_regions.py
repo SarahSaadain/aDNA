@@ -11,8 +11,8 @@ def execute_samtools_get_read_regions(bam_file, output_file, threads=THREADS_DEF
         return
     
     command = (
-        f"{PROGRAM_PATH_SAMTOOLS} view -@ {threads} {bam_file} | "
-        f"bedtools bamtobed -i - > {output_file}"
+        f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -h -@ {threads} {bam_file} | "
+        f"{PROGRAM_PATH_BEDTOOLS} bamtobed -i - > {output_file}"
     )
     #print_info(f"Running command: {command}")
     
