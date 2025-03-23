@@ -38,7 +38,7 @@ def coi_get_regions_for_species(species):
     result_file_path = os.path.join(result_folder, f"{species}_coi_regions{FILE_ENDING_BED}")
 
     if os.path.exists(result_file_path):
-        print_info(f"Result file already exists for species {species}. Skipping.")
+        print_info(f"Result file {result_file_path} already exists for species {species}. Skipping.")
         return
     
     execute_samtools_get_read_regions(bam_files[0], result_file_path)
