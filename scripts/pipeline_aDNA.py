@@ -69,6 +69,7 @@ def run_pipeline():
     extract_special_sequences.all_species_extract_special_sequences()
 
     generate_plots.all_species_generate_plots()
+    
     generate_plots_species_compare.species_generate_comparison_plots([FOLDER_BGER, FOLDER_TRIAL_BGER])
     generate_plots_species_compare.species_generate_comparison_plots([FOLDER_TRIAL_BGER, FOLDER_TRIAL_MMUS])
 

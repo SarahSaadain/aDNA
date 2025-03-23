@@ -41,7 +41,7 @@ def species_generate_comparison_plots(species: list):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate comparison plots for specified species.")
-    parser.add_argument("species", nargs="+", help="List of species to compare.")
+    parser.add_argument("species", nargs="+", help="List of species to compare (separated by comma).")
     args = parser.parse_args()
 
     species_list = args.species
