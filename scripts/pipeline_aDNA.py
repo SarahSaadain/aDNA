@@ -1,7 +1,6 @@
 from common_aDNA_scripts import *
 
 import prepare_species_for_processing as prepare
-import prepare_reads_for_GD as prepare_reads_for_GD
 import execute_fastqc as execute_fastqc
 import execute_multiqc as execute_multiqc
 import execute_fastp_adapter_remove_and_merge as execute_fastp_adapter_remove_and_merge
@@ -48,10 +47,7 @@ def run_pipeline():
     generate_quality_check_report.all_species_generate_quality_check_report()
 
     prepare_species_for_map_to_ref_genome.all_species_prepare()
-
-    #prepare_reads_for_GD.all_species_prepare_reads_for_GD()
-    prepare_reads_for_GD.species_prepare_reads_for_GD(FOLDER_BGER)
-
+    
     map_aDNA_to_refgenome.all_species_map_aDNA_to_refgenome()
 
     convert_sam2bam.all_species_convert_sam_to_bam()
