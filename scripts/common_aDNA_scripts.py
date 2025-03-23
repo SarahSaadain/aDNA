@@ -124,6 +124,9 @@ R_SCRIPT_PLOT_DEPTH = "plot_coverage_depth.R"
 R_SCRIPT_PLOT_BREADTH = "plot_coverage_breadth.R"
 R_SCRIPT_PLOT_ENDOGENOUS_READS = "plot_endogenous_reads.R"
 R_SCRIPT_PLOT_SEQUENCE_LENGTH_DISTRIBUTION = "plot_sequence_length_distribution.R"
+R_SCRIPT_PLOT_COMPARE_SPECIES_READS_BEFORE_AFTER_PROCESSING = "plot_compare_species_reads_before_after_processing.R"
+R_SCRIPT_PLOT_COMPARE_SPECIES_DEPTH_BREADTH = "plot_compare_species_depth_breadth.R"
+R_SCRIPT_PLOT_COMPARE_SPECIES_ENDOGENOUS_READS = "plot_compare_species_endogenous_reads.R"
 
 
 #####################
@@ -197,6 +200,16 @@ def check_folder_exists_or_create(folder_path):
 
 def get_folder_aDNA():
     return PATH_ADNA_PROJECT
+
+def get_folder_path_results():
+    path = os.path.join(get_folder_aDNA(), FOLDER_RESULTS)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_results_plots():
+    path = os.path.join(get_folder_path_results(), FOLDER_PLOTS)
+    check_folder_exists_or_create(path)
+    return path
 
 def get_folder_path_scripts():
     path = os.path.join(get_folder_aDNA(), FOLDER_SCRIPTS)

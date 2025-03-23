@@ -93,12 +93,16 @@ def main():
         "scripts/prepare_species_for_map_to_ref_genome.py",
         "scripts/prepare_ref_genome_for_mapping.py",
         "scripts/generate_plots.py",
+        "scripts/generate_plots_compare.py",
 
         "scripts/plots/plot_comparison_reads_before_after_processing.R",
         "scripts/plots/plot_coverage_breadth.R",
         "scripts/plots/plot_coverage_depth.R",
         "scripts/plots/plot_endogenous_reads.R",
         "scripts/plots/plot_sequence_length_distribution.R",
+        "scripts/plots/plot_compare_species_depth_breadth.R",
+        "scripts/plots/plot_compare_species_endogenous_reads.R",
+        "scripts/plots/plot_compare_species_reads_before_after_processing.R",
 
         "Bger/scripts/prepare_for_processing.py",
         "Bger/resources/mapping_folder_to_lane.csv",
