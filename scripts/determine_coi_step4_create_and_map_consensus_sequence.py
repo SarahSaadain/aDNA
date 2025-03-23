@@ -18,9 +18,9 @@ def execute_angsd_create_and_map_consensus_sequence(input_file, output_dir):
 
     # create consensus fasta
     #NOTE: maybe change later so it is not fasta.fa.gz but just fa.gz -> remove .fasta from below
-    out_file_path = os.path.join(output_dir, f"{base_name}_consensus.fasta")
+    out_file_path = os.path.join(output_dir, f"{base_name}_consensus{FILE_ENDING_FASTA}")
     
-    if os.path.exists(out_file_path+"fa.gz"):
+    if os.path.exists(out_file_path+FILE_ENDING_FA_GZ):
         print_info(f"Consensus sequence {out_file_path} already exists. Skipping.")
         return
 
