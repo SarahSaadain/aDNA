@@ -31,7 +31,7 @@ FOLDER_SPECIES = [FOLDER_BGER, FOLDER_DSIM, FOLDER_PHORTICA, FOLDER_SEPSIS, FOLD
 FOLDER_RAW = "raw"
 FOLDER_READS = "reads"
 FOLDER_REFERENCE_GENOMES = "ref_genome"
-FOLDER_COI_MTDNA = "coi_gene"
+FOLDER_MTDNA = "mtdna"
 
 # processed folders
 # if there is a follow up step, it is considered processed
@@ -273,7 +273,7 @@ def get_folder_path_species_raw_reads(species):
     return path
 
 def get_folder_path_species_raw_mtdna(species):
-    path = os.path.join(get_folder_path_species_raw(species), FOLDER_COI_MTDNA)
+    path = os.path.join(get_folder_path_species_raw(species), FOLDER_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
@@ -288,7 +288,7 @@ def get_folder_path_species_processed_mapped(species):
     return path
 
 def get_folder_path_species_processed_mtdna(species):
-    path = os.path.join(get_folder_path_species_processed(species), FOLDER_COI_MTDNA)
+    path = os.path.join(get_folder_path_species_processed(species), FOLDER_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
@@ -353,7 +353,7 @@ def get_folder_path_species_results_genomedelta(species):
     return path
 
 def get_folder_path_species_results_mtdna(species):
-    path = os.path.join(get_folder_path_species_results(species), FOLDER_COI_MTDNA)
+    path = os.path.join(get_folder_path_species_results(species), FOLDER_MTDNA)
     check_folder_exists_or_create(path)
     return path
 

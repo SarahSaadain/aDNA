@@ -11,7 +11,7 @@ def execute_samtools_extract_region_by_bed_file(bam_file_path, mtdna_region_bed_
         raise Exception(f"BAM file {bam_file_path} does not exist.")
     
     if not os.path.exists(mtdna_region_bed_file_path):
-        raise Exception(f"COI region BED file {mtdna_region_bed_file_path} does not exist.")
+        raise Exception(f"mtDNA region BED file {mtdna_region_bed_file_path} does not exist.")
     
     if not os.path.exists(output_dir):
         raise Exception(f"Output directory {output_dir} does not exist.")
@@ -20,12 +20,12 @@ def execute_samtools_extract_region_by_bed_file(bam_file_path, mtdna_region_bed_
     base_name_bam_file = os.path.splitext(os.path.basename(bam_file_path))[0]
     base_name_bed_file = os.path.splitext(os.path.basename(mtdna_region_bed_file_path))[0]
 
-    # Filter the BAM file for reads that map to the COI region
+    # Filter the BAM file for reads that map to the mtDNA region
     print_info(f"Filtering {bam_file_path} for reads mapped to mtDNA region...")
     mtdna_bam = os.path.join(output_dir, f"{base_name_bam_file}_{base_name_bed_file}.bam")
 
     if os.path.exists(mtdna_bam):
-        print_info(f"COI BAM file already exists: {mtdna_bam}")
+        print_info(f"mtDNA BAM file already exists: {mtdna_bam}")
         return
 
     command = (
