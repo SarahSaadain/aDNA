@@ -4,7 +4,7 @@ import argparse
 
 from common_aDNA_scripts import *
 
-def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT):
+def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT, detlete_unsorted_bam=True):
 
     # Convert SAM to BAM
     bam_file_base_name = os.path.splitext(os.path.basename(sam_file))[0]
@@ -35,7 +35,9 @@ def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT):
 
             print_success(f"Conversion and sorting of {sam_file} completed successfully.")
              # Optional cleanup of intermediate BAM file if the sorted was created
-            os.remove(bam_file)
+            if detlete_unsorted_bam and os.path.exists(sorted_bam):
+                print_info(f"Removing unsorted BAM file {bam_file}...")
+                os.remove(bam_file)
 
         except Exception as e:
             print_error(f"Failed to sort {bam_file}: {e}")

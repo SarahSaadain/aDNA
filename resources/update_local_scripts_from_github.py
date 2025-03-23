@@ -70,7 +70,10 @@ def main():
         "scripts/common_aDNA_scripts.py",
         #"scripts/determine_poly_nt_count.py",
         "scripts/determine_coi_step1_map_to_ref_genome.py",
+        "scripts/determine_coi_step2_determine_regions.py",
+        "scripts/determine_coi_step3_extract_coi_regions.py",
         "scripts/determine_coverage_depth_and_breadth.py",
+        "scripts/determine_coi_step4_create_and_map_consensus_sequence.py",
         #"scripts/extract_most_common_sequence_to_fasta.py"
         "scripts/map_aDNA_to_refgenome.py",
         "scripts/execute_multiqc.py",

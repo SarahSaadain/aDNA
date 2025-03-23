@@ -44,6 +44,8 @@ FOLDER_ADAPTER_REMOVED = "adapter_removed"
 FOLDER_QUALITY_FILTERED = "quality_filtered"
 FOLDER_DUPLICATES_REMOVED = "duplicates_removed"
 FOLDER_GENOMEDELTA = "genome_delta"
+FOLDER_CONSENSUS_SEQUENCES = "consensus_sequences"
+FOLDER_CONSENSUS_SEQUENCES_MAPPED = "consensus_sequences_mapped"
 
 # results folders
 # if there is no follow up step, it is considered a result
@@ -85,6 +87,7 @@ PROGRAM_PATH_SAMTOOLS = "samtools"
 PROGRAM_PATH_SAMTOOLS_VIEW =  "view"
 PROGRAM_PATH_SAMTOOLS_SORT = "sort"
 PROGRAM_PATH_SAMTOOLS_INDEX = "index"
+PROGRAM_PATH_ANGSD = "angsd"
 
 #"doi.org/10.1093/bioinformatics/btt193" to check damage, include to pipeline
 
@@ -274,6 +277,16 @@ def get_folder_path_species_processed_coigene(species):
 
 def get_folder_path_species_processed_coigene_mapped(species):
     path = os.path.join(get_folder_path_species_processed_coigene(species), FOLDER_MAPPED)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_processed_coigene_consensus_sequences(species):
+    path = os.path.join(get_folder_path_species_processed_coigene(species), FOLDER_CONSENSUS_SEQUENCES)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_processed_coigene_consensus_sequences_mapped(species):
+    path = os.path.join(get_folder_path_species_processed_coigene(species), FOLDER_CONSENSUS_SEQUENCES_MAPPED)
     check_folder_exists_or_create(path)
     return path
 
