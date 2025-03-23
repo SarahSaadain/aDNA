@@ -93,7 +93,7 @@ def main():
         "scripts/prepare_species_for_map_to_ref_genome.py",
         "scripts/prepare_ref_genome_for_mapping.py",
         "scripts/generate_plots.py",
-        "scripts/generate_plots_compare.py",
+        "scripts/generate_plots_species_compare.py",
 
         "scripts/plots/plot_comparison_reads_before_after_processing.R",
         "scripts/plots/plot_coverage_breadth.R",
