@@ -1,10 +1,12 @@
 .DS_Store
 .Rhistory
+.RData
 aDNA.code-workspace
 */raw/
 */processed/
 */logs/
 */results/
+results/
 __pycache__
 scripts/try_and_error/
 batch1_failed_trialrun/

@@ -38,6 +38,11 @@ conda install bioconda::bwa-mem2
 conda install bioconda::samtools
 ```
 
+### angsd
+```bash
+conda install -c bioconda -c conda-forge angsd
+```
+
 ### pysam
 ```bash
 pip install pysam
