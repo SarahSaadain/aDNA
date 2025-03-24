@@ -1,5 +1,4 @@
 import os
-import subprocess
 from common_aDNA_scripts import *
 
 from map_aDNA_to_refgenome import execute_bwa_map_aDNA_to_refgenome

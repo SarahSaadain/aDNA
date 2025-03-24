@@ -1,4 +1,3 @@
-import os
 from common_aDNA_scripts import *
 
 def multiqc_for_species(species: str):

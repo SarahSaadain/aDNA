@@ -2,9 +2,6 @@ import os
 import subprocess
 from common_aDNA_scripts import *
 
-##todo
-
-
 def execute_samtools_extract_region_by_bed_file(bam_file_path: str, mtdna_region_bed_file_path: str, output_dir: str):
     
     if not os.path.exists(bam_file_path):
