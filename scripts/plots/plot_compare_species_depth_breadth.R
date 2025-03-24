@@ -76,7 +76,7 @@ process_and_plot_depth_breadth <- function(root_folder, species_list, output_fol
           legend.position = "none") +
     scale_fill_manual(values = species_colors)
   
-  print(plot_breadth)
+  #print(plot_breadth)
   ggsave(file.path(output_folder, paste0("plot_breadth_", paste(species_list, collapse = "_"), ".png")), plot_breadth, width = 12, height = 8, dpi = 300)
   
   # Plot depth

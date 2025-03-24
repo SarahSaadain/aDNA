@@ -125,7 +125,7 @@ process_and_plot_endogenous_reads <- function(root_folder, species_list, output_
     ))
   
   # Print the plot
-  print(endogenous_plot)
+  #print(endogenous_plot)
   
   # Save the plot to the specified output folder
   ggsave(file.path(output_folder, paste0("plot_endogenous_reads_", paste(species_list, collapse = "_"), ".png")), endogenous_plot, width = 12, height = 8, dpi = 300)
