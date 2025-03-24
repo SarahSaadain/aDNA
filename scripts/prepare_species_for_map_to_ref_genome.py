@@ -6,7 +6,7 @@ from common_aDNA_scripts import *
 
 FILE_NAME_PREPARE_SCRIPT = "prepare_for_mapping_to_ref_genome.py"
 
-def merge_all_fastq_files(species):
+def merge_all_fastq_files(species: str):
 
     print_info(f"Merging  all the fastq files for {species}.")
 
@@ -40,7 +40,7 @@ def merge_all_fastq_files(species):
         print_error(f"Failed to concatenate fastq files for pattern {input_pattern_path}: {e}")
 
 
-def generate_fastq_patterns(file_paths):
+def generate_fastq_patterns(file_paths: str) -> dict:
     patterns = {}
     
     for path in file_paths:
@@ -55,7 +55,7 @@ def generate_fastq_patterns(file_paths):
 
     return patterns
 
-def merge_fastq_by_individual(species):
+def merge_fastq_by_individual(species: str):
 
     # find all raw fastq files
     duplicates_removed_folder = get_folder_path_species_processed_duplicates_removed(species)

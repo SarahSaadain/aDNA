@@ -4,7 +4,7 @@ from common_aDNA_scripts import *
 
 import determine_reads_processing_result as determine_reads_processing_result
 
-def call_r_script(script_path, *args):
+def call_r_script(script_path: str, *args):
     if not os.path.exists(script_path):
         raise FileNotFoundError(f"R script not found: {script_path}")
 
@@ -15,7 +15,7 @@ def call_r_script(script_path, *args):
     except subprocess.CalledProcessError as e:
         print(f"Error executing {script_path}: {e}")
 
-def plot_reads_processing_result(species):
+def plot_reads_processing_result(species: str):
 
     print_info(f"Plotting reads processing result for species {species}") 
 
@@ -35,7 +35,7 @@ def plot_reads_processing_result(species):
 
     call_r_script(r_script, species, input_file_path, output_folder_path)
 
-def plot_depth_analysis(species):
+def plot_depth_analysis(species: str):
     print_info(f"Plotting depth analysis for species {species}")
 
 # gives a list with the path and file names
@@ -64,7 +64,7 @@ def plot_depth_analysis(species):
 
     print_info(f"Finished plotting depth analysis for species {species}")
 
-def plot_breadth_analysis(species):
+def plot_breadth_analysis(species: str):
     print_info(f"Plotting breadth analysis for species {species}")
 
     analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_depth_breath(species), f"*{FILE_ENDING_ANALYSIS_TSV}")
@@ -91,7 +91,7 @@ def plot_breadth_analysis(species):
 
     print_info(f"Finished plotting breadth analysis for species {species}")
 
-def plot_endogenous_reads(species):
+def plot_endogenous_reads(species: str):
     print_info(f"Plotting endogenous reads for species {species}")
 
     analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_endogenous_reads(species), f"*_endogenous_reads{FILE_ENDING_CSV}")
@@ -116,7 +116,7 @@ def plot_endogenous_reads(species):
 
     print_info(f"Finished plotting endogenous reads for species {species}")
 
-def plot_sequence_length_distribution(species):
+def plot_sequence_length_distribution(species: str):
     print_info(f"Plotting sequence length distribution for species {species}")   
 
     analysis_files = get_files_in_folder_matching_pattern(get_folder_path_species_results_qc_read_length_distribution(species), f"*{FILE_ENDING_TSV}")
@@ -141,7 +141,7 @@ def plot_sequence_length_distribution(species):
 
     print_info(f"Finished plotting sequence length distribution for species {species}")
 
-def species_generate_plots(species):
+def species_generate_plots(species: str):
     print_info(f"Generating plots for species {species}")
 
     plot_reads_processing_result(species)

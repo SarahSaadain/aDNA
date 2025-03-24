@@ -38,7 +38,7 @@ def execute_fastp_deduplication(input_file_path:str, output_file_path:str, threa
         print_error(f"Failed to run fastp deduplication for {input_file_path}: {e}")
 
 
-def fastp_deduplication_for_species(species):
+def fastp_deduplication_for_species(species: str):
 
     print_info(f"Running fastp deduplication for {species}")
 
@@ -53,7 +53,7 @@ def fastp_deduplication_for_species(species):
 
     print_info(f"fastp deduplication for {species} complete")
 
-def get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file_path):
+def get_deduplication_path_for_quality_filtered_reads(species: str, quality_filtered_file_path: str) -> str:
     output_file = os.path.basename(quality_filtered_file_path).replace(FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ, FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ)
     return os.path.join(get_folder_path_species_processed_duplicates_removed(species), output_file)
 

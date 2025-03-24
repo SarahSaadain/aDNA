@@ -2,7 +2,7 @@ import os
 from common_aDNA_scripts import *
 
 
-def get_html_list_of_files(species, files):
+def get_html_list_of_files(species: str, files: list):
     html_list = ""
     for file in files:
 
@@ -15,7 +15,7 @@ def get_html_list_of_files(species, files):
         html_list += f"<li><a href='{file}'>{file}</a></li>"
     return html_list
 
-def species_generate_quality_check_report(species):
+def species_generate_quality_check_report(species: str):
     print_info("Generating quality check report for species: %s" % species)
 
     # get fastqc html pages

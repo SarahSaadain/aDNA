@@ -10,7 +10,7 @@ from polish_fastp_deduplication import get_deduplication_path_for_quality_filter
 
 from common_aDNA_scripts import *
 
-def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -> int:
+def execute_seqkit_stats_count_reads(input_file: str, thread:int = THREADS_DEFAULT) -> int:
 
     print_info(f"Executing seqkit stats for {input_file}")
 
@@ -65,10 +65,10 @@ def execute_seqkit_stats_count_reads(input_file, thread:int = THREADS_DEFAULT) -
         print_error(f"Failed to process seqkit stats output: {e}")
         return -1
     
-def get_file_name_reads_processing(species):
+def get_file_name_reads_processing(species: str) -> str:
     return f"{species}_reads_processing_result{FILE_ENDING_TSV}"
 
-def determine_reads_processing_result(species):
+def determine_reads_processing_result(species: str):
 
     print_info(f"Determine reads processing result for {species}")
 

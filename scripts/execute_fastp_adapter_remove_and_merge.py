@@ -7,7 +7,7 @@ from common_aDNA_scripts import *
 R1_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
 R2_ADAPTER_SEQUENCE = "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
 
-def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1, input_file_path_r2, output_file_path_r1, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE, threads:int = THREADS_DEFAULT):
+def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str, input_file_path_r2: str, output_file_path_r1: str, output_file_path_r2: str, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE, threads:int = THREADS_DEFAULT):
 
     print_info(f"Removing adapters from {input_file_path_r1} and {input_file_path_r2} ...")
 
@@ -65,7 +65,7 @@ def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1, inp
         raise Exception(f"Removed adapters error for {input_file_path_r1} and {input_file_path_r2} : {e}")
 
 
-def execute_fastp_single_reads_remove_adapters(input_file_path, output_file_path, adapter_sequence: str = R1_ADAPTER_SEQUENCE, threads: int = THREADS_DEFAULT):
+def execute_fastp_single_reads_remove_adapters(input_file_path: str, output_file_path: str, adapter_sequence: str = R1_ADAPTER_SEQUENCE, threads: int = THREADS_DEFAULT):
     
     print_info(f"Removing adapters from {input_file_path} ...")
     
@@ -116,7 +116,7 @@ def all_species_fastp_adapter_remove_and_merge():
 
     print_info("Adapter removal and merge for all species completed successfully.")
 
-def adapter_remove_for_species(species):
+def adapter_remove_for_species(species: str):
     print_info(f"Running adapter removal for species {species}")
 
     # Get lists of R1 and R2 read files
@@ -160,7 +160,7 @@ def adapter_remove_for_species(species):
     
     print_info(f"Adapter removal for species {species} completed successfully.")
 
-def get_adapter_removed_path_for_paired_raw_reads(species, paired_read_file_path_list):
+def get_adapter_removed_path_for_paired_raw_reads(species, paired_read_file_path_list: list) -> str:
     filename_new = os.path.basename(paired_read_file_path_list[0]).replace("_R1_","_").replace("_R2_","_").replace(FILE_ENDING_FASTQ_GZ, FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ )
     return os.path.join(get_folder_path_species_processed_adapter_removed(species), filename_new)
 

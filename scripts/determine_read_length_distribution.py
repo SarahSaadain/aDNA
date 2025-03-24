@@ -13,7 +13,7 @@ from polish_fastp_deduplication import get_deduplication_path_for_quality_filter
 from common_aDNA_scripts import *
 
 
-def get_read_length_distribution(fastq_file):
+def get_read_length_distribution(fastq_file: str) -> Counter:
     read_lengths = Counter()
 
     with gzip.open(fastq_file, "rt") as handle:
@@ -22,10 +22,10 @@ def get_read_length_distribution(fastq_file):
 
     return read_lengths
     
-def get_file_name_read_length_distribution(species):
+def get_file_name_read_length_distribution(species: str) -> str:
     return f"{species}_read_length_distribution{FILE_ENDING_TSV}"
 
-def determine_read_length_distribution(species):
+def determine_read_length_distribution(species: str):
 
     print_info(f"Determine read length distribution for {species}")
 

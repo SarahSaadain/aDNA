@@ -24,7 +24,7 @@ def execute_bwa_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, 
     except Exception as e:
         print_error(f"Failed to run bwa for {input_file_path}: {e}")
 
-def map_aDNA_to_refgenome_for_species(species):
+def map_aDNA_to_refgenome_for_species(species: str):
     print_info(f"Mapping aDNA to reference genome for species {species} ...")
 
     #get reads

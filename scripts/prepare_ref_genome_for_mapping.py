@@ -14,7 +14,7 @@ def all_species_prepare_ref_genome():
     
     print_info("Finished preparing reference genomes for mapping for all species")
 
-def species_prepare_ref_genome(species):
+def species_prepare_ref_genome(species: str):
     print_info(f"Preparing reference genome for {species} for mapping")
 
     # get reference genome
@@ -30,7 +30,7 @@ def species_prepare_ref_genome(species):
 
     print_info(f"Finished preparing reference genome for {species} for mapping")
 
-def execute_bwa_index_reference_genome(reference_genome_path):
+def execute_bwa_index_reference_genome(reference_genome_path: str):
     print_info(f"Indexing reference genome {reference_genome_path} ...")
 
     # Check if index file already exists

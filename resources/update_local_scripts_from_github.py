@@ -2,7 +2,7 @@ import os
 import requests
 import argparse
 
-def download_files(file_url, target_file, force_update=False):
+def download_files(file_url: str, target_file: str, force_update: bool=False):
 
     print(f'Downloading {file_url} to {target_file} ...')
 
@@ -39,7 +39,7 @@ def download_files(file_url, target_file, force_update=False):
     except Exception as e:
         print(f"Failed to download file: {e}")
 
-def get_remote_file_content(file_url):
+def get_remote_file_content(file_url: str):
     response = requests.get(file_url)
     if response.status_code != 200:
         raise Exception('Failed to download file')

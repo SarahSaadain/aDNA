@@ -39,7 +39,7 @@ def execute_fastp_quality_filter(input_file_path:str, output_file_path:str, thre
         print_error(f"Failed to run fastp_quality_filter for {input_file_path}: {e}")
 
 
-def fastp_quality_filter_for_species(species):
+def fastp_quality_filter_for_species(species: str):
 
     print_info(f"Running fastp quality filter for {species}")
 
@@ -54,7 +54,7 @@ def fastp_quality_filter_for_species(species):
 
     print_info(f"fastp quality filter for {species} complete")
 
-def get_quality_filtered_path_for_adapter_removed_reads(species, adapter_removed_file_path):
+def get_quality_filtered_path_for_adapter_removed_reads(species: str, adapter_removed_file_path: str) -> str:
     output_file = os.path.basename(adapter_removed_file_path).replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ)
     return os.path.join(get_folder_path_species_processed_quality_filtered(species), output_file)
 

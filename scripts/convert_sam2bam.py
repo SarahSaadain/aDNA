@@ -4,7 +4,7 @@ import argparse
 
 from common_aDNA_scripts import *
 
-def execute_convert_sam_to_bam(sam_file, output_dir, threads=THREADS_DEFAULT, detlete_unsorted_bam=True):
+def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THREADS_DEFAULT, detlete_unsorted_bam: bool=True):
 
     # Convert SAM to BAM
     bam_file_base_name = os.path.splitext(os.path.basename(sam_file))[0]

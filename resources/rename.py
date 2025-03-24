@@ -2,7 +2,7 @@ import os
 import csv
 import argparse
 
-def load_replacements(csv_file):
+def load_replacements(csv_file: str):
     """Load old and new name pairs from the CSV file."""
     replacements = {}
     with open(csv_file, mode='r', encoding='utf-8') as file:
@@ -13,7 +13,7 @@ def load_replacements(csv_file):
                 replacements[old_name] = new_name
     return replacements
 
-def rename_files(folder, replacements, test_mode):
+def rename_files(folder: str, replacements: str, test_mode: bool):
     """Rename files in the given folder based on the replacements dictionary."""
     for filename in os.listdir(folder):
         new_filename = filename

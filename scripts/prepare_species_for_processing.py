@@ -6,7 +6,7 @@ from common_aDNA_scripts import *
 
 FILE_NAME_PREPARE_SCRIPT = "prepare_for_processing.py"
 
-def call_prepare_script(species, prepare_script_full_path):
+def call_prepare_script(species: str, prepare_script_full_path: str):
 
     # Check if prepare.py exists
     if not os.path.exists(prepare_script_full_path):

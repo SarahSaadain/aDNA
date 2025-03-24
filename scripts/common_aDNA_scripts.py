@@ -163,10 +163,10 @@ def is_sam_file_sorted(sam_file: str) -> bool:
         # Return False in case of an error
         return False
 
-def is_fasta_file(file_name):
+def is_fasta_file(file_name: str) -> bool:
     return file_name.endswith("fna") or file_name.endswith("fa") or file_name.endswith("fasta")
 
-def is_fasta_gz_file(file_name):
+def is_fasta_gz_file(file_name: str) -> bool:
     return file_name.endswith("fna.gz") or file_name.endswith("fa.gz") or file_name.endswith("fasta.gz") 
 
 
@@ -176,56 +176,56 @@ def is_fasta_gz_file(file_name):
 #####################
 
 # print command to terminal
-def print_command(subprocess_command):          # prints subprocess commands
+def print_command(subprocess_command: list):          # prints subprocess commands
     print_info(" ".join(subprocess_command))
 
-def print_info(message):
+def print_info(message: str):
     print(f"[INFO] {message}")
 
-def print_error(message):
+def print_error(message: str):
     print(f"[ERROR] {message}")
 
-def print_success(message):
+def print_success(message: str):
     print(f"[SUCCESS] {message}")
 
-def print_warning(message): 
+def print_warning(message: str): 
     print(f"[WARNING] {message}")
 
 #####################
 # Folder paths
 #####################
 
-def is_species_folder(folder_name):
+def is_species_folder(folder_name: str) -> bool:
     return folder_name in FOLDER_SPECIES
 
-def check_folder_exists_or_create(folder_path):
+def check_folder_exists_or_create(folder_path: str) -> None:
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
-def get_folder_aDNA():
+def get_folder_aDNA() -> str:
     return PATH_ADNA_PROJECT
 
-def get_folder_path_results():
+def get_folder_path_results() -> str:
     path = os.path.join(get_folder_aDNA(), FOLDER_RESULTS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_results_plots():
+def get_folder_path_results_plots() -> str:
     path = os.path.join(get_folder_path_results(), FOLDER_PLOTS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_scripts():
+def get_folder_path_scripts() -> str:
     path = os.path.join(get_folder_aDNA(), FOLDER_SCRIPTS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_scripts_plots():
+def get_folder_path_scripts_plots() -> str:
     path = os.path.join(get_folder_path_scripts(), FOLDER_PLOTS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_raw(species):
+def get_folder_path_species_raw(species: str) -> str:
     if not is_species_folder(species):
         raise Exception(f"Invalid species folder: {species}")
 
@@ -233,7 +233,7 @@ def get_folder_path_species_raw(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species(species):
+def get_folder_path_species(species: str) -> str:
     if not is_species_folder(species):
         raise Exception(f"Invalid species folder: {species}")
 
@@ -241,249 +241,249 @@ def get_folder_path_species(species):
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed(species):
+def get_folder_path_species_processed(species: str) -> str:
     path = os.path.join(get_folder_path_species(species), FOLDER_PROCESSED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results(species):
+def get_folder_path_species_results(species: str) -> str:
     path = os.path.join(get_folder_path_species(species), FOLDER_RESULTS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_scripts(species):
+def get_folder_path_species_scripts(species: str) -> str:
     path = os.path.join(get_folder_path_species(species), FOLDER_SCRIPTS)
     check_folder_exists_or_create(path)
     return path
 
 
-def get_folder_path_species_logs(species):
+def get_folder_path_species_logs(species: str) -> str:
     path = os.path.join(get_folder_path_species(species), FOLDER_LOGS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_resources(species):
+def get_folder_path_species_resources(species: str) -> str:
     path = os.path.join(get_folder_path_species(species), FOLDER_RESOURCES)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_raw_reads(species):
+def get_folder_path_species_raw_reads(species: str) -> str:
     path = os.path.join(get_folder_path_species_raw(species), FOLDER_READS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_raw_mtdna(species):
+def get_folder_path_species_raw_mtdna(species: str) -> str:
     path = os.path.join(get_folder_path_species_raw(species), FOLDER_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_raw_ref_genome(species):
+def get_folder_path_species_raw_ref_genome(species: str) -> str:
     path = os.path.join(get_folder_path_species_raw(species), FOLDER_REFERENCE_GENOMES)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mapped(species):
+def get_folder_path_species_processed_mapped(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_MAPPED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna(species):
+def get_folder_path_species_processed_mtdna(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna_extracted_sequence(species):
+def get_folder_path_species_processed_mtdna_extracted_sequence(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_EXTRACTED_SEQUENCES)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna_mapped(species):
+def get_folder_path_species_processed_mtdna_mapped(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_MAPPED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna_consensus_sequences(species):
+def get_folder_path_species_processed_mtdna_consensus_sequences(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_CONSENSUS_SEQUENCES)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna_consensus_sequences_mapped(species):
+def get_folder_path_species_processed_mtdna_consensus_sequences_mapped(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_CONSENSUS_SEQUENCES_MAPPED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_adapter_removed(species):
+def get_folder_path_species_processed_adapter_removed(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_ADAPTER_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_quality_filtered(species):
+def get_folder_path_species_processed_quality_filtered(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_QUALITY_FILTERED)
     check_folder_exists_or_create(path)
     return path 
 
-def get_folder_path_species_processed_duplicates_removed(species):
+def get_folder_path_species_processed_duplicates_removed(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_DUPLICATES_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_prepared_for_ref_genome(species):
+def get_folder_path_species_processed_prepared_for_ref_genome(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_PREPARED_FOR_REF_GENOME)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_genomedelta(species):
+def get_folder_path_species_processed_genomedelta(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_GENOMEDELTA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_concatenated(species):
+def get_folder_path_species_processed_concatenated(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_CONCATENATED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_non_concatenated(species):
+def get_folder_path_species_processed_non_concatenated(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_NON_CONCATENATED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_genomedelta(species):
+def get_folder_path_species_results_genomedelta(species: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_GENOMEDELTA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_mtdna(species):
+def get_folder_path_species_results_mtdna(species: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_mtdna_regions(species):
+def get_folder_path_species_results_mtdna_regions(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_mtdna(species), FOLDER_REGIONS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc(species):
+def get_folder_path_species_results_qc(species: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_QUALITYCONTROL)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_fastqc(species):
+def get_folder_path_species_results_qc_fastqc(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_FASTQC)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_fastqc_raw(species):
+def get_folder_path_species_results_qc_fastqc_raw(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc_fastqc(species), FOLDER_RAW)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_fastqc_adapter_removed(species):
+def get_folder_path_species_results_qc_fastqc_adapter_removed(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc_fastqc(species), FOLDER_ADAPTER_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_fastqc_quality_filtered(species):
+def get_folder_path_species_results_qc_fastqc_quality_filtered(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc_fastqc(species), FOLDER_QUALITY_FILTERED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_fastqc_duplicates_removed(species):
+def get_folder_path_species_results_qc_fastqc_duplicates_removed(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc_fastqc(species), FOLDER_DUPLICATES_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_multiqc(species):
+def get_folder_path_species_results_qc_multiqc(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_MULTIQC)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_multiqc_raw(species):
+def get_folder_path_species_results_qc_multiqc_raw(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc_multiqc(species), FOLDER_RAW)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_multiqc_adapter_removed(species):
+def get_folder_path_species_results_qc_multiqc_adapter_removed(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc_multiqc(species), FOLDER_ADAPTER_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_multiqc_quality_filtered(species):
+def get_folder_path_species_results_qc_multiqc_quality_filtered(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc_multiqc(species), FOLDER_QUALITY_FILTERED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_multiqc_duplicates_removed(species):
+def get_folder_path_species_results_qc_multiqc_duplicates_removed(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc_multiqc(species), FOLDER_DUPLICATES_REMOVED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_depth_breath(species):
+def get_folder_path_species_results_qc_depth_breath(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_DEPTH_BREADTH)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_mitochondria(species):
+def get_folder_path_species_results_mitochondria(species: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_MITOCHONDRIA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_plots(species):
+def get_folder_path_species_results_plots(species: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_PLOTS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_plots_reads_processing(species):
+def get_folder_path_species_results_plots_reads_processing(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_PROCESSED_READS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_plots_depth(species):
+def get_folder_path_species_results_plots_depth(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_DEPTH)
     check_folder_exists_or_create(path) 
     return path
 
-def get_folder_path_species_results_plots_depth_sample(species, sample_name):
+def get_folder_path_species_results_plots_depth_sample(species: str, sample_name: str) -> str:
     path = os.path.join(get_folder_path_species_results_plots_depth(species), sample_name)
     check_folder_exists_or_create(path) 
     return path
 
 
-def get_folder_path_species_results_plots_breadth(species):
+def get_folder_path_species_results_plots_breadth(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_BREADTH)
     check_folder_exists_or_create(path) 
     return path
 
-def get_folder_path_species_results_plots_breadth_sample(species, sample_name):
+def get_folder_path_species_results_plots_breadth_sample(species: str, sample_name: str) -> str:
     path = os.path.join(get_folder_path_species_results_plots_breadth(species), sample_name)
     check_folder_exists_or_create(path) 
     return path
 
-def get_folder_path_species_results_plots_endogenous_reads(species):
+def get_folder_path_species_results_plots_endogenous_reads(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_ENDOGENOUS_READS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_plots_read_length_distribution(species):    
+def get_folder_path_species_results_plots_read_length_distribution(species: str) -> str:    
     path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_READ_LENGTH_DISTRIBUTION)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_special_sequences(species):
+def get_folder_path_species_results_special_sequences(species: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_SPECIAL_SEQUENCES)
     check_folder_exists_or_create(path) 
     return path
 
-def get_folder_path_species_results_endogenous_reads(species):
+def get_folder_path_species_results_endogenous_reads(species: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_ENDOGENOUS_READS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_reads_processing(species):
+def get_folder_path_species_results_qc_reads_processing(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_PROCESSED_READS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_qc_read_length_distribution(species):
+def get_folder_path_species_results_qc_read_length_distribution(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_READ_LENGTH_DISTRIBUTION)
     check_folder_exists_or_create(path)
     return path
@@ -493,7 +493,7 @@ def get_folder_path_species_results_qc_read_length_distribution(species):
 # File paths
 #####################
 
-def get_r_script(r_script_name):
+def get_r_script(r_script_name: str) -> str:
 
     r_script_path = os.path.join(get_folder_path_scripts_plots(), r_script_name)
 
@@ -503,7 +503,7 @@ def get_r_script(r_script_name):
     return r_script_path
 
 
-def get_raw_reads_list_of_species(species):
+def get_raw_reads_list_of_species(species: str) -> list:
      
     if not is_species_folder(species):
         raise Exception(f"Invalid species folder: {species}")
@@ -513,7 +513,7 @@ def get_raw_reads_list_of_species(species):
     return get_files_in_folder_matching_pattern(raw_reads_folder, "*.fastq.gz")
    
 
-def get_files_in_folder_matching_pattern(folder, pattern):
+def get_files_in_folder_matching_pattern(folder: str, pattern: str) -> list:
      
     if not os.path.exists(folder):
         raise Exception(f"Invalid folder: {folder}")
@@ -523,7 +523,7 @@ def get_files_in_folder_matching_pattern(folder, pattern):
 
     return files
 
-def get_raw_paired_reads_list_of_species(species):
+def get_raw_paired_reads_list_of_species(species: str) -> list:
 
     if not is_species_folder(species):
         raise Exception(f"Invalid species folder: {species}")

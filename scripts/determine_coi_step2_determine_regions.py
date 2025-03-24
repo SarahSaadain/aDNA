@@ -1,7 +1,7 @@
 import os
 from common_aDNA_scripts import *
 
-def execute_samtools_get_read_regions(bam_file, output_file, threads=THREADS_DEFAULT):
+def execute_samtools_get_read_regions(bam_file: str, output_file: str, threads: int=THREADS_DEFAULT):
 
     if not os.path.exists(bam_file):
         raise Exception(f"BAM file {bam_file} does not exist.")

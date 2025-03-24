@@ -4,7 +4,7 @@ from common_aDNA_scripts import *
 
 from map_aDNA_to_refgenome import execute_bwa_map_aDNA_to_refgenome
 
-def execute_angsd_create_and_map_consensus_sequence(input_file, output_dir):
+def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir: str):
 
     print_info(f"Executing angsd to create consensus sequence for {input_file}")
 
@@ -31,7 +31,7 @@ def execute_angsd_create_and_map_consensus_sequence(input_file, output_dir):
     except Exception as e:
         print_error(f"Failed to create consensus sequence of {input_file}: {e}")
 
-def create_consensus_sequence_for_species(species):
+def create_consensus_sequence_for_species(species: str):
     print_info(f"Creating consensus sequence for species {species} ...")
 
     #get reads
@@ -53,7 +53,7 @@ def create_consensus_sequence_for_species(species):
     print_info(f"Creating consensus sequence for species {species} complete")
 
 
-def map_consensus_sequence_for_species(species):
+def map_consensus_sequence_for_species(species: str):   
     print_info(f"Mapping aDNA consensus sequence to reference genome for species {species} ...")
 
     #get reads

@@ -5,7 +5,7 @@ from common_aDNA_scripts import *
 ##todo
 
 
-def execute_samtools_extract_region_by_bed_file(bam_file_path, mtdna_region_bed_file_path, output_dir):
+def execute_samtools_extract_region_by_bed_file(bam_file_path: str, mtdna_region_bed_file_path: str, output_dir: str):
     
     if not os.path.exists(bam_file_path):
         raise Exception(f"BAM file {bam_file_path} does not exist.")
@@ -44,7 +44,7 @@ def execute_samtools_extract_region_by_bed_file(bam_file_path, mtdna_region_bed_
 
     print(f"Filtered and indexed BAM file created: {mtdna_bam}")
 
-def extract_mtdna_region_for_species(species):
+def extract_mtdna_region_for_species(species: str):
     print_info(f"Extracting mtDNA regions for species: {species}")
     
     mapped_folder = get_folder_path_species_processed_mtdna_consensus_sequences_mapped(species)

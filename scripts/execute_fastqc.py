@@ -3,7 +3,7 @@ from common_aDNA_scripts import *
 
 FASTQC_THREADS = 20
 
-def fastqc_for_species(species):
+def fastqc_for_species(species: str):
     # run fastqc for raw data
     fastqc_for_raw_data(species)
 
@@ -16,7 +16,7 @@ def fastqc_for_species(species):
     # run fastqc for duplicates removed data
     fastqc_for_duplicates_removed_data(species)
 
-def fastqc_for_raw_data(species):
+def fastqc_for_raw_data(species: str):
     print_info(f"Running fastqc for species {species} raw data")
 
     # raw data
@@ -40,7 +40,7 @@ def fastqc_for_raw_data(species):
 
     print_success(f"fastqc for species {species} raw data complete")
 
-def fastqc_for_quality_filtered_data(species):
+def fastqc_for_quality_filtered_data(species: str):
     print_info(f"Running fastqc for species {species} quality filtered data")
 
     quality_filtered_reads_folder = get_folder_path_species_processed_quality_filtered(species)
@@ -63,7 +63,7 @@ def fastqc_for_quality_filtered_data(species):
 
     print_success(f"fastqc for species {species} quality filtered data complete")
 
-def fastqc_for_adapter_removed_data(species):
+def fastqc_for_adapter_removed_data(species: str):
     print_info(f"Running fastqc for species {species} adapter removed data")
 
     #adapter removed data
@@ -87,7 +87,7 @@ def fastqc_for_adapter_removed_data(species):
 
     print_success(f"fastqc for species {species} adapter removed data complete")
 
-def fastqc_for_duplicates_removed_data(species):
+def fastqc_for_duplicates_removed_data(species: str):
     print_info(f"Running fastqc for species {species} duplicates removed data")
 
     duplicates_removed_reads_folder = get_folder_path_species_processed_duplicates_removed(species)
@@ -110,7 +110,7 @@ def fastqc_for_duplicates_removed_data(species):
 
     print_success(f"fastqc for species {species} duplicates removed data complete")
 
-def execute_fastqc(species, reads_file, output_folder, threads:int = FASTQC_THREADS):
+def execute_fastqc(species: str, reads_file: str, output_folder: str, threads:int = FASTQC_THREADS):
 
     print_info(f"Running fastqc for reads file {reads_file}")
 

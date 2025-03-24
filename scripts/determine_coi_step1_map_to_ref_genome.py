@@ -5,7 +5,7 @@ from common_aDNA_scripts import *
 from map_aDNA_to_refgenome import execute_bwa_map_aDNA_to_refgenome
 from convert_sam2bam import execute_convert_sam_to_bam
 
-def map_mtdna_to_refgenome_for_species(species):
+def map_mtdna_to_refgenome_for_species(species: str):
     print_info(f"Mapping mtdna to reference genome for species {species} ...")
 
     #get reads

@@ -5,7 +5,7 @@ import pandas as pd
 
 from common_aDNA_scripts import *
 
-def execute_samtools_detpth(input_file, coverage_output_file, thread:int = THREADS_DEFAULT):
+def execute_samtools_detpth(input_file: str, coverage_output_file: str, thread:int = THREADS_DEFAULT):
 
     print_info(f"Executing samtools depth for {input_file}")
 
@@ -23,7 +23,7 @@ def execute_samtools_detpth(input_file, coverage_output_file, thread:int = THREA
     except Exception as e:
         print_error(f"Failed to execute samtools depth: {e}")
 
-def determine_coverage_depth_and_breath(species):
+def determine_coverage_depth_and_breath(species: str):
     print_info(f"Determine coverage depth and breadth for species {species}")
 
     input_folder = get_folder_path_species_processed_mapped(species)
@@ -64,7 +64,7 @@ def determine_coverage_depth_and_breath(species):
 
     print_info(f"Determine coverage depth and breadth for species {species} complete")
 
-def extended_analysis(coverage_file, analysis_file_path):
+def extended_analysis(coverage_file: str, analysis_file_path: str):
 
     print_info(f"Performing extended analysis for {coverage_file}")
 

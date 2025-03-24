@@ -1,7 +1,7 @@
 import os
 from common_aDNA_scripts import *
 
-def execute_samtools_count_mapped_reads(bam_file, threads=THREADS_DEFAULT):
+def execute_samtools_count_mapped_reads(bam_file: str, threads: int=THREADS_DEFAULT) -> int:
     """Counts the number of mapped reads in a BAM file."""
     try:
         result = subprocess.run(
@@ -12,7 +12,7 @@ def execute_samtools_count_mapped_reads(bam_file, threads=THREADS_DEFAULT):
     except Exception as e:
         print_error(f"Failed to count mapped reads in {bam_file}: {e}")
     return 0
-def execute_samtools_count_total_reads(bam_file, threads=THREADS_DEFAULT):
+def execute_samtools_count_total_reads(bam_file: str, threads: int=THREADS_DEFAULT) -> int:
     """Counts the total number of reads in a BAM file (mapped and unmapped)."""
     try:
         result = subprocess.run(
@@ -24,7 +24,7 @@ def execute_samtools_count_total_reads(bam_file, threads=THREADS_DEFAULT):
         print_error(f"Failed to count total reads in {bam_file}: {e}")
     return 0
 
-def determine_endogenous_reads_for_species(species):
+def determine_endogenous_reads_for_species(species: str):
     print(f"Determining endogenous reads for species: {species}")
     
     mapped_folder = get_folder_path_species_processed_mapped(species)

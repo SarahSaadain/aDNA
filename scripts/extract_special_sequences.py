@@ -1,12 +1,5 @@
-'''
-Extract special sequences from a BAM file based on depth threshold
-
-This script takes a BAM file and outputs a FASTA file with special sequences
-'''
-
 import pysam
 import os
-import argparse
 from collections import Counter
 from common_aDNA_scripts import *
 
@@ -14,7 +7,7 @@ DEPTH_THRESHOLD = 1000
 MINIMUM_SEQUENCE_LENGTH = 100
 MAXIMUM_SEQUENCE_LENGTH = 5000
 
-def write_fasta_entry(special_reads_file_content, scaffold, start, end, sequence, depth_values, minimum_sequence_length=MINIMUM_SEQUENCE_LENGTH):
+def write_fasta_entry(special_reads_file_content: str, scaffold: str, start: int, end: int, sequence: str, depth_values: list, minimum_sequence_length: int=MINIMUM_SEQUENCE_LENGTH):
     """Writes a sequence entry to the output FASTA file."""
     if sequence:
 
@@ -84,7 +77,7 @@ def execute_extract_special_sequences(bam_file_path:str, output_folder:str, dept
 
     print_success(f"Total sequences written for {bam_file_path}: {total_sequences}\n")
 
-def write_unmapped_region(txtfile, scaffold, start, end, minimum_sequence_length, maximum_sequence_length):
+def write_unmapped_region(txtfile, scaffold: str, start: int, end: int, minimum_sequence_length: int=MINIMUM_SEQUENCE_LENGTH, maximum_sequence_length: int=MAXIMUM_SEQUENCE_LENGTH):
     """Writes an unmapped region entry to the output FASTA file."""
     if start is not None:
         
@@ -94,7 +87,7 @@ def write_unmapped_region(txtfile, scaffold, start, end, minimum_sequence_length
         txtfile.write(f"{scaffold}:{start}-{end}\n")
         print_info(f"Unmapped region found in {scaffold}: {start}-{end}")
 
-def execute_extract_unmapped_regions(bam_file_path, output_folder, minimum_sequence_length: int = MINIMUM_SEQUENCE_LENGTH, maximum_sequence_length: int = MAXIMUM_SEQUENCE_LENGTH, threads: int = THREADS_DEFAULT):
+def execute_extract_unmapped_regions(bam_file_path: str, output_folder: str, minimum_sequence_length: int = MINIMUM_SEQUENCE_LENGTH, maximum_sequence_length: int = MAXIMUM_SEQUENCE_LENGTH, threads: int = THREADS_DEFAULT):
     """Extracts regions of the reference genome with no coverage (depth = 0) from a BAM file."""
     output_filename = os.path.join(output_folder, os.path.basename(bam_file_path).replace(FILE_ENDING_BAM, "_unmapped_regions.txt"))
     
@@ -129,7 +122,7 @@ def execute_extract_unmapped_regions(bam_file_path, output_folder, minimum_seque
     print_info(f"Total unmapped regions written for {bam_file_path}: {total_regions}\n")
 
 
-def extract_special_sequences_for_species(species, depth_threshold: int = DEPTH_THRESHOLD):
+def extract_special_sequences_for_species(species: str, depth_threshold: int = DEPTH_THRESHOLD):
     print_info(f"Extracting special sequences for species {species} with depth threshold: {depth_threshold}")
 
     mapped_folder = get_folder_path_species_processed_mapped(species)

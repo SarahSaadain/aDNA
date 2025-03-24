@@ -1,7 +1,7 @@
 import os
 from common_aDNA_scripts import *
 
-def multiqc_for_species(species):
+def multiqc_for_species(species: str):
     # run multiqc for raw data
     multiqc_for_raw_data(species)
 
@@ -14,7 +14,7 @@ def multiqc_for_species(species):
     # run multiqc for duplicates removed data
     multiqc_for_duplicates_removed_data(species)
 
-def multiqc_for_raw_data(species):
+def multiqc_for_raw_data(species: str):
     print_info(f"Running MultiQC for species {species} raw data")
 
     # raw data
@@ -38,7 +38,7 @@ def multiqc_for_raw_data(species):
 
     print_success(f"MultiQC for species {species} raw data complete")
 
-def multiqc_for_quality_filtered_data(species):
+def multiqc_for_quality_filtered_data(species: str):
     print_info(f"Running MultiQC for species {species} quality filtered data")  
 
     quality_filtered_fastqc_folder = get_folder_path_species_results_qc_fastqc_quality_filtered(species)
@@ -61,7 +61,7 @@ def multiqc_for_quality_filtered_data(species):
 
     print_success(f"MultiQC for species {species} quality filtered data complete")
 
-def multiqc_for_duplicates_removed_data(species):
+def multiqc_for_duplicates_removed_data(species: str):
     print_info(f"Running MultiQC for species {species} duplicates removed data")
 
     duplicates_removed_fastqc_folder = get_folder_path_species_results_qc_fastqc_duplicates_removed(species)
@@ -84,7 +84,7 @@ def multiqc_for_duplicates_removed_data(species):
 
     print_success(f"MultiQC for species {species} duplicates removed data complete")
 
-def multiqc_for_adapter_removed_data(species):
+def multiqc_for_adapter_removed_data(species: str):
     print_info(f"Running MultiQC for species {species} trimmed data")
 
     #adapter removed data
@@ -108,7 +108,7 @@ def multiqc_for_adapter_removed_data(species):
 
     print_success(f"Multiqc for species {species} trimmed data complete")
 
-def run_multiqc(species, fastqc_results_folder, output_folder):
+def run_multiqc(species: str, fastqc_results_folder: str, output_folder: str):
 
     command = f"{PROGRAM_PATH_MULTIQC} {fastqc_results_folder} -o {output_folder}"
     try:

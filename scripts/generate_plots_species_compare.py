@@ -1,11 +1,9 @@
-import os
-import subprocess
 import argparse
 
 from common_aDNA_scripts import *
 import generate_plots as generate_plots
 
-def plot_reads_processing_result(species):
+def plot_reads_processing_result(species: list):
     species_string = ",".join(species)
     print_info(f"Plotting reads before and after comparison for species {species_string}")
     root_folder_path = PATH_ADNA_PROJECT
