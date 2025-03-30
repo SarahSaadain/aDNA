@@ -3,8 +3,17 @@
 This project contains a pipeline to analyze raw ancient data, obtained from the sequencing facility. The pipeline includes various scripts to process, analyze, and generate reports on the sequence quality, which helps decide if an aDNA extraction and sequencing was successfull, and further polishes the data for downstream analyses.
 
 ## Project Structure
-The scripts folder contains all necessary scripts, which are all executed within pipeline_aDNA.py.
-Bger, Dmel/scripts, Mmus/scripts contain a species specific scripts for more detailed analyses.
+
+### Species Folders
+
+The project contains folders for different species, such as `Bger`, `Dsim`, `Phortica`, `Sepsis`, `Mmus`, and `Dmel`. These folders contain the raw data, processed data, and results for each species.
+
+When adding a new species, make sure to 
+- add the folder name to the `FOLDER_SPECIES` variable in the `common_aDNA_scripts.py` file
+- provide the raw reads in `species/raw/reads/` folder
+- provide the reference genome in `species/raw/ref_genome/` folder
+- provide mtDNA reads in `species/raw/mtdna/` folder
+- all other folders will be created and populated automatically
 
 ### Scripts Folder Structure
 
@@ -19,7 +28,7 @@ The `common_aDNA_scripts.py` file contains a collection of helper functions and 
 - Checking and creating folders  
 - Handling file extensions and patterns  
 - Executing R scripts  
-- Providing various constants such as `THREADS_DEFAULT` and `PATH_ADNA_PROJECT`
+- Providing various constants
 - Providing various helper functions
 
 This file is intended to be imported and used by other scripts in the pipeline, providing a centralized location for shared functionality and reducing code duplication.  
@@ -54,13 +63,11 @@ python scripts/pipeline_aDNA.py
 
 #### Species-Specific Scripts
 
-Species-specific scripts are organized into separate folders:
+Species-specific can be used to prepare the reads for processing. These scripts are organized into separate folders:
 
-- **`Bger/`**  
-- **`Dmel/`**  
-- **`Mmus/`**  
+- **`species/scripts`**
 
-These scripts are executed within the main pipeline script.  
+These scripts are executed within the main pipeline script if provided.  
 
 
 ### Demultiplexing  
@@ -69,42 +76,51 @@ Sequencing results were demultiplexed with bcl2fastq
 
 ## Requirements
 
-### FastQC
-```bash
-conda install -c bioconda fastqc 
-```
+The following dependencies are required to run the aDNA pipeline. You can install them using `conda` or `pip` as specified below.
 
-### MultiQC v2.35
-```bash
-conda install -c bioconda multiqc
-```
+Make sure conda and pip are installed and properly configured before running these commands.
 
-### fastq  
-```bash
-conda install bioconda::fastp
-```
+### Conda Packages
 
-### bwa-mem2
-```bash
-conda install bioconda::bwa-mem2
-```
+Install the necessary tools using `conda`:
 
-### samtools
 ```bash
-conda install bioconda::samtools
-```
-
-### angsd
+# FastQC - Quality control for high-throughput sequence data
+conda install -c bioconda fastqc  
+```	
 ```bash
-conda install -c bioconda -c conda-forge angsd
-```
+# MultiQC v2.35 - Aggregate results from bioinformatics analyses
+conda install -c bioconda multiqc  
+```	
 
-### pysam
+```bash
+# fastp - Fast and efficient FASTQ preprocessor
+conda install -c bioconda fastp 
+```	 
+
+```bash
+# BWA-MEM2 - Alignment algorithm optimized for large genomes
+conda install -c bioconda bwa-mem2  
+```	
+
+```bash
+# SAMtools - Utilities for manipulating alignments in the SAM/BAM format
+conda install -c bioconda samtools  
+```	
+
+```bash
+# ANGSD - Analysis of Next Generation Sequencing Data
+conda install -c bioconda -c conda-forge angsd  
+```	
+
+### Python Packages
+
+Install required Python libraries using pip:
+
 ```bash
 pip install pysam
-```
+```	
 
-### pandas
 ```bash
-pip install pandas
-```
+pip install pandas  
+```	
