@@ -18,10 +18,10 @@ import determine_read_length_distribution as determine_read_length_distribution
 import generate_quality_check_report as generate_quality_check_report
 import generate_plots as generate_plots
 import generate_plots_species_compare as generate_plots_species_compare
-import determine_coi_step1_map_to_ref_genome as determine_coi_step1_map_to_ref_genome
-import determine_coi_step2_determine_regions as determine_coi_step2_determine_regions
-import determine_coi_step3_extract_coi_regions as determine_coi_step3_extract_coi_regions
-import determine_coi_step4_create_and_map_consensus_sequence as determine_coi_step4_create_and_map_consensus_sequence
+import mtdna_analysis.determine_mtdna_step1_map_to_ref_genome as determine_mtdna_step1_map_to_ref_genome
+import mtdna_analysis.determine_mtdna_step2_determine_regions as determine_mtdna_step2_determine_regions
+import scripts.mtdna_analysis.determine_mtdna_step4_extract_coi_regions as determine_mtdna_step4_extract_coi_regions
+import scripts.mtdna_analysis.determine_mtdna_step3_create_and_map_consensus_sequence as determine_mtdna_step3_create_and_map_consensus_sequence
 
 
 def run_pipeline():
@@ -103,10 +103,10 @@ def run_pipeline():
     ############################################################
 
     # determine coi
-    determine_coi_step1_map_to_ref_genome.all_species_map_mtdna_to_refgenome()
-    determine_coi_step2_determine_regions.all_species_mtdna_get_regions()
+    determine_mtdna_step1_map_to_ref_genome.all_species_map_mtdna_to_refgenome()
+    determine_mtdna_step2_determine_regions.all_species_mtdna_get_regions()
     #determine_coi_step3_extract_coi_regions.()
-    determine_coi_step4_create_and_map_consensus_sequence.all_species_create_and_map_consensus_sequence()
+    determine_mtdna_step3_create_and_map_consensus_sequence.all_species_create_and_map_consensus_sequence()
 
     # extract special sequences 
     extract_special_sequences.all_species_extract_special_sequences()

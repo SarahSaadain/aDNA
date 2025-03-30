@@ -66,15 +66,9 @@ def main():
     path = "https://raw.githubusercontent.com/SarahSaadain/aDNA/refs/heads/main"
 
     file_list = [
-        #'scripts/adapter_remove_aDNA.py',
-        "scripts/common_aDNA_scripts.py",
-        #"scripts/determine_poly_nt_count.py",
-        "scripts/determine_coi_step1_map_to_ref_genome.py",
-        "scripts/determine_coi_step2_determine_regions.py",
-        "scripts/determine_coi_step3_extract_coi_regions.py",
+        "scripts/common_aDNA_scripts.py",                
         "scripts/determine_coverage_depth_and_breadth.py",
         "scripts/determine_coi_step4_create_and_map_consensus_sequence.py",
-        #"scripts/extract_most_common_sequence_to_fasta.py"
         "scripts/map_aDNA_to_refgenome.py",
         "scripts/execute_multiqc.py",
         "scripts/execute_fastqc.py",
@@ -103,6 +97,11 @@ def main():
         "scripts/plots/plot_compare_species_depth_breadth.R",
         "scripts/plots/plot_compare_species_endogenous_reads.R",
         "scripts/plots/plot_compare_species_reads_before_after_processing.R",
+
+        "scripts/mtdna_analysis/determine_mtdna_step1_map_to_ref_genome.py",
+        "scripts/mtdna_analysis/determine_mtdna_step2_determine_regions.py",
+        "scripts/mtdna_analysis/determine_mtdna_step3_create_and_map_consensus_sequence.py",
+        "scripts/mtdna_analysis/determine_mtdna_step4_extract_coi_regions.py",
 
         "Bger/scripts/prepare_for_processing.py",
         "Bger/resources/mapping_folder_to_lane.csv",
