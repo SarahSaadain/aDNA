@@ -2,7 +2,17 @@
 
 This project contains a pipeline to analyze raw ancient data, obtained from the sequencing facility. The pipeline includes various scripts to process, analyze, and generate reports on the sequence quality, which helps decide if an aDNA extraction and sequencing was successfull, and further polishes the data for downstream analyses.
 
-## Project Structure
+## Setup Overview
+
+- Before running the pipeline, ensure you have the necessary dependencies installed. Please refer to the [Requirements](#Requirements) section for the necessary dependencies and installation instructions.
+- Raw reads and reference genome must be provided in the relevant folders. 
+    - Raw reads shoud be renamed according to the naming convention specified in the [RAW Reads filenames](#RAW-Reads-filenames) section. Also see the [Manually renaming the raw reads files](#Manually-renaming-the-raw-reads-files) section.
+    - Reference genome must be provided in the `species/raw/ref_genome/` folder.
+    - Species folders must be added to the `FOLDER_SPECIES` variable in the `common_aDNA_scripts.py` file.
+    - Please refer to the [Species Folders](#Species-Folders) section for the expected folder structure.
+- You need to set the `PATH_ADNA_PROJECT` variable in the `common_aDNA_scripts.py` file to point to the project directory.
+
+## Folder Structure
 
 ### Species Folders
 
@@ -17,7 +27,7 @@ When adding a new species, make sure to
     - folder `species/processed/` contains the intermediary files during processing
     - folder `species/results/` contains the final results and reports
 
-#### RAW Reads filenames
+#### RAW Reads Filenames
 
 The pipeline expects input read files to follow a standardized naming convention:
 
@@ -27,7 +37,7 @@ The pipeline expects input read files to follow a standardized naming convention
 
 Following this convention ensures proper organization and automated processing within the pipeline.  
 
-##### Components:
+##### Filename Components:
 - **`<Individual>`** – A unique identifier for the sample or individual.  
 - **`<Protocol>`** – The sequencing or library preparation protocol used (e.g., shotgun, capture).  
 - **`<Original_Filename>`** – The original filename assigned by the sequencing platform.  
@@ -87,7 +97,7 @@ python resources/rename.py rename_list.csv path/to/raw_reads/ --test
 
 This will print the planned renaming actions without modifying any files.
 
-### Scripts Folder Structure
+### Scripts Folder
 
 The `scripts/` folder contains all necessary scripts for the aDNA pipeline, organized into subfolders corresponding to different stages of the analysis.
 
@@ -147,12 +157,6 @@ If you want to restart the pipeline from the beginning, you can delete the relev
 
 Some stages support parallelization. The number of threads can be adjusted in the `common_aDNA_scripts.py` file.
 
-#### Folder Structure
-
-- **`raw_reads_processing/`** – Scripts for processing raw reads.  
-- **`ref_genome_processing/`** – Scripts for processing reads in relation to reference genomes.  
-- **`additional_analysis/`** – Scripts for additional analyses, including species comparison and mitochondrial DNA analysis.  
-
 #### Species-Specific Scripts
 
 Species-specific can be used to prepare the reads for processing. These scripts are organized into separate folders:
@@ -200,6 +204,31 @@ conda install -c bioconda samtools
 conda install -c bioconda -c conda-forge angsd  
 ```	
 
+```bash
+# Cutadapt - Adapter trimming and removal
+conda install -c bioconda cutadapt
+```
+
+```bash
+# FASTX-Toolkit - FASTA/FASTQ file processing
+conda install -c bioconda fastx_toolkit
+```
+
+```bash
+# SGA - String Graph Assembler
+conda install -c bioconda sga
+```
+
+```bash
+# BEDTools - Genome arithmetic and manipulation
+conda install -c bioconda bedtools
+```
+
+```bash
+# SeqKit - Cross-platform and ultrafast toolkit for FASTA/Q file manipulation
+conda install -c bioconda seqkit
+```
+
 ### Python Packages
 
 Install required Python libraries using pip:
@@ -211,3 +240,19 @@ pip install pysam
 ```bash
 pip install pandas  
 ```	
+
+### R Packages
+
+The pipeline requires R beeing installed and uses the following R packages:
+
+- ggplot2
+- dplyr
+- tidyr
+- scales
+- readr
+- tools
+- ggpubr
+- purrr
+- stringr
+
+These packages are used for data manipulation, visualization, and analysis.
