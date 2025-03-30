@@ -1,6 +1,6 @@
-# Raw Read Polishing
+# Raw Read Processing
 
-**Adapter Removal**
+## Adapter Removal
 
 * Program: `fastp`
 * Purpose: Remove adapters from raw reads
@@ -27,7 +27,7 @@
 		- `--unqualified_percent_limit`: Maximum percentage of unqualified bases (set to `40`)
 		- `--n_base_limit`: Maximum number of N bases allowed (set to `5`)
 
-**Quality Filtering**
+## Quality Filtering
 
 * Program: `fastp`
 * Purpose: Filter reads based on quality scores
@@ -45,7 +45,7 @@
 	+ `--unqualified_percent_limit`: Maximum percentage of unqualified bases (set to `40`)
 	+ `--n_base_limit`: Maximum number of N bases allowed (set to `5`)
 
-**Deduplication**
+## Deduplication
 
 * Program: `fastp`
 * Purpose: Remove duplicate reads
@@ -61,3 +61,13 @@
 	+ `--qualified_quality_phred`: Minimum quality score to keep (set to `5`)
 	+ `--unqualified_percent_limit`: Maximum percentage of unqualified bases (set to `40`)
 	+ `--n_base_limit`: Maximum number of N bases allowed (set to `5`)
+
+
+# FastQC and MultiQC
+
+FastQC and MultiQC are used to generate quality control reports for raw reads, adapter-removed reads, quality-filtered reads, and deduplicated reads. The reports are saved in the `species/results/quality_control/fastqc` and `species/results/quality_control/multiqc` folders, respectively.
+
+## Plots
+
+* Read length distribution plots are generated for raw reads, adapter-removed reads, quality-filtered reads, and deduplicated reads.
+* Plots are created to visualize the distribution of read lengths at each processing step, allowing for quality control and assessment of the processing pipeline's performance.

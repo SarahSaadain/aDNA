@@ -123,7 +123,7 @@ The `pipeline_aDNA.py` file is the main entry point for the aDNA pipeline. It or
 
 The pipeline is divided into several stages, executed sequentially:
 
-1. **Raw reads processing**  
+1. **Raw reads processing** - for more details see [Raw Read Processing](scripts/raw_reads_processing/raw_reads_processing.md)
 2. **Reference genome processing**  
 3. **Additional analysis**   
 
