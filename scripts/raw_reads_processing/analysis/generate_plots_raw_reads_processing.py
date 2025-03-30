@@ -10,7 +10,7 @@ def plot_reads_processing_result(species: str):
     input_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species), f"{species}_reads_processing_result{FILE_ENDING_TSV}")
 
     if not os.path.exists(input_file_path):
-        print_error(f"Input file not found: {input_file_path}")
+        print_warning(f"Input file not found: {input_file_path}")
         return
 
     output_folder_path = get_folder_path_species_results_plots_reads_processing(species)
