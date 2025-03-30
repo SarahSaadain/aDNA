@@ -19,7 +19,13 @@ def check_extracted_region_for_species(species):
         print_warning(f"No extracted region files found for species {species}. Skipping.")
         return
     
-    output_file = os.path.join(extracted_region_folder, f"{species}_extracted_region_analysis.tsv")
+    output_folder = get_folder_path_species_results_mtdna_regions(species)
+    
+    output_file = os.path.join(output_folder, f"{species}_extracted_region_analysis.tsv")
+
+    if os.path.exists(output_file):
+        print_info(f"Output file {output_file} already exists. Skipping analysis.")
+        return
     
     results = []
 
