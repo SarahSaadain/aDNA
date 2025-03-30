@@ -2,7 +2,8 @@
 .Rhistory
 .RData
 aDNA.code-workspace
-*/raw/
+*/raw/reads/
+*/raw/ref_genome/
 */processed/
 */logs/
 */results/
