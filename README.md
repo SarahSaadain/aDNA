@@ -15,6 +15,28 @@ When adding a new species, make sure to
 - provide mtDNA reads in `species/raw/mtdna/` folder
 - all other folders will be created and populated automatically
 
+#### RAW Reads filenames
+
+The pipeline expects input read files to follow a standardized naming convention:
+
+```
+<Individual>_<Protocol>_<Original_Filename>.fastq.gz
+```
+
+Following this convention ensures proper organization and automated processing within the pipeline.  
+
+##### Components:
+- **`<Individual>`** – A unique identifier for the sample or individual.  
+- **`<Protocol>`** – The sequencing or library preparation protocol used (e.g., shotgun, capture).  
+- **`<Original_Filename>`** – The original filename assigned by the sequencing platform.  
+- **`.fastq.gz`** – The expected file extension, indicating compressed FASTQ format.  
+
+#### Example:
+
+```
+Bger1_S_326862_S37_R1_001.fastq.gz
+```
+
 ### Scripts Folder Structure
 
 The `scripts/` folder contains all necessary scripts for the aDNA pipeline, organized into subfolders corresponding to different stages of the analysis.
