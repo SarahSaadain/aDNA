@@ -161,11 +161,6 @@ Species-specific can be used to prepare the reads for processing. These scripts 
 
 These scripts are executed within the main pipeline script if provided.  
 
-
-### Demultiplexing  
-Sequencing results were demultiplexed with bcl2fastq  
-
-
 ## Requirements
 
 The following dependencies are required to run the aDNA pipeline. You can install them using `conda` or `pip` as specified below.
