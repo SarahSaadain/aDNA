@@ -33,6 +33,17 @@ FOLDER_READS = "reads"
 FOLDER_REFERENCE_GENOMES = "ref_genome"
 FOLDER_MTDNA = "mtdna"
 
+# script folders
+FOLDER_SCRIPTS = "scripts"
+FOLDER_ANALYSIS = "analysis"
+FOLDER_RAW_READS_PROCESSING = "raw_reads_processing"
+FOLDER_REF_GENOME_PROCESSING = "ref_genome_processing"
+FOLDER_ADDITIONAL_ANALYSIS = "additional_analysis"
+FOLDER_MTDNA_ANALYSIS = "mtdna_analysis"
+FOLDER_SPECIES_COMPARISON = "species_comparison"
+FOLDER_QUALITY_CHECKING = "quality_checking"
+FOLDER_PLOTS = "plots"
+
 # processed folders
 # if there is a follow up step, it is considered processed
 FOLDER_PROCESSED = "processed"
@@ -62,11 +73,10 @@ FOLDER_SPECIAL_SEQUENCES = "special_sequences"
 FOLDER_ENDOGENOUS_READS = "endogenous_reads"
 FOLDER_PROCESSED_READS = "processed_reads"
 FOLDER_READ_LENGTH_DISTRIBUTION = "read_length_distribution"
-FOLDER_PLOTS = "plots"
+
 FOLDER_REGIONS = "regions"
 
 # main folders
-FOLDER_SCRIPTS = "scripts"
 FOLDER_LOGS = "logs"
 FOLDER_RESOURCES = "resources"
 
@@ -170,6 +180,17 @@ def is_fasta_gz_file(file_name: str) -> bool:
     return file_name.endswith("fna.gz") or file_name.endswith("fa.gz") or file_name.endswith("fasta.gz") 
 
 
+def call_r_script(script_path: str, *args):
+    if not os.path.exists(script_path):
+        raise FileNotFoundError(f"R script not found: {script_path}")
+
+    command = ["Rscript", script_path] + list(args)
+    try:
+        subprocess.run(command, check=True)
+        print(f"Successfully executed {command}")
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing {script_path}: {e}")
+
 
 #####################
 # Print
@@ -220,8 +241,8 @@ def get_folder_path_scripts() -> str:
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_scripts_plots() -> str:
-    path = os.path.join(get_folder_path_scripts(), FOLDER_PLOTS)
+def get_folder_path_scripts_plots(processing_folder: str) -> str:
+    path = os.path.join(get_folder_path_scripts(), processing_folder, FOLDER_ANALYSIS, FOLDER_PLOTS)
     check_folder_exists_or_create(path)
     return path
 
@@ -493,9 +514,8 @@ def get_folder_path_species_results_qc_read_length_distribution(species: str) ->
 # File paths
 #####################
 
-def get_r_script(r_script_name: str) -> str:
-
-    r_script_path = os.path.join(get_folder_path_scripts_plots(), r_script_name)
+def get_r_script(r_script_name: str, processing_folder: str) -> str:
+    r_script_path = os.path.join(get_folder_path_scripts_plots(processing_folder), r_script_name)
 
     if not os.path.exists(r_script_path):
         raise Exception(f"Invalid R script: {r_script_path}")   

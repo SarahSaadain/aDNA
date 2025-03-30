@@ -1,7 +1,4 @@
-import contextlib
-import io
 import os
-import importlib.util
 from common_aDNA_scripts import *
 
 FILE_NAME_PREPARE_SCRIPT = "prepare_for_mapping_to_ref_genome.py"

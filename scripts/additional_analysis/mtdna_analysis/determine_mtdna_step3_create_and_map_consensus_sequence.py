@@ -2,7 +2,7 @@ import os
 import subprocess
 from common_aDNA_scripts import *
 
-from map_aDNA_to_refgenome import execute_bwa_map_aDNA_to_refgenome
+from ref_genome_processing.map_aDNA_to_refgenome import execute_bwa_map_aDNA_to_refgenome
 
 def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir: str):
 

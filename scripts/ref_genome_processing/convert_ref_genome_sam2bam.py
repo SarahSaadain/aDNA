@@ -1,6 +1,5 @@
 import os
 import subprocess
-import argparse
 
 from common_aDNA_scripts import *
 
