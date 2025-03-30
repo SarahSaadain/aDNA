@@ -32,7 +32,7 @@ def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir:
         # index consensus sequence
         print_info(f"Indexing consensus sequence {out_file_path}...")
         try:
-            subprocess.run([PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_FAIDX, "-i", out_file_path])
+            subprocess.run([PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_FAIDX, "-i", out_file_path+FILE_ENDING_FA_GZ])
             print_success(f"Consensus sequence {out_file_path} indexed successfully.")
         except Exception as e:
             print_error(f"Failed to index consensus sequence {out_file_path}: {e}")
