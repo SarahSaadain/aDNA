@@ -92,7 +92,7 @@ def main():
         "scripts/ref_genome_processing/analysis/plots/plot_coverage_depth.R",
         "scripts/ref_genome_processing/analysis/plots/plot_endogenous_reads.R",
 
-        "scripts/additional_analysis/species_comparison/generate_plots_species_compare.py",
+        "scripts/additional_analysis/species_comparison/analysis/generate_plots_species_compare.py",
         "scripts/additional_analysis/species_comparison/analysis/plots/plot_compare_species_depth_breadth.R",
         "scripts/additional_analysis/species_comparison/analysis/plots/plot_compare_species_endogenous_reads.R",
         "scripts/additional_analysis/species_comparison/analysis/plots/plot_compare_species_reads_before_after_processing.R",
