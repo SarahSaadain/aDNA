@@ -41,7 +41,7 @@ def execute_samtools_extract_region_by_bed_file(fasta_file_path: str, mtdna_regi
     mtdna_fasta = os.path.join(output_dir, f"{base_name_fasta_file}_{base_name_bed_file}{FILE_ENDING_FASTA}")
 
     if os.path.exists(mtdna_fasta):
-        print_info(f"mtDNA BAM file already exists: {mtdna_fasta}")
+        print_info(f"mtDNA FASTA file already exists: {mtdna_fasta}")
         return
 
     # Get the mtDNA region from the BED file
