@@ -53,7 +53,7 @@ The script reads a CSV file containing old and new filename mappings and renames
 - If a match is found, the filename is updated accordingly.
 - If --test is enabled, it prints the changes without renaming the files.
 
-This ensures efficient and structured renaming of raw read files within the pipeline
+This ensures efficient and structured renaming of raw read files within the pipeline.
 
 ###### CSV Format  
 
