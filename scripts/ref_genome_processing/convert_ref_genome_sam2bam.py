@@ -83,7 +83,7 @@ def convert_sam_to_bam_for_species(species):
     print_info(f"Conversion of sam to bam for species {species} completed successfully.")
 
 def all_species_convert_sam_to_bam():
-    print("Convert sam to bam files for all species")
+    print_execution("Convert sam to bam files for all species")
 
     for species in FOLDER_SPECIES: 
         convert_sam_to_bam_for_species(species)

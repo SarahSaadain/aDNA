@@ -85,7 +85,7 @@ def species_generate_quality_check_report(species: str):
 
 
 def all_species_generate_quality_check_report():
-    print_info("Generating quality check report for all species")
+    print_execution("Generating quality check report for all species")
     for species in FOLDER_SPECIES:
         species_generate_quality_check_report(species)
 

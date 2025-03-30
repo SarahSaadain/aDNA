@@ -26,14 +26,14 @@ def call_prepare_script(species: str, prepare_script_full_path: str):
         prepare_module.prepare()
 
     # Print the captured output
-    print(output.getvalue())
+    print_info(output.getvalue())
 
     print_info(f"Finished running {FILE_NAME_PREPARE_SCRIPT} script for species {species}.")
         
 
 def all_species_prepare():
 
-    print(f"Running {FILE_NAME_PREPARE_SCRIPT} for all species")
+    print_execution(f"Running {FILE_NAME_PREPARE_SCRIPT} for all species")
 
     for species in FOLDER_SPECIES: 
         scripts_folder = get_folder_path_species_scripts(species)

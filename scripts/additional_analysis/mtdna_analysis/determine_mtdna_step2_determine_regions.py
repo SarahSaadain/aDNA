@@ -53,7 +53,7 @@ def mtdna_get_regions_for_species(species):
    
 def all_species_mtdna_get_regions():
 
-    print("Determining mtdna regions for all species")
+    print_execution("Determining mtdna regions for all species")
     for species in FOLDER_SPECIES: 
         mtdna_get_regions_for_species(species)
     print_info("Finished determining mtdna regions for all species")

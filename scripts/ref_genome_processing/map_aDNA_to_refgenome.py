@@ -62,7 +62,7 @@ def map_aDNA_to_refgenome_for_species(species: str):
     print_success(f"Mapping aDNA to reference genome for species {species} complete")
 
 def all_species_map_aDNA_to_refgenome():
-    print("Mapping aDNA to reference genome for all species")
+    print_execution("Mapping aDNA to reference genome for all species")
 
     for species in FOLDER_SPECIES: 
         map_aDNA_to_refgenome_for_species(species)

@@ -117,7 +117,7 @@ def run_multiqc(species: str, fastqc_results_folder: str, output_folder: str):
 
 def all_species_multiqc():
 
-    print("Running MultiQC for all species before and after adapter removal")
+    print_execution("Running MultiQC for all species before and after adapter removal")
 
     for species in FOLDER_SPECIES: 
         multiqc_for_species(species)
@@ -125,7 +125,7 @@ def all_species_multiqc():
     print_info("Multiqc for all species before and after adapter removal completed successfully.")
 
 def all_species_multiqc_raw():
-    print("Running MultiQC for all species raw data")
+    print_execution("Running MultiQC for all species raw data")
 
     for species in FOLDER_SPECIES: 
         multiqc_for_raw_data(species)
@@ -133,7 +133,7 @@ def all_species_multiqc_raw():
     print_info("Multiqc for all species raw data completed successfully.")
 
 def all_species_multiqc_adapter_removed():
-    print("Running MultiQC for all species trimmed data")
+    print_execution("Running MultiQC for all species trimmed data")
 
     for species in FOLDER_SPECIES: 
        multiqc_for_adapter_removed_data(species)
@@ -141,7 +141,7 @@ def all_species_multiqc_adapter_removed():
     print_info("Multiqc for all species trimmed data completed successfully.")
 
 def all_species_multiqc_quality_filtered():
-    print("Running MultiQC for all species quality filtered data")
+    print_execution("Running MultiQC for all species quality filtered data")
 
     for species in FOLDER_SPECIES: 
         multiqc_for_quality_filtered_data(species)
@@ -149,7 +149,7 @@ def all_species_multiqc_quality_filtered():
     print_info("Multiqc for all species quality filtered data completed successfully.")
 
 def all_species_multiqc_duplicates_removed():
-    print("Running MultiQC for all species duplicates removed data")
+    print_execution("Running MultiQC for all species duplicates removed data")
 
     for species in FOLDER_SPECIES: 
         multiqc_for_duplicates_removed_data(species)

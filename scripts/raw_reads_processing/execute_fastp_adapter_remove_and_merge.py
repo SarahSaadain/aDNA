@@ -108,7 +108,7 @@ def execute_fastp_single_reads_remove_adapters(input_file_path: str, output_file
 
 def all_species_fastp_adapter_remove_and_merge():
 
-    print("Running adaper removal and merge for all species")
+    print_execution("Running adaper removal and merge for all species")
     
     for species in FOLDER_SPECIES:
         adapter_remove_for_species(species)

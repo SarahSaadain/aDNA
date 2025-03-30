@@ -58,7 +58,7 @@ def get_deduplication_path_for_quality_filtered_reads(species: str, quality_filt
     return os.path.join(get_folder_path_species_processed_duplicates_removed(species), output_file)
 
 def all_species_fastp_deduplication():
-    print("Running fastp deduplication for all species")
+    print_execution("Running fastp deduplication for all species")
 
     for species in FOLDER_SPECIES: 
         fastp_deduplication_for_species(species)

@@ -137,12 +137,12 @@ def extract_special_sequences_for_species(species: str, depth_threshold: int = D
     print_info(f"Finished extracting special sequences for species {species}")
 
 def all_species_extract_special_sequences(depth_threshold: int = DEPTH_THRESHOLD):
-    print("Extract special sequences for all species")
+    print_execution("Extract special sequences for all species")
 
     for species in FOLDER_SPECIES: 
         extract_special_sequences_for_species(species, depth_threshold)
 
-    print("Finished extracting special sequences for all species")
+    print_info("Finished extracting special sequences for all species")
 
 def main():
     all_species_extract_special_sequences()

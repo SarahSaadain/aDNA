@@ -49,7 +49,7 @@ def map_mtdna_to_refgenome_for_species(species: str):
     print_success(f"Mapping mtdna to reference genome for species {species} complete")
 
 def all_species_map_mtdna_to_refgenome():
-    print("Mapping mtdna to reference genome for all species")
+    print_execution("Mapping mtdna to reference genome for all species")
 
     for species in FOLDER_SPECIES: 
         map_mtdna_to_refgenome_for_species(species)

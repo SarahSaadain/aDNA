@@ -126,7 +126,7 @@ def execute_fastqc(species: str, reads_file: str, output_folder: str, threads:in
 
 def all_species_fastqc():
 
-    print("Running fastqc for all species before and after adapter removal")
+    print_execution("Running fastqc for all species before and after adapter removal")
 
     for species in FOLDER_SPECIES: 
         fastqc_for_species(species)
@@ -134,7 +134,7 @@ def all_species_fastqc():
     print_info("Fastqc for all species before and after adapter removal completed successfully.")
 
 def all_species_fastqc_raw():
-    print("Running fastqc for all species raw data")
+    print_execution("Running fastqc for all species raw data")
 
     for species in FOLDER_SPECIES: 
         fastqc_for_raw_data(species)
@@ -142,7 +142,7 @@ def all_species_fastqc_raw():
     print_info("Fastqc for all species raw data completed successfully.")
 
 def all_species_fastqc_adapter_removed():
-    print("Running fastqc for all species trimmed data")
+    print_execution("Running fastqc for all species trimmed data")
 
     for species in FOLDER_SPECIES: 
        fastqc_for_adapter_removed_data(species)
@@ -150,7 +150,7 @@ def all_species_fastqc_adapter_removed():
     print_info("Fastqc for all species trimmed data completed successfully.")
 
 def all_species_fastqc_quality_filtered():
-    print("Running fastqc for all species quality filtered data")
+    print_execution("Running fastqc for all species quality filtered data")
 
     for species in FOLDER_SPECIES: 
         fastqc_for_quality_filtered_data(species)
@@ -158,7 +158,7 @@ def all_species_fastqc_quality_filtered():
     print_info("Fastqc for all species quality filtered data completed successfully.")
 
 def all_species_fastqc_duplicates_removed():
-    print("Running fastqc for all species duplicates removed data")
+    print_execution("Running fastqc for all species duplicates removed data")
 
     for species in FOLDER_SPECIES: 
         fastqc_for_duplicates_removed_data(species)

@@ -28,7 +28,7 @@ import additional_analysis.mtdna_analysis.determine_mtdna_step3_create_and_map_c
 
 def run_pipeline_reference_genome_processing():
 
-    print("Starting reference genome processing pipeline ...")
+    print_execution("Starting reference genome processing pipeline ...")
     
     ############################################################
     # Mapping to reference genome
@@ -68,7 +68,7 @@ def run_pipeline_reference_genome_processing():
 
 def run_pipeline_raw_reads_processing():
 
-    print("Starting raw reads processing pipeline ...")
+    print_execution("Starting raw reads processing pipeline ...")
 
     ############################################################
     # Processing of reads
@@ -122,7 +122,7 @@ def run_pipeline_raw_reads_processing():
 
 def run_pipeline_post_processing():
 
-    print("Starting post processing pipeline ...")
+    print_execution("Starting post processing pipeline ...")
 
     ############################################################
     # Post processing
@@ -146,7 +146,7 @@ def run_pipeline_post_processing():
 
 def run_pipeline():
 
-    print("Starting pipeline ...")
+    print_execution("Starting pipeline ...")
     
     ############################################################
     # Processing of reads

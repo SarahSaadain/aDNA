@@ -60,7 +60,7 @@ def get_quality_filtered_path_for_adapter_removed_reads(species: str, adapter_re
 
 def all_species_fastp_quality_filter():
 
-    print("Running fastp quality filter for all species")
+    print_execution("Running fastp quality filter for all species")
 
     for species in FOLDER_SPECIES: 
         fastp_quality_filter_for_species(species)

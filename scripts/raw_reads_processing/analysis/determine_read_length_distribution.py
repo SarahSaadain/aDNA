@@ -103,7 +103,7 @@ def determine_read_length_distribution(species: str):
 
 
 def all_species_determine_read_length_distribution():
-    print("Determine reads processing result for all species")
+    print_execution("Determine reads processing result for all species")
     for species in FOLDER_SPECIES: 
         determine_read_length_distribution(species)
 

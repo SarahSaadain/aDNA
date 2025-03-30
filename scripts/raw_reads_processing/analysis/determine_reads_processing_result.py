@@ -124,7 +124,7 @@ def determine_reads_processing_result(species: str):
 
 
 def all_species_determine_determine_reads_processing_result():
-    print("Determine reads processing result for all species")
+    print_execution("Determine reads processing result for all species")
     for species in FOLDER_SPECIES: 
         determine_reads_processing_result(species)
 

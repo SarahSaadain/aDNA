@@ -25,7 +25,7 @@ def execute_samtools_count_total_reads(bam_file: str, threads: int=THREADS_DEFAU
     return 0
 
 def determine_endogenous_reads_for_species(species: str):
-    print(f"Determining endogenous reads for species: {species}")
+    print_info(f"Determining endogenous reads for species: {species}")
     
     mapped_folder = get_folder_path_species_processed_mapped(species)
 
@@ -59,12 +59,12 @@ def determine_endogenous_reads_for_species(species: str):
             if total_reads != 0:
                 proportion = mapped_reads / total_reads
 
-            print(f"Endogenous reads for {bam_filename}: {mapped_reads}/{total_reads} -> {proportion:.4f}")
+            print_info(f"Endogenous reads for {bam_filename}: {mapped_reads}/{total_reads} -> {proportion:.4f}")
             result_file.write(f"{bam_filename},{mapped_reads},{total_reads},{proportion}\n")
 
 def all_species_determine_endogenous_reads():
 
-    print("Determining endogenous reads for all species")
+    print_execution("Determining endogenous reads for all species")
     for species in FOLDER_SPECIES: 
         determine_endogenous_reads_for_species(species)
 

@@ -173,7 +173,7 @@ def is_sam_file_sorted(sam_file: str) -> bool:
         # The SAM file is not sorted by coordinate
         return False
     except subprocess.CalledProcessError as e:
-        print(f"Error reading header: {e}")
+        print_error(f"Error reading header: {e}")
         # Return False in case of an error
         return False
 
@@ -191,9 +191,9 @@ def call_r_script(script_path: str, *args):
     command = ["Rscript", script_path] + list(args)
     try:
         subprocess.run(command, check=True)
-        print(f"Successfully executed {command}")
+        print_success(f"Successfully executed {command}")
     except subprocess.CalledProcessError as e:
-        print(f"Error executing {script_path}: {e}")
+        print_error(f"Error executing {script_path}: {e}")
 
 
 #####################
@@ -215,6 +215,14 @@ def print_success(message: str):
 
 def print_warning(message: str): 
     print(f"[WARNING] {message}")
+
+def print_debug(message: str):
+    print(f"[DEBUG] {message}")
+
+def print_execution(message: str):
+    print(f"[EXECUTION] {message}")
+
+
 
 #####################
 # Folder paths

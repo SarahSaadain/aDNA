@@ -90,7 +90,7 @@ def extract_mtdna_region_for_species(species: str):
 
 def all_species_extract_mtdna_region():
 
-    print("Extracting mtDNA regions for all species")
+    print_execution("Extracting mtDNA regions for all species")
     for species in FOLDER_SPECIES: 
         extract_mtdna_region_for_species(species)
     print_info("Finished extracting mtDNA regions for all species")
