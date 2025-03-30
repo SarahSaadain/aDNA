@@ -67,7 +67,7 @@ def extract_mtdna_region_for_species(species: str):
     print_info(f"Extracting mtDNA regions for species: {species}")
     
     consensus_sequences_folder = get_folder_path_species_processed_mtdna_consensus_sequences(species)
-    fasta_files = get_files_in_folder_matching_pattern(consensus_sequences_folder, f"*{FILE_ENDING_FASTA}")
+    fasta_files = get_files_in_folder_matching_pattern(consensus_sequences_folder, f"*{FILE_ENDING_FA_GZ}")
 
     if len(fasta_files) == 0:
         print_warning(f"No consensus sequence files found for species {species}. Skipping.")
