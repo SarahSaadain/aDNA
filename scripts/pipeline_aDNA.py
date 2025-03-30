@@ -12,6 +12,7 @@ import raw_reads_processing.analysis.determine_reads_processing_result as determ
 import raw_reads_processing.analysis.determine_read_length_distribution as determine_read_length_distribution
 import raw_reads_processing.analysis.generate_plots_raw_reads_processing as generate_plots_raw_reads_processing
 
+import ref_genome_processing.prepare_ref_genome_for_mapping as prepare_ref_genome_for_mapping
 import ref_genome_processing.prepare_species_for_map_to_ref_genome as prepare_species_for_map_to_ref_genome
 import ref_genome_processing.map_aDNA_to_refgenome as map_aDNA_to_refgenome
 import ref_genome_processing.convert_ref_genome_sam2bam as convert_ref_genome_sam2bam
@@ -40,6 +41,9 @@ def run_pipeline_reference_genome_processing():
     # reference genome by concatenating the reads and creating different fastq files.
     # fastq files are created for the species (all reads), and per individual
     prepare_species_for_map_to_ref_genome.all_species_prepare()
+
+    # prepare reference genome for mapping
+    prepare_ref_genome_for_mapping.all_species_prepare_ref_genome()
     
     # map reads to reference genome
     map_aDNA_to_refgenome.all_species_map_aDNA_to_refgenome()
