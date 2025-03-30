@@ -105,9 +105,37 @@ def main():
         "Bger/scripts/prepare_for_processing.py",
         "Bger/resources/mapping_folder_to_lane.csv",
         "Bger/resources/mapping_runID_to_name.csv",
+        "Bger/raw/mtdna/marker_coi.fasta",
+
+        "trial_Mmus/raw/mtdna/marker_12S_rRNA.fasta",
+        "trial_Mmus/raw/mtdna/marker_16S_rRNA.fasta",
+        "trial_Mmus/raw/mtdna/marker_ATP6.fasta",
+        "trial_Mmus/raw/mtdna/marker_ATP8.fasta",
+        "trial_Mmus/raw/mtdna/marker_COI.fasta",
+        "trial_Mmus/raw/mtdna/marker_COX2.fasta",
+        "trial_Mmus/raw/mtdna/marker_COX3.fasta",
+        "trial_Mmus/raw/mtdna/marker_Cyb561.fasta",
+        "trial_Mmus/raw/mtdna/marker_cytochrome_b.fasta",
+        "trial_Mmus/raw/mtdna/marker_ND1.fasta",
+        "trial_Mmus/raw/mtdna/marker_ND2.fasta",
+        "trial_Mmus/raw/mtdna/marker_ND3.fasta",
+        "trial_Mmus/raw/mtdna/marker_ND4.fasta",
+        "trial_Mmus/raw/mtdna/marker_ND4L.fasta",
+        "trial_Mmus/raw/mtdna/marker_ND5.fasta",
+        "trial_Mmus/raw/mtdna/marker_ND6.fasta",
+        "trial_Mmus/raw/mtdna/marker_Ptgs2.fasta",
+
+        "trial_Phortica/raw/mtdna/marker_28S.fasta",
+        "trial_Phortica/raw/mtdna/marker_COI3.fasta",
+        "trial_Phortica/raw/mtdna/marker_COI5.fasta",
+        "trial_Phortica/raw/mtdna/marker_NC_081078.fasta",
+        "trial_Phortica/raw/mtdna/marker_ND2.fasta",
 
         "resources/rename.py",
         "resources/rename.csv"
+
+
+
     ]
 
     for file in file_list:
