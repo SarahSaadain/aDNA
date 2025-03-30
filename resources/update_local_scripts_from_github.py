@@ -1,43 +1,41 @@
 import os
 import requests
 import argparse
+import sys
 
-def download_files(file_url: str, target_file: str, force_update: bool=False):
-
+def download_files(file_url: str, target_file: str, force_update: bool=False, check_only: bool=False):
     print(f'Downloading {file_url} to {target_file} ...')
-
     try:
-        # Download the file
         file_content = get_remote_file_content(file_url)
-
         print(f"Downloaded {file_url}")
-        #print(f"Content: {file_content}")
 
-        #check if content of the file is up to date 
         if os.path.exists(target_file):
             with open(target_file, 'rb') as f:
                 if f.read() == file_content:
                     print(f"File {target_file} is up to date")
-                    return
-                
-        # if file already exists and must be update. get confirmation by the user
+                    return False  # No update needed
+
+        if check_only:
+            return True  # Indicates that the file has changed
+
         if os.path.exists(target_file) and not force_update:
             print(f"File {target_file} already exists. Do you want to overwrite it? (y/n)")
-            choice = input().lower()    
+            choice = input().lower()
             if choice != 'y':
-                print("File not overwritten")    
-                return
-            
-        #check if directory exists, if not create it
+                print("File not overwritten")
+                return False
+
         target_dir = os.path.dirname(target_file)
         if not os.path.exists(target_dir):
             os.makedirs(target_dir)
 
-        # Save the file to the target directory
         with open(target_file, 'wb') as f:
             f.write(file_content)
+        print(f"Updated {target_file}")
+        return True
     except Exception as e:
         print(f"Failed to download file: {e}")
+        return False
 
 def get_remote_file_content(file_url: str):
     response = requests.get(file_url)
@@ -46,24 +44,24 @@ def get_remote_file_content(file_url: str):
     return response.content
 
 def main():
-
-    #argparse to allow user to force update files. also provide information about the script
-
-    parser = argparse.ArgumentParser(description="This script downloads the latest version of the scripts from GITHub")
+    parser = argparse.ArgumentParser(description="This script downloads the latest version of the scripts from GitHub")
     parser.add_argument("--force_update", "-u", help="force update files", default=False, action="store_true")
     args = parser.parse_args()
-    
-    # check if script is run in the folder aDNA
+
     if not os.getcwd().endswith("aDNA"):
         print("Please run this script in the aDNA folder")
         exit()
 
-    if args.force_update:
-        print("Forcing update of all files")
-    
+    base_url = "https://raw.githubusercontent.com/SarahSaadain/aDNA/refs/heads/main"
+    update_script = "resources/update_local_scripts_from_github.py"
+    update_script_url = f"{base_url}/{update_script}"
+    update_script_target = os.path.join(os.getcwd(), update_script)
 
-    # Example usage:
-    path = "https://raw.githubusercontent.com/SarahSaadain/aDNA/refs/heads/main"
+    print("Checking if update script has changed...")
+    if download_files(update_script_url, update_script_target, force_update=args.force_update, check_only=True):
+        print("Update script has changed. Updating only itself and exiting.")
+        download_files(update_script_url, update_script_target, force_update=True)
+        sys.exit()
 
     file_list = [
         "scripts/common_aDNA_scripts.py",                
@@ -107,27 +105,14 @@ def main():
         "Bger/resources/mapping_folder_to_lane.csv",
         "Bger/resources/mapping_runID_to_name.csv",
 
-        "resources/update_local_scripts_from_github.py",
         "resources/rename.py",
         "resources/rename.csv"
-
     ]
 
     for file in file_list:
-        file_url = f"{path}/{file}"
-
-        #get path from file
-        relative_path = os.path.relpath(file_url, path)
-
-        # set script folder of current folder as target directory
-        target_dir = os.path.join(os.getcwd(), relative_path)
-
-        download_files(file_url, target_dir, args.force_update)
+        file_url = f"{base_url}/{file}"
+        target_file = os.path.join(os.getcwd(), file)
+        download_files(file_url, target_file, args.force_update)
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
