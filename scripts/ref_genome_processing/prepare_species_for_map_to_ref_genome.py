@@ -42,7 +42,7 @@ def generate_fastq_patterns(file_paths: str) -> dict:
     
     for path in file_paths:
         # Extract the filename
-        filename = os.path.basename(path)
+        filename = get_filename_from_path_without_extension(path)
         
         # Extract the individual
         individual = filename.split('_')[0]

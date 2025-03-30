@@ -130,8 +130,8 @@ def run_pipeline_post_processing():
     # determine coi
     determine_mtdna_step1_map_to_ref_genome.all_species_map_mtdna_to_refgenome()
     determine_mtdna_step2_determine_regions.all_species_mtdna_get_regions()
-    #determine_coi_step3_extract_coi_regions.()
     determine_mtdna_step3_create_and_map_consensus_sequence.all_species_create_and_map_consensus_sequence()
+    determine_mtdna_step4_extract_coi_regions.all_species_extract_mtdna_region()
 
     ############################################################
     # Generate plots

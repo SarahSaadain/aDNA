@@ -14,7 +14,7 @@ def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir:
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    base_name = os.path.splitext(os.path.basename(input_file))[0]
+    base_name = get_filename_from_path_without_extension(input_file)
 
     # create consensus fasta
     #NOTE: maybe change later so it is not fasta.fa.gz but just fa.gz -> remove .fasta from below

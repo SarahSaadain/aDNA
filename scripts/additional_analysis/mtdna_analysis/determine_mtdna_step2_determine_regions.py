@@ -19,7 +19,7 @@ def execute_samtools_get_read_regions(bam_file: str, output_file: str, threads: 
     try:
       # Execute the command
         subprocess.run(command, shell=True, check=True)
-        print(f"Regions have been written to {output_file}")
+        print_success(f"Regions for {bam_file} have been written to {output_file}")
     except Exception as e:
         print_error(f"Failed to extract regions for {bam_file}: {e}")
 
@@ -33,15 +33,20 @@ def mtdna_get_regions_for_species(species):
     if len(bam_files) == 0:
         print_warning(f"No BAM files found for species {species}. Skipping.")
         return
-
-    result_folder = get_folder_path_species_results_mtdna_regions(species)
-    result_file_path = os.path.join(result_folder, f"{species}_mtdna_regions{FILE_ENDING_BED}")
-
-    if os.path.exists(result_file_path):
-        print_info(f"Result file {result_file_path} already exists for species {species}. Skipping.")
-        return
     
-    execute_samtools_get_read_regions(bam_files[0], result_file_path)
+    for bam_file in bam_files:
+        print_info(f"Determining mtdna regions for {bam_file}")
+
+        bam_file_name_wo_ext = get_filename_from_path_without_extension(bam_file)
+
+        result_folder = get_folder_path_species_results_mtdna_regions(species)
+        result_file_path = os.path.join(result_folder, f"{bam_file_name_wo_ext}_mtdna_region{FILE_ENDING_BED}")
+
+        if os.path.exists(result_file_path):
+            print_info(f"Result file {result_file_path} already exists for species {species}. Skipping.")
+            return
+        
+        execute_samtools_get_read_regions(bam_file, result_file_path)
 
     print_info(f"Finished determining mtdna regions for species {species}")
     

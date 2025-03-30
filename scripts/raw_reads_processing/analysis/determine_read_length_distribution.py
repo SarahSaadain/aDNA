@@ -66,7 +66,7 @@ def determine_read_length_distribution(species: str):
 
         print_info("Combining read length distributions")
 
-        reads_file = os.path.basename(raw_read).split(".")[0]
+        reads_file = get_filename_from_path_without_extension(raw_read)
         individual = reads_file.split("_")[0]
         protocol = reads_file.split("_")[1]
 

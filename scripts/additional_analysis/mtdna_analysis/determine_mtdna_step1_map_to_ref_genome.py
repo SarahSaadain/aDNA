@@ -27,13 +27,13 @@ def map_mtdna_to_refgenome_for_species(species: str):
 
     for ref_genome_path in ref_genome_files:
 
-        ref_genome_filename = os.path.splitext(os.path.basename(ref_genome_path))[0]
+        ref_genome_filename = get_filename_from_path_without_extension(ref_genome_path)
 
         for mtrna_read_file_path in list_of_mtrna_files:
 
             print_info(f"Mapping {mtrna_read_file_path} to reference genome {ref_genome_path} ...")
 
-            read_name = os.path.splitext(os.path.basename(mtrna_read_file_path))[0]
+            read_name = get_filename_from_path_without_extension(mtrna_read_file_path)
             output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}{FILE_ENDING_SAM}")
 
             try:

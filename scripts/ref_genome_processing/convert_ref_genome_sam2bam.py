@@ -6,7 +6,7 @@ from common_aDNA_scripts import *
 def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THREADS_DEFAULT, detlete_unsorted_bam: bool=True):
 
     # Convert SAM to BAM
-    bam_file_base_name = os.path.splitext(os.path.basename(sam_file))[0]
+    bam_file_base_name = get_filename_from_path_without_extension(sam_file)
     
     bam_file = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_BAM}")
     sorted_bam = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_SORTED_BAM}")

@@ -18,7 +18,7 @@ def execute_seqkit_stats_count_reads(input_file: str, thread:int = THREADS_DEFAU
         raise Exception(f"Input file {input_file} does not exist!")
 
     try:
-        command = ["seqkit", "stats", "--threads", str(thread), input_file]
+        command = [PROGRAM_PATH_SEQKIT, PROGRAM_PATH_SEQKIT_STATS, "--threads", str(thread), input_file]
 
         result = subprocess.run( command, capture_output=True, text=True, check=True)
     
@@ -101,7 +101,7 @@ def determine_reads_processing_result(species: str):
         duplicates_removed_file = get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file)
         duplicates_removed_count = execute_seqkit_stats_count_reads(duplicates_removed_file)
 
-        reads_id = os.path.basename(raw_read).split(".")[0]
+        reads_id = get_filename_from_path_without_extension(raw_read)
         individual = reads_id.split("_")[0]
         protocol = reads_id.split("_")[1]
 

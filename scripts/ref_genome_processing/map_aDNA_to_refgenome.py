@@ -47,13 +47,13 @@ def map_aDNA_to_refgenome_for_species(species: str):
 
     for ref_genome_path in ref_genome_files:
 
-        ref_genome_filename = os.path.splitext(os.path.basename(ref_genome_path))[0]
+        ref_genome_filename = get_filename_from_path_without_extension(ref_genome_path)
 
         for read_file_path in list_of_read_files:
 
             print_info(f"Mapping {read_file_path} to reference genome {ref_genome_path} ...")
 
-            read_name = os.path.splitext(os.path.basename(read_file_path))[0]
+            read_name = get_filename_from_path_without_extension(read_file_path)
             output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}.sam")
 
             execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)

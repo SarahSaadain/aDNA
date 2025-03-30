@@ -5,6 +5,7 @@ import glob
 #####################
 # Constants
 #####################
+
 PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
 #PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
 
@@ -100,6 +101,8 @@ PROGRAM_PATH_SAMTOOLS_VIEW =  "view"
 PROGRAM_PATH_SAMTOOLS_SORT = "sort"
 PROGRAM_PATH_SAMTOOLS_INDEX = "index"
 PROGRAM_PATH_ANGSD = "angsd"
+PROGRAM_PATH_SEQKIT = "seqkit"
+PROGRAM_PATH_SEQKIT_STATS = "stats"
 
 #"doi.org/10.1093/bioinformatics/btt193" to check damage, include to pipeline
 
@@ -513,6 +516,12 @@ def get_folder_path_species_results_qc_read_length_distribution(species: str) ->
 #####################
 # File paths
 #####################
+
+def get_filename_from_path(file_path: str) -> str:
+    return os.path.basename(file_path)
+
+def get_filename_from_path_without_extension(file_path: str) -> str:
+    return os.path.splitext(get_filename_from_path(file_path))[0]
 
 def get_r_script(r_script_name: str, processing_folder: str) -> str:
     r_script_path = os.path.join(get_folder_path_scripts_plots(processing_folder), r_script_name)
