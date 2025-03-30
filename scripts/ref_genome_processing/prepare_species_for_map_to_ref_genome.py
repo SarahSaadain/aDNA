@@ -60,7 +60,7 @@ def merge_fastq_by_individual(species: str):
 
     # if no files are found, exit
     if len(fastq_files) == 0:
-        print_error("No duplicate removed fastq files found. Exiting.")
+        print_warning(f"No duplicate removed fastq files found for species {species}. Exiting.")
         return
     
     for individual, pattern in generate_fastq_patterns(fastq_files).items():

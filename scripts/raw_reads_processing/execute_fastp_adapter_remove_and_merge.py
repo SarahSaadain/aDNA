@@ -124,7 +124,7 @@ def adapter_remove_for_species(species: str):
     list_of_r2_read_files = get_files_in_folder_matching_pattern(raw_reads_folder, FILE_PATTERN_R2_FASTQ_GZ)
 
     if not list_of_r1_read_files and not list_of_r2_read_files:
-        print_warning(f"No reads found for species {species}.")
+        print_warning(f"No raw reads found for species {species}.")
         return
 
     # Create a set of base filenames to identify paired reads
@@ -145,7 +145,7 @@ def adapter_remove_for_species(species: str):
                 adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, [r1, r2])
                 execute_fastp_paired_reads_remove_adapters_and_merge(r1, r2, adapter_removed_read_file)
         except Exception as e:
-            print_error(e)
+            print_error(f"Error processing paired-end reads for species {species}: {e}")
     
     # Process single-end reads
     if single_reads:
@@ -155,7 +155,7 @@ def adapter_remove_for_species(species: str):
                 adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, [read_file_path])
                 execute_fastp_single_reads_remove_adapters(read_file_path, adapter_removed_read_file)
         except Exception as e:
-            print_error(e)
+            print_error(f"Error processing single-end reads for species {species}: {e}")
     
     print_info(f"Adapter removal for species {species} completed successfully.")
 
