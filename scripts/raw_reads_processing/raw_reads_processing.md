@@ -67,7 +67,7 @@
 
 FastQC and MultiQC are used to generate quality control reports for raw reads, adapter-removed reads, quality-filtered reads, and deduplicated reads. The reports are saved in the `species/results/quality_control/fastqc` and `species/results/quality_control/multiqc` folders, respectively.
 
-## Plots
+# Plots
 
 * Read length distribution plots are generated for raw reads, adapter-removed reads, quality-filtered reads, and deduplicated reads.
 * Plots are created to visualize the distribution of read lengths at each processing step, allowing for quality control and assessment of the processing pipeline's performance.
