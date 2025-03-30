@@ -6,7 +6,7 @@ from common_aDNA_scripts import *
 R1_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
 R2_ADAPTER_SEQUENCE = "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
 
-def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str, input_file_path_r2: str, output_file_path_r1: str, output_file_path_r2: str, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE, threads:int = THREADS_DEFAULT):
+def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str, input_file_path_r2: str, output_file_path: str, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE, threads:int = THREADS_DEFAULT):
 
     print_info(f"Removing adapters from {input_file_path_r1} and {input_file_path_r2} ...")
 
@@ -16,16 +16,16 @@ def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str
     if not os.path.exists(input_file_path_r2):
         raise Exception(f"Read file {input_file_path_r2} does not exist!")
     
-    if os.path.exists(output_file_path_r1):
-        print_info(f"Output file {output_file_path_r1} already exists! Skipping!")
+    if os.path.exists(output_file_path):
+        print_info(f"Output file {output_file_path} already exists! Skipping!")
         return
     
-    filepath_merge_failed_passed_r1 = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_passed_r1.fastq.gz")
-    filepath_merge_failed_passed_r2 = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_passed_r2.fastq.gz")
-    filepath_merge_failed_not_passed_r1 = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_not_passed_r1.fastq.gz")
-    filepath_merge_failed_not_passed_r2 = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_not_passed_r2.fastq.gz")
-    filepath_merge_json_report = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_report.json")
-    filepath_merge_html_report = output_file_path_r1.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_report.html")
+    filepath_merge_failed_passed_r1 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_passed_r1.fastq.gz")
+    filepath_merge_failed_passed_r2 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_passed_r2.fastq.gz")
+    filepath_merge_failed_not_passed_r1 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_not_passed_r1.fastq.gz")
+    filepath_merge_failed_not_passed_r2 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_not_passed_r2.fastq.gz")
+    filepath_merge_json_report = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_report.json")
+    filepath_merge_html_report = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_report.html")
 
     #https://github.com/OpenGene/fastp/blob/59cc2f67414e74e99d42774e227b192a3d9bb63a/README.md#all-options
     command_fastp = [
@@ -36,7 +36,7 @@ def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str
         "--out2", filepath_merge_failed_passed_r2,
         "--unpaired1", filepath_merge_failed_not_passed_r1,
         "--unpaired2", filepath_merge_failed_not_passed_r2,
-        "--merged_out", output_file_path_r1,  # Output file for R1
+        "--merged_out", output_file_path,  # Output file for R1
         "--in1", input_file_path_r1,        # Input R1 file
         "--in2", input_file_path_r2,         # Input R2 file
         "--json", filepath_merge_json_report,

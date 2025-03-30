@@ -13,7 +13,7 @@ def merge_all_fastq_files(species: str):
 
     # if no files are found, exit
     if len(fastq_files) == 0:
-        print_error("No duplicate removed fastq files found. Exiting.")
+        print_warning(f"No duplicate removed fastq files found for species {species}. Exiting.")
         return
     
     print_info(f"Found {len(fastq_files)} fastq files")
