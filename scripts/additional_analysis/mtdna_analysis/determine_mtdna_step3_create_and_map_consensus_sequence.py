@@ -104,7 +104,6 @@ def map_consensus_sequence_for_species(species: str):
 
 def create_and_map_consensus_sequence_for_species(species):
     
-
     create_consensus_sequence_for_species(species)
     map_consensus_sequence_for_species(species)        
 

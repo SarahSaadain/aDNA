@@ -25,6 +25,7 @@ import additional_analysis.mtdna_analysis.determine_mtdna_step1_map_to_ref_genom
 import additional_analysis.mtdna_analysis.determine_mtdna_step2_determine_regions as determine_mtdna_step2_determine_regions
 import additional_analysis.mtdna_analysis.determine_mtdna_step4_extract_coi_regions as determine_mtdna_step4_extract_coi_regions
 import additional_analysis.mtdna_analysis.determine_mtdna_step3_create_and_map_consensus_sequence as determine_mtdna_step3_create_and_map_consensus_sequence
+import additional_analysis.mtdna_analysis.determine_mtdna_step5_check_extracted_regions_for_content as determine_mtdna_step5_check_extracted_regions_for_content
 
 def run_pipeline_reference_genome_processing():
 
@@ -132,6 +133,7 @@ def run_pipeline_post_processing():
     determine_mtdna_step2_determine_regions.all_species_mtdna_get_regions()
     determine_mtdna_step3_create_and_map_consensus_sequence.all_species_create_and_map_consensus_sequence()
     determine_mtdna_step4_extract_coi_regions.all_species_extract_mtdna_region()
+    determine_mtdna_step5_check_extracted_regions_for_content.all_species_check_extracted_region()
 
     ############################################################
     # Generate plots
