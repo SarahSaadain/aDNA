@@ -39,9 +39,9 @@ Following this convention ensures proper organization and automated processing w
 Bger1_S_326862_S37_R1_001.fastq.gz
 ```
 
-#### Renaming the raw reads files
+#### Manually renaming the raw reads files
 
-For renaming the raw read files, use the `rename.py` script located in the `resources/` folder in the root directory of the project.  
+For manually renaming the raw read files, use the `rename.py` script located in the `resources/` folder in the root directory of the project.  
 
 ##### Usage  
 
