@@ -14,8 +14,8 @@ When adding a new species, make sure to
 - provide the reference genome in `species/raw/ref_genome/` folder
 - provide mtDNA reads in `species/raw/mtdna/` folder
 - all other folders will be created and populated automatically
-- - folder `processed/` contains the intermediary files during processing
-- - folder `results/` contains the final results and reports
+    - folder `species/processed/` contains the intermediary files during processing
+    - folder `species/results/` contains the final results and reports
 
 #### RAW Reads filenames
 
