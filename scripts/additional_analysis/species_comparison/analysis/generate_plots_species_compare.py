@@ -49,7 +49,6 @@ def plot_endogenous_reads(species: list):
         print_info(f"Plots already exist for species {species_string}. Skipping plot generation.")
         return
 
-
     r_script = get_r_script(R_SCRIPT_PLOT_COMPARE_SPECIES_ENDOGENOUS_READS, scripts_base_folder)
     call_r_script(r_script, root_folder_path, species_string, output_folder_path)
     print_info(f"Finished plotting endogenous reads comparison for species {species_string}")
