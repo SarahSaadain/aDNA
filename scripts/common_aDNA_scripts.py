@@ -124,8 +124,6 @@ FILE_NAME_RAW_READS_LIST = "reads_list.csv"
 
 PROGRAM_PATH_CUTADAPT = config['tools']['cutadapt']
 PROGRAM_PATH_FASTP = config['tools']['fastp']
-PROGRAM_PATH_FASTX_TRIMMER = config['tools']['fastx_trimmer']
-PROGRAM_PATH_FASTX_QUALITY_FILTER = config['tools']['fastq_quality_filter']
 PROGRAM_PATH_SGA = config['tools']['sga']
 PROGRAM_PATH_MULTIQC = config['tools']['multiqc']
 PROGRAM_PATH_FASTQC = config['tools']['fastqc']
