@@ -147,8 +147,8 @@ def run_pipeline_post_processing():
     # 1. reads processing results before and after
     # 2. coverage depth and breadth
     # 3. endogenous reads
-    generate_plots_species_compare.species_generate_comparison_plots([FOLDER_BGER, FOLDER_TRIAL_BGER])
-    generate_plots_species_compare.species_generate_comparison_plots([FOLDER_TRIAL_BGER, FOLDER_TRIAL_MMUS])
+    #generate_plots_species_compare.species_generate_comparison_plots([FOLDER_BGER, FOLDER_TRIAL_BGER])
+    #generate_plots_species_compare.species_generate_comparison_plots([FOLDER_TRIAL_BGER, FOLDER_TRIAL_MMUS])
 
 def run_pipeline():
 
