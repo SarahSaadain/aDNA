@@ -11,3 +11,4 @@ results/
 __pycache__
 scripts/try_and_error/
 sequencing_data/
+config.yaml
