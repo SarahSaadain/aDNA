@@ -271,17 +271,19 @@ def get_adapter_sequence(species: str) -> tuple[str,str]:
     # Check if the species is valid
     if not is_species(species):
         raise ValueError(f"Invalid species: {species}")
+    
+    # Get global defaults
+    default_adapters = config['processing']['adapter_removal']['adapters']
+    
+   # Navigate species config safely
+    species_config = config['species'].get(species, {})
+    species_processing = species_config.get('processing', {})
+    species_adapter_removal = species_processing.get('adapter_removal', {})
+    species_adapter = species_adapter_removal.get('adapter', {})
 
-    # Get the adapter sequence from the config for species, if available
-    adapter_sequence_r1 = config['species'][species]['processing']["adapter_removal"]["adapter"]['r1']
-    adapter_sequence_r2 = config['species'][species]['processing']["adapter_removal"]["adapter"]['r1']
-
-    #if not available, use global adapter sequence
-    if adapter_sequence_r1 is None:
-        adapter_sequence_r1 = config['processing']["adapter_removal"]["adapter"]['r1']
-
-    if adapter_sequence_r2 is None:
-        adapter_sequence_r2 = config['processing']["adapter_removal"]["adapter"]['r2']
+    # Use species adapter if exists, else fall back to default
+    adapter_sequence_r1 = species_adapter.get('r1', default_adapters['r1'])
+    adapter_sequence_r2 = species_adapter.get('r2', default_adapters['r2'])
 
     if adapter_sequence_r1 is None and adapter_sequence_r2 is None:
         raise ValueError(f"Adapter sequence not found for species: {species}")
