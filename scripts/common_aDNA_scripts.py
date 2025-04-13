@@ -1,32 +1,49 @@
 import os
 import subprocess
 import glob
+import config_manager as config_manager  # Assuming config_manager.py is in the same directory
+
+# Load the configuration file (only once)
+try:
+    config = config_manager.load_config('config.yaml')  # Or however you specify the path
+    print("Config loaded successfully.")
+    #print("Loaded Configuration:")
+    #print(config)
+
+    print("Project path: ", config['path_adna_project'])
+    print("Species: ", list(config['species'].keys()))
+
+except FileNotFoundError:
+    print("Config file not found.  Exiting.")
+    exit(1) #Or handle more gracefully
 
 #####################
 # Constants
 #####################
 
-PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
+PATH_ADNA_PROJECT = config['path_adna_project']
+#PATH_ADNA_PROJECT = "/mnt/data2/sarah/aDNA"
 #PATH_ADNA_PROJECT = "/Users/ssaadain/Documents/aDNA"
 
 # config
-THREADS_DEFAULT = 10
+THREADS_DEFAULT = config['threads_default']
 
 # species folders
-FOLDER_BGER = "Bger" # just the species names, could be in /raw or in /processed
-FOLDER_DSIM = "Dsim"
-FOLDER_PHORTICA = "Phortica"
-FOLDER_SEPSIS = "Sepsis"
-FOLDER_MMUS = "Mmus"
-FOLDER_DMEL = "Dmel"
-FOLDER_TRIAL_BGER = "trial_Bger"
-FOLDER_TRIAL_DSIM = "trial_Dsim"
-FOLDER_TRIAL_PHORTICA = "trial_Phortica"
-FOLDER_TRIAL_SEPSIS = "trial_Sepsis"
-FOLDER_TRIAL_MMUS = "trial_Mmus"
-FOLDER_TRIAL_DMEL = "trial_Dmel"
+#FOLDER_BGER = "Bger" # just the species names, could be in /raw or in /processed
+#FOLDER_DSIM = "Dsim"
+#FOLDER_PHORTICA = "Phortica"
+#FOLDER_SEPSIS = "Sepsis"
+#FOLDER_MMUS = "Mmus"
+#FOLDER_DMEL = "Dmel"
+#FOLDER_TRIAL_BGER = "trial_Bger"
+#FOLDER_TRIAL_DSIM = "trial_Dsim"
+#FOLDER_TRIAL_PHORTICA = "trial_Phortica"
+#FOLDER_TRIAL_SEPSIS = "trial_Sepsis"
+#FOLDER_TRIAL_MMUS = "trial_Mmus"
+#FOLDER_TRIAL_DMEL = "trial_Dmel"
 
-FOLDER_SPECIES = [FOLDER_BGER, FOLDER_DSIM, FOLDER_PHORTICA, FOLDER_SEPSIS, FOLDER_MMUS, FOLDER_DMEL, FOLDER_TRIAL_BGER, FOLDER_TRIAL_DSIM, FOLDER_TRIAL_PHORTICA, FOLDER_TRIAL_SEPSIS, FOLDER_TRIAL_MMUS, FOLDER_TRIAL_DMEL]
+FOLDER_SPECIES = list(config['species'].keys())
+#FOLDER_SPECIES = [FOLDER_BGER, FOLDER_DSIM, FOLDER_PHORTICA, FOLDER_SEPSIS, FOLDER_MMUS, FOLDER_DMEL, FOLDER_TRIAL_BGER, FOLDER_TRIAL_DSIM, FOLDER_TRIAL_PHORTICA, FOLDER_TRIAL_SEPSIS, FOLDER_TRIAL_MMUS, FOLDER_TRIAL_DMEL]
 
 # raw folders
 FOLDER_RAW = "raw"
@@ -86,26 +103,43 @@ FILE_NAME_RAW_READS_LIST = "reads_list.csv"
 
 # paths
 # programs
-PROGRAM_PATH_CUTADAPT = "cutadapt"
-PROGRAM_PATH_FASTP = "fastp"
-PROGRAM_PATH_FASTX_TRIMMER = "fastx_trimmer"
-PROGRAM_PATH_FASTX_QUALITY_FILTER = "fastq_quality_filter"
-PROGRAM_PATH_SGA = "sga"
-PROGRAM_PATH_MULTIQC = "multiqc"
-PROGRAM_PATH_FASTQC = "fastqc"
-PROGRAM_PATH_BWA = "bwa"
-PROGRAM_PATH_BEDTOOLS = "bedtools"
+# PROGRAM_PATH_CUTADAPT = "cutadapt"
+# PROGRAM_PATH_FASTP = "fastp"
+# PROGRAM_PATH_FASTX_TRIMMER = "fastx_trimmer"
+# PROGRAM_PATH_FASTX_QUALITY_FILTER = "fastq_quality_filter"
+# PROGRAM_PATH_SGA = "sga"
+# PROGRAM_PATH_MULTIQC = "multiqc"
+# PROGRAM_PATH_FASTQC = "fastqc"
+# PROGRAM_PATH_BWA = "bwa"
+# PROGRAM_PATH_BEDTOOLS = "bedtools"
+# PROGRAM_PATH_BWA_MEM = "mem"
+# PROGRAM_PATH_SAMTOOLS = "samtools"
+# PROGRAM_PATH_SAMTOOLS_FAIDX =  "faidx"
+# PROGRAM_PATH_SAMTOOLS_VIEW =  "view"
+# PROGRAM_PATH_SAMTOOLS_SORT = "sort"
+# PROGRAM_PATH_SAMTOOLS_INDEX = "index"
+# PROGRAM_PATH_ANGSD = "angsd"
+# PROGRAM_PATH_SEQKIT = "seqkit"
+# PROGRAM_PATH_SEQKIT_STATS = "stats"
+
+PROGRAM_PATH_CUTADAPT = config['tools']['cutadapt']
+PROGRAM_PATH_FASTP = config['tools']['fastp']
+PROGRAM_PATH_FASTX_TRIMMER = config['tools']['fastx_trimmer']
+PROGRAM_PATH_FASTX_QUALITY_FILTER = config['tools']['fastq_quality_filter']
+PROGRAM_PATH_SGA = config['tools']['sga']
+PROGRAM_PATH_MULTIQC = config['tools']['multiqc']
+PROGRAM_PATH_FASTQC = config['tools']['fastqc']
+PROGRAM_PATH_BWA = config['tools']['bwa']
+PROGRAM_PATH_BEDTOOLS = config['tools']['bedtools']
 PROGRAM_PATH_BWA_MEM = "mem"
-PROGRAM_PATH_SAMTOOLS = "samtools"
+PROGRAM_PATH_SAMTOOLS = config['tools']['samtools']
 PROGRAM_PATH_SAMTOOLS_FAIDX =  "faidx"
 PROGRAM_PATH_SAMTOOLS_VIEW =  "view"
 PROGRAM_PATH_SAMTOOLS_SORT = "sort"
 PROGRAM_PATH_SAMTOOLS_INDEX = "index"
-PROGRAM_PATH_ANGSD = "angsd"
-PROGRAM_PATH_SEQKIT = "seqkit"
+PROGRAM_PATH_ANGSD = config['tools']['angsd']
+PROGRAM_PATH_SEQKIT = config['tools']['seqkit']
 PROGRAM_PATH_SEQKIT_STATS = "stats"
-
-#"doi.org/10.1093/bioinformatics/btt193" to check damage, include to pipeline
 
 # files
 FILE_PATTERN_R1_FASTQ_GZ = "*_R1*.fastq.gz"
@@ -148,8 +182,40 @@ R_SCRIPT_PLOT_COMPARE_SPECIES_ENDOGENOUS_READS = "plot_compare_species_endogenou
 
 
 #####################
+# Print
+#####################
+
+# print command to terminal
+def print_command(subprocess_command: list):          # prints subprocess commands
+    print_info(" ".join(subprocess_command))
+
+def print_info(message: str):
+    print(f"[INFO] {message}")
+
+def print_error(message: str):
+    print(f"[ERROR] {message}")
+
+def print_success(message: str):
+    print(f"[SUCCESS] {message}")
+
+def print_warning(message: str): 
+    print(f"[WARNING] {message}")
+
+def print_debug(message: str):
+    print(f"[DEBUG] {message}")
+
+def print_execution(message: str):
+    print(f"[EXECUTION] {message}")
+
+
+
+#####################
 # Helpers
 #####################
+
+def is_species(species: str) -> bool:
+    return species in config['species']
+
 def is_sam_file_sorted(sam_file: str) -> bool:
     """
     Checks if a SAM file is sorted by coordinate.
@@ -195,41 +261,41 @@ def call_r_script(script_path: str, *args):
     except subprocess.CalledProcessError as e:
         print_error(f"Error executing {script_path}: {e}")
 
+def get_adapter_sequence(species: str) -> tuple[str,str]:
+    """
+    Get the adapter sequence for a given species. If not found, use the global adapter sequence.
 
-#####################
-# Print
-#####################
+    :param species: The species name
+    :return: The adapter sequence for R1 and R2
+    """
+    # Check if the species is valid
+    if not is_species(species):
+        raise ValueError(f"Invalid species: {species}")
 
-# print command to terminal
-def print_command(subprocess_command: list):          # prints subprocess commands
-    print_info(" ".join(subprocess_command))
+    # Get the adapter sequence from the config for species, if available
+    adapter_sequence_r1 = config['species'][species]['processing']["adapter_removal"]["adapter"]['r1']
+    adapter_sequence_r2 = config['species'][species]['processing']["adapter_removal"]["adapter"]['r1']
 
-def print_info(message: str):
-    print(f"[INFO] {message}")
+    #if not available, use global adapter sequence
+    if adapter_sequence_r1 is None:
+        adapter_sequence_r1 = config['processing']["adapter_removal"]["adapter"]['r1']
 
-def print_error(message: str):
-    print(f"[ERROR] {message}")
+    if adapter_sequence_r2 is None:
+        adapter_sequence_r2 = config['processing']["adapter_removal"]["adapter"]['r2']
 
-def print_success(message: str):
-    print(f"[SUCCESS] {message}")
+    if adapter_sequence_r1 is None and adapter_sequence_r2 is None:
+        raise ValueError(f"Adapter sequence not found for species: {species}")
 
-def print_warning(message: str): 
-    print(f"[WARNING] {message}")
-
-def print_debug(message: str):
-    print(f"[DEBUG] {message}")
-
-def print_execution(message: str):
-    print(f"[EXECUTION] {message}")
-
-
+    return adapter_sequence_r1, adapter_sequence_r2
 
 #####################
 # Folder paths
 #####################
 
 def is_species_folder(folder_name: str) -> bool:
-    return folder_name in FOLDER_SPECIES
+    #return folder_name in FOLDER_SPECIES
+    return folder_name in [config['species'][s]['folder_name'] for s in config['species']]
+
 
 def check_folder_exists_or_create(folder_path: str) -> None:
     if not os.path.exists(folder_path):
