@@ -12,14 +12,94 @@ This project contains a pipeline to analyze raw ancient data, obtained from the 
     - Please refer to the [Species Folders](#Species-Folders) section for the expected folder structure.
 - You need to set the `PATH_ADNA_PROJECT` variable in the `common_aDNA_scripts.py` file to point to the project directory.
 
+## Configuration File (config.yaml)
+
+The `config.yaml` file is used to configure the aDNA pipeline. It contains settings such as project name, project description, default number of threads, adapter sequences for adapter removal, species-specific settings, and paths to external tools.
+
+Example `config.yaml`
+
+```
+# config.yaml - Configuration file for aDNA pipeline
+
+# Global settings
+project_name: "aDNA_Project"
+project_description: "Analysis of ancient DNA data"
+threads_default: 10  # Default number of threads to use for parallel processing
+path_adna_project: "/path/to/aDNA" #Main project path
+
+processing:
+  adapter_removal:
+    adapters:
+      r1: "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
+      r2: "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT" 
+
+# Species-specific settings
+species:
+  Bger:
+    folder_name: "species1"
+  Dsim:
+    folder_name: "species2"
+
+# Paths to external tools
+tools:
+  cutadapt: "cutadapt"
+  fastp: "fastp"
+  sga: "sga"
+  multiqc: "multiqc"
+  fastqc: "fastqc"
+  bwa: "bwa"
+  bedtools: "bedtools"
+  samtools: "samtools"
+  angsd: "angsd"
+  seqkit: "seqkit"
+```
+
+### Global Settings
+
+*   `project_name`: Name of the project.
+*   `project_description`: Description of the project.
+*   `threads_default`: Default number of threads to use for parallel processing.
+*   `path_adna_project`: Main project path.
+
+### Processing Settings
+*   `processing`
+    *   `adapter_removal`
+        *   `adapters`:
+            *   `r1`: Adapter sequence for read 1.
+            *   `r2`: Adapter sequence for read 2.
+
+### Species-Specific Settings
+
+*   `species`: A dictionary containing settings for each species.
+    *   `folder_name`: The name of the folder for the species.
+    *   `processing`: Optional processing config. If not provided, the default values are used.
+        *   `adapter_removal`
+            *   `adapters`:
+                *   `r1`: Adapter sequence for read 1.
+                *   `r2`: Adapter sequence for read 2.
+
+### Paths to External Tools
+
+*   `tools`: A dictionary containing paths to external tools used in the pipeline.
+    *   `cutadapt`: Path to Cutadapt.
+    *   `fastp`: Path to fastp.
+    *   `sga`: Path to SGA.
+    *   `multiqc`: Path to MultiQC.
+    *   `fastqc`: Path to FastQC.
+    *   `bwa`: Path to BWA.
+    *   `bedtools`: Path to BEDTools.
+    *   `samtools`: Path to SAMtools.
+    *   `angsd`: Path to ANGSD.
+    *   `seqkit`: Path to SeqKit.
+
 ## Folder Structure
 
 ### Species Folders
 
-The project contains folders for different species, such as `Bger`, `Dsim`, `Phortica`, `Sepsis`, `Mmus`, and `Dmel`. These folders contain the raw data, processed data, and results for each species.
+The project contains folders for different species, which contain the raw data, processed data, and results for each species.
 
 When adding a new species, make sure to 
-- add the folder name to the `FOLDER_SPECIES` variable in the `common_aDNA_scripts.py` file
+- add the folder name to the `config.yaml`
 - provide the raw reads in `species/raw/reads/` folder
 - provide the reference genome in `species/raw/ref_genome/` folder
 - provide mtDNA reads in `species/raw/mtdna/` folder
