@@ -3,10 +3,7 @@ import subprocess
 
 from common_aDNA_scripts import *
 
-R1_ADAPTER_SEQUENCE = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
-R2_ADAPTER_SEQUENCE = "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT"
-
-def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str, input_file_path_r2: str, output_file_path: str, adapter_sequence_r1:str = R1_ADAPTER_SEQUENCE, adapter_sequence_r2:str = R2_ADAPTER_SEQUENCE, threads:int = THREADS_DEFAULT):
+def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str, input_file_path_r2: str, output_file_path: str, adapter_sequence_r1:str, adapter_sequence_r2:str, threads:int = THREADS_DEFAULT):
 
     print_info(f"Removing adapters from {input_file_path_r1} and {input_file_path_r2} ...")
 
@@ -64,7 +61,7 @@ def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str
         raise Exception(f"Removed adapters error for {input_file_path_r1} and {input_file_path_r2} : {e}")
 
 
-def execute_fastp_single_reads_remove_adapters(input_file_path: str, output_file_path: str, adapter_sequence: str = R1_ADAPTER_SEQUENCE, threads: int = THREADS_DEFAULT):
+def execute_fastp_single_reads_remove_adapters(input_file_path: str, output_file_path: str, adapter_sequence: str, threads: int = THREADS_DEFAULT):
     
     print_info(f"Removing adapters from {input_file_path} ...")
     
@@ -137,13 +134,16 @@ def adapter_remove_for_species(species: str):
             paired_reads.add((r1, r2))
             single_reads.discard(r1)  # Remove from single-end list if paired
 
+    #get adapter sequence
+    adapter_sequence_r1, adapter_sequence_r2 = get_adapter_sequence(species)
+
     # Process paired reads
     if paired_reads:
         print_info("Processing paired-end reads.")
         try:
             for r1, r2 in paired_reads:
                 adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, [r1, r2])
-                execute_fastp_paired_reads_remove_adapters_and_merge(r1, r2, adapter_removed_read_file)
+                execute_fastp_paired_reads_remove_adapters_and_merge(r1, r2, adapter_removed_read_file, adapter_sequence_r1, adapter_sequence_r2)
         except Exception as e:
             print_error(f"Error processing paired-end reads for species {species}: {e}")
     
@@ -153,7 +153,7 @@ def adapter_remove_for_species(species: str):
         try:
             for read_file_path in single_reads:
                 adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, [read_file_path])
-                execute_fastp_single_reads_remove_adapters(read_file_path, adapter_removed_read_file)
+                execute_fastp_single_reads_remove_adapters(read_file_path, adapter_removed_read_file, adapter_sequence_r1)
         except Exception as e:
             print_error(f"Error processing single-end reads for species {species}: {e}")
     
