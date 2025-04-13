@@ -66,6 +66,7 @@ def main():
     file_list = [
         "scripts/common_aDNA_scripts.py",    
         "scripts/pipeline_aDNA.py",
+        "scripts/config_manager.py",
     
         "scripts/raw_reads_processing/quality_checking/execute_multiqc.py",
         "scripts/raw_reads_processing/quality_checking/execute_fastqc.py",
