@@ -68,6 +68,7 @@ def main():
         "scripts/pipeline_aDNA.py",
         "scripts/common/config_manager.py",
         "scripts/common/common_constants.py",
+        "scripts/common/common_config.py",
         "scripts/common/common_folder_functions.py",
         "scripts/common/common_helper_functions.py",
     
