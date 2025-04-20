@@ -11,6 +11,10 @@ MAPPING_FILENAME_RUNID_TO_NAME = "mapping_runID_to_name.csv"
 MAPPING_FILENAME_FOLDER_TO_LANE = "mapping_folder_to_lane.csv"
 
 def prepare():
+
+    
+    return #decativated
+
     print_info("Preparing Bger for processing.")    
 
     try:

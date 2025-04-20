@@ -9,6 +9,11 @@ prepare read list
 find . -type f \( -name "*_R1_*.fastq.gz" -o -name "*_R2_*.fastq.gz" \) ! -path "*/undetermined/*" | sort | awk 'NR%2{printf "%s,", $0} NR%2==0{print $0}' > reads_list.txt
 ```  
 
+To move all .fastq.gz files from all subfolders into the current directory, you can use the following command:
+```bash
+find . -type f -name "*.fastq.gz" -exec mv {} . \;
+```
+
 compare md5sum for 22VCLWLT3_6_R18381_20250131.tar.gz  
 ```bash
 echo "53682ce8865dd90346dd900c5252c6cb" "53682ce8865dd90346dd900c5252c6cb" | awk '{if ($1 == $2) print "Match"; else print "Different"}'  
