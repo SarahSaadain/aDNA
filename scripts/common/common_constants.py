@@ -1,6 +1,3 @@
-import common.config_manager as config_manager  # Assuming config_manager.py is in the same directory
-
-
 # raw folders
 FOLDER_RAW = "raw"
 FOLDER_READS = "reads"

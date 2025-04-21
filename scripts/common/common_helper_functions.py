@@ -13,7 +13,8 @@ from common.common_folder_functions import *
 # print command to terminal
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S (%Z)')
-
+# INFO is the default level, so it will log all messages at this level and above (WARNING, ERROR, CRITICAL)
+# if you want to log DEBUG messages, change the level to logging.DEBUG
 def print_command(subprocess_command: list):  # prints subprocess commands
     logging.info(" ".join(subprocess_command))
 
@@ -168,16 +169,6 @@ def get_raw_paired_reads_list_of_species(species: str) -> list:
         raise Exception(f"Invalid species folder: {species}")
 
     folder_path = get_folder_path_species_raw_reads(species)
-
-    #def generate_paired_reads_list(folder_path: str, output_file: str, overwrite: bool = False) -> None:
-    """
-    Generate a list of read files from a given folder path, sorted by sample ID.
-
-    Args:
-        folder_path (str): The path to the folder containing the read files.
-        output_file (str): The path to the output file.
-        overwrite (bool, optional): Whether to overwrite the output file if it already exists. Defaults to False.
-    """
 
     find_command = f'find {folder_path} -type f \\( -name "{FILE_PATTERN_R1_FASTQ_GZ}" -o -name "{FILE_PATTERN_R2_FASTQ_GZ}" \\) ! -path "{FILE_PATTERN_UNDETERMINED_FOLDER}"'
     
