@@ -54,12 +54,6 @@ def run_pipeline_reference_genome_processing():
     # quality control for mapped reads
     # determine endogenous reads
     determine_endogenous_reads.all_species_determine_endogenous_reads()
-    
-    # determine reads processing before and after
-    determine_reads_processing_result.all_species_determine_determine_reads_processing_result()
-
-    # determine read length distribution
-    determine_read_length_distribution.all_species_determine_read_length_distribution()
 
     # determine coverage depth and breadth
     determine_coverage_depth_and_breadth.all_species_determine_coverage_depth_and_breath()
@@ -118,6 +112,12 @@ def run_pipeline_raw_reads_processing():
 
     # extract special sequences 
     extract_special_sequences.all_species_extract_special_sequences()
+
+    # determine reads processing before and after
+    determine_reads_processing_result.all_species_determine_determine_reads_processing_result()
+
+    # determine read length distribution
+    determine_read_length_distribution.all_species_determine_read_length_distribution()
 
     # generate plots for all species to visualize results
     # these contain 
