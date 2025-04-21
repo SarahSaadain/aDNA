@@ -1,5 +1,6 @@
 import os
 from common.common_constants import *
+from common.common_config import *
 
 #####################
 # Folder paths
