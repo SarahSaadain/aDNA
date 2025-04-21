@@ -108,9 +108,9 @@ def main():
         "scripts/additional_analysis/mtdna_analysis/determine_mtdna_step4_extract_coi_regions.py",
         "scripts/additional_analysis/mtdna_analysis/determine_mtdna_step5_check_extracted_regions_for_content.py",
 
-        "Bger/scripts/prepare_for_processing.py",
-        "Bger/resources/mapping_folder_to_lane.csv",
-        "Bger/resources/mapping_runID_to_name.csv",
+        #"Bger/scripts/prepare_for_processing.py",
+        #"Bger/resources/mapping_folder_to_lane.csv",
+        #"Bger/resources/mapping_runID_to_name.csv",
         "Bger/raw/mtdna/marker_coi.fasta",
 
         "trial_Mmus/raw/mtdna/marker_12S_rRNA.fasta",
