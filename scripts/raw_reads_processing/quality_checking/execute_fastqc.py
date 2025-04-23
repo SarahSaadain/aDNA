@@ -4,8 +4,10 @@ from common_aDNA_scripts import *
 def get_threads_count_for_fastqc():
     # Get the number of threads from the config file
     threads = config['processing']['fastqc']['threads']
+
     if threads is None or not isinstance(threads, int) or threads <= 0:
         return 1  # Default to 1 thread if not specified or invalid
+    
     return threads
 
 def fastqc_for_species(species: str):
@@ -112,6 +114,9 @@ def fastqc_for_duplicates_removed_data(species: str):
     print_success(f"fastqc for species {species} duplicates removed data complete")
 
 def execute_fastqc(species: str, reads_file_list: list, output_folder: str):
+
+    if len(reads_file_list) == 0:
+        raise Exception(f"No reads provided.")
 
     print_info(f"Running fastqc for {len(reads_file_list)} files for species {species}")
 
