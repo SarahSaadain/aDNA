@@ -4,10 +4,13 @@ import argparse
 import sys
 
 def download_files(file_url: str, target_file: str, force_update: bool=False, check_only: bool=False):
-    print(f'Downloading {file_url} to {target_file} ...')
+
+    print(f"Checking for changes: {file_url} ...")
+
+    #print(f'Downloading {file_url} to {target_file} ...')
     try:
         file_content = get_remote_file_content(file_url)
-        print(f"Downloaded {file_url}")
+        #print(f"Downloaded {file_url}")
 
         if os.path.exists(target_file):
             with open(target_file, 'rb') as f:
