@@ -1,8 +1,6 @@
 import os
 from common_aDNA_scripts import *
 
-FASTQC_THREADS = 20
-
 def fastqc_for_species(species: str):
     # run fastqc for raw data
     fastqc_for_raw_data(species)
@@ -110,14 +108,14 @@ def fastqc_for_duplicates_removed_data(species: str):
 
     print_success(f"fastqc for species {species} duplicates removed data complete")
 
-def execute_fastqc(species: str, reads_file: str, output_folder: str, threads:int = FASTQC_THREADS):
+def execute_fastqc(species: str, reads_file: str, output_folder: str):
 
     print_info(f"Running fastqc for reads file {reads_file}")
 
     if not os.path.exists(reads_file):
         raise Exception(f"Read file {reads_file} does not exist!")
 
-    command = f"{PROGRAM_PATH_FASTQC} -o {output_folder} -t {threads} {reads_file}"
+    command = f"{PROGRAM_PATH_FASTQC} -o {output_folder} -t {THREADS_DEFAULT} {reads_file}"
     try:
         subprocess.run(command, shell=True, check=True)
         print_success(f"Fastqc for {reads_file} complete")
