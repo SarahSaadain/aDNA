@@ -25,14 +25,14 @@ def merge_all_fastq_files(species: str):
         print_info(f"Output file {output_file_path} already exists. Skipping.")
         return
     
-    excluded_files = [f for f in fastq_files if f not in fastq_files_filtered]
-    if excluded_files:
-        print_info(f"Excluded {len(excluded_files)} files: {[os.path.basename(f) for f in excluded_files]}")
-    
     # filter out files that contain "LB" or "EB"
     # LB = library blanks
     # EB = extraction blanks
     fastq_files_filtered = [f for f in fastq_files if "LB" not in os.path.basename(f) and "EB" not in os.path.basename(f)]
+
+    excluded_files = [f for f in fastq_files if f not in fastq_files_filtered]
+    if excluded_files:
+        print_info(f"Excluded {len(excluded_files)} files: {[os.path.basename(f) for f in excluded_files]}")
 
      # if no files are found, exit
     if len(fastq_files_filtered) == 0:
