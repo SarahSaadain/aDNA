@@ -1,6 +1,13 @@
 import os
 from common_aDNA_scripts import *
 
+def get_threads_count_for_fastqc():
+    # Get the number of threads from the config file
+    threads = config['processing']['fastqc']['threads']
+    if threads is None or not isinstance(threads, int) or threads <= 0:
+        return 1  # Default to 1 thread if not specified or invalid
+    return threads
+
 def fastqc_for_species(species: str):
     # run fastqc for raw data
     fastqc_for_raw_data(species)
@@ -108,7 +115,9 @@ def execute_fastqc(species: str, reads_file_list: list, output_folder: str):
 
     print_info(f"Running fastqc for {len(reads_file_list)} files for species {species}")
 
-    command = f"{PROGRAM_PATH_FASTQC} -o {output_folder} -t {THREADS_DEFAULT} {' '.join(reads_file_list)}"
+    threads = get_threads_count_for_fastqc()
+
+    command = f"{PROGRAM_PATH_FASTQC} -o {output_folder} -t {threads} {' '.join(reads_file_list)}"
     try:
         subprocess.run(command, shell=True, check=True)
         print_success(f"Fastqc for {reads_file} complete")
