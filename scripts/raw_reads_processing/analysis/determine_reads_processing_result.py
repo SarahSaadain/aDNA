@@ -20,6 +20,8 @@ def execute_seqkit_stats_count_reads(input_file: str, thread:int = THREADS_DEFAU
     try:
         command = [PROGRAM_PATH_SEQKIT, PROGRAM_PATH_SEQKIT_STATS, "--threads", str(thread), input_file]
 
+        print_debug(f"Executing command: {' '.join(command)}")
+
         result = subprocess.run( command, capture_output=True, text=True, check=True)
     
     except Exception as e:
