@@ -31,6 +31,8 @@ def execute_fastp_quality_filter(input_file_path:str, output_file_path:str, thre
         "--json", filepath_json_report,
         "--html", filepath_html_report
     ]
+
+    print_debug(f"Executing command: {' '.join(command_fastp)}")
     
     try:
         subprocess.run(command_fastp, check=True)
@@ -47,7 +49,13 @@ def fastp_quality_filter_for_species(species: str):
     output_folder = get_folder_path_species_processed_quality_filtered(species)
 
     reads_files_list = get_files_in_folder_matching_pattern(reads_folder, f"*{FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ}")
+
+    if len(reads_files_list) == 0:
+        print_warning(f"No adapter removed reads found for species {species}. Skipping.")
+        return
     
+    print_debug(f"Adapter removed reads found for species {species}: {reads_files_list}")
+
     for read_file_path in reads_files_list:
         output_file_path = get_quality_filtered_path_for_adapter_removed_reads(species, read_file_path)
         execute_fastp_quality_filter(read_file_path, output_file_path)
