@@ -1,48 +1,11 @@
 import os
 import subprocess
 import glob
-import logging
 
 from common.common_constants import *
+from common.common_logging import *
+from common.common_config import *
 from common.common_folder_functions import *
-
-#####################
-# Log
-#####################
-
-# print command to terminal
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S (%Z)')
-# INFO is the default level, so it will log all messages at this level and above (WARNING, ERROR, CRITICAL)
-# if you want to log DEBUG messages, change the level to logging.DEBUG
-def print_command(subprocess_command: list):  # prints subprocess commands
-    logging.info(" ".join(subprocess_command))
-
-def print_info(message: str):
-    logging.info(message)
-
-def print_error(message: str):
-    logging.error(message)
-
-def print_success(message: str):
-    highlight = "***"
-    logging.info(f"{highlight} SUCCESS: {message} {highlight}")
-
-def print_warning(message: str):
-    logging.warning(message)
-
-def print_debug(message: str):
-    logging.debug(message)
-
-def print_execution(message: str):
-    print_headline(message)
-
-def print_headline(message: str):
-    """Logs a headline message with separators."""
-    separator = "=" * (len(message) + 4) # Adjust length as needed
-    logging.info(separator)
-    logging.info(f"  {message}  ")
-    logging.info(separator)
 
 #####################
 # Helpers
@@ -61,7 +24,7 @@ def is_sam_file_sorted(sam_file: str) -> bool:
     try:
         # Check the header for sorting status
         result = subprocess.run(
-            [PROGRAM_PATH_SAMTOOLS, 'view', '-H', sam_file],
+            [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_VIEW, '-H', sam_file],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -90,6 +53,9 @@ def call_r_script(script_path: str, *args):
         raise FileNotFoundError(f"R script not found: {script_path}")
 
     command = ["Rscript", script_path] + list(args)
+
+    print_debug(f"Executing command: {' '.join(command)}")
+
     try:
         subprocess.run(command, check=True)
         print_success(f"Successfully executed {command}")
@@ -180,13 +146,12 @@ def get_raw_paired_reads_list_of_species(species: str) -> list:
     
     # Combine the commands into a single command string
     full_command = f'{find_command} | {sort_command} | {awk_command}'
-    
-    # Run the command and return the list of files
-    command_result = subprocess.run(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
 
+    print_debug(f"Running command: {full_command}")
+    
     try:
         #print_info(f"Running command: {full_command}")
-        command_result = subprocess.run(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        command_result = subprocess.run(full_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
 
     except subprocess.CalledProcessError as e:
         raise Exception(f"An error occurred while running the command: {e}")
