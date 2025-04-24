@@ -17,6 +17,7 @@ def execute_bwa_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, 
         return
     
     command_bwa = f"{PROGRAM_PATH_BWA} {PROGRAM_PATH_BWA_MEM} -t {str(threads)} {ref_genome_path} {input_file_path} > {output_file_path}"
+    print_info(f"BWA command: {command_bwa}")
 
     try:
         subprocess.run(command_bwa, shell=True, check=True)
@@ -34,14 +35,26 @@ def map_aDNA_to_refgenome_for_species(species: str):
     if len(list_of_read_files) == 0:
         print_warning(f"No reads found for species {species}. Skipping.")
         return
+    
+    print_debug(f"Found {len(list_of_read_files)} read files for species {species}.")
+    print_debug(f"Read files: {list_of_read_files}")
 
     # get ref genome
     ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
-    ref_genome_files = get_files_in_folder_matching_pattern(ref_genome_folder, "*.fna")
+
+    # add fna files to reference genome list
+    ref_genome_files = get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FNA}")
+    # add fasta files to reference genome list
+    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FASTA}")
+    # add fa files to reference genome list
+    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FA}")
 
     if len(ref_genome_files) == 0:
         print_warning(f"No reference genome found for species {species}. Skipping.")
         return
+    
+    print_debug(f"Found {len(ref_genome_files)} reference genome files for species {species}.")
+    print_debug(f"Reference genome files: {ref_genome_files}")
 
     output_folder = get_folder_path_species_processed_mapped(species)
 
@@ -57,7 +70,6 @@ def map_aDNA_to_refgenome_for_species(species: str):
             output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}.sam")
 
             execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
-        
 
     print_success(f"Mapping aDNA to reference genome for species {species} complete")
 
