@@ -7,26 +7,30 @@ from common.common_logging import *
 try:
 
     print_execution("Loading configuration file ...")
-    config_file_path = 'config.yaml'  # Path to your config file
+    # Path to your config file. we assume it is in the same directory where this script is located
+    config_file_path = 'config.yaml'  
 
     print_info(f"Loading config file: {config_file_path}")
 
-    config = config_manager.load_config('config.yaml')  # Or however you specify the path
+    config = config_manager.load_config(config_file_path)  # Or however you specify the path
+    
     print_success("Config loaded successfully.")
-    #print("Loaded Configuration:")
-    #print(config)
-
+    
     print_info(f"Project path: {config['path_adna_project']}")
     print_info(f"Species: {config['species'].keys()}")
     print_info(f"Threads default: {config['threads_default']}")
 
+    # Set up logging based on the config
+    # Assuming the config has a 'log_level' key
+    # and you want to set the logging level accordingly
     log_level_str = config.get("log_level", "INFO").upper()
     log_level = getattr(logging, log_level_str, logging.INFO)
 
+    # update the logging level
     logging.getLogger().setLevel(log_level)
     print_info(f"Log level set to {log_level_str}")
 
-    print_debug(f"Config: {config}") 
+    print_debug(f"Loaded Config: {config}") 
 
 except FileNotFoundError:
     print_error("Config file not found.  Exiting.")
