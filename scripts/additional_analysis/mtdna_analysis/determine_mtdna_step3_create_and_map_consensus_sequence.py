@@ -25,14 +25,22 @@ def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir:
         return
 
     print_info(f"Creating consensus sequence of {input_file}...")
+
     try:
-        subprocess.run([PROGRAM_PATH_ANGSD, "-out", out_file_path, "-i", input_file, "-doFasta", "2", "-doCounts", "1"])
+        command_angsd = [PROGRAM_PATH_ANGSD, "-out", out_file_path, "-i", input_file, "-doFasta", "2", "-doCounts", "1"]
+        print_debug(f"Executing command: {' '.join(command_angsd)}")
+
+        subprocess.run(command_angsd, check=True)
         print_success(f"Consensus sequence of {input_file} created successfully.")
 
         # index consensus sequence
         print_info(f"Indexing consensus sequence {out_file_path}...")
+
         try:
-            subprocess.run([PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_FAIDX, "-i", out_file_path+FILE_ENDING_FA_GZ])
+            command_samtools = [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_FAIDX, "-i", out_file_path+FILE_ENDING_FA_GZ]
+            print_debug(f"Executing command: {command_samtools}")
+
+            subprocess.run(command_samtools, check=True)
             print_success(f"Consensus sequence {out_file_path} indexed successfully.")
         except Exception as e:
             print_error(f"Failed to index consensus sequence {out_file_path}: {e}")
@@ -53,6 +61,9 @@ def create_consensus_sequence_for_species(species: str):
         print_warning(f"No mapped reads found for species {species}. Skipping.")
         return
     
+    print_debug(f"Found {len(list_of_mapped_aDNA_files)} mapped reads for species {species}.")
+    print_debug(f"Mapped reads: {list_of_mapped_aDNA_files}")
+
     output_folder_consensus_seq = get_folder_path_species_processed_mtdna_consensus_sequences(species)
 
     for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files:
@@ -75,15 +86,26 @@ def map_consensus_sequence_for_species(species: str):
         print_warning(f"No reads found for species {species}. Skipping.")
         return
     
+    print_debug(f"Found {len(list_of_read_files)} reads for species {species}.")
+    print_debug(f"Reads: {list_of_read_files}")
+    
     output_folder = get_folder_path_species_processed_mtdna_consensus_sequences_mapped(species)
 
       # get ref genome
     ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
+    # add fna files to reference genome list
     ref_genome_files = get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FNA}")
+    # add fasta files to reference genome list
+    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FASTA}")
+    # add fa files to reference genome list
+    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FA}")
 
     if len(ref_genome_files) == 0:
         print_warning(f"No reference genome found for species {species}. Skipping.")
         return
+    
+    print_debug(f"Found {len(ref_genome_files)} reference genome files for species {species}.")
+    print_debug(f"Reference genome files: {ref_genome_files}")
 
     output_folder = get_folder_path_species_processed_mtdna_mapped(species)
 
