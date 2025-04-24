@@ -30,6 +30,8 @@ def execute_fastp_deduplication(input_file_path:str, output_file_path:str, threa
         "--json", filepath_json_report,
         "--html", filepath_html_report
     ]
+
+    print_debug(f"Executing command: {' '.join(command_fastp)}")
     
     try:
         subprocess.run(command_fastp, check=True)
@@ -43,9 +45,14 @@ def fastp_deduplication_for_species(species: str):
     print_info(f"Running fastp deduplication for {species}")
 
     reads_folder = get_folder_path_species_processed_quality_filtered(species)
-    output_folder = get_folder_path_species_processed_duplicates_removed(species)
 
     reads_files_list = get_files_in_folder_matching_pattern(reads_folder, f"*{FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ}")
+
+    if len(reads_files_list) == 0:
+        print_warning(f"No quality filtered reads found for species {species}. Skipping.")
+        return
+    
+    print_debug(f"Quality filtered reads found for species {species}: {reads_files_list}")
     
     for read_file_path in reads_files_list:
         output_file_path = get_deduplication_path_for_quality_filtered_reads(species, read_file_path)
