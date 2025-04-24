@@ -53,6 +53,8 @@ def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str
         "--n_base_limit", "5"                  #if one read's number of N base is >n_base_limit, then this read/pair is discarded. Default is 5 (int [=5])
        
     ]
+
+    print_debug(f"Executing command: {' '.join(command_fastp)}")
     
     try:
         subprocess.run(command_fastp, check=True)
@@ -95,6 +97,8 @@ def execute_fastp_single_reads_remove_adapters(input_file_path: str, output_file
         "--unqualified_percent_limit", "40",  # Max percentage of unqualified bases
         "--n_base_limit", "5"  # Max number of N bases allowed
     ]
+
+    print_debug(f"Executing command: {' '.join(command_fastp)}")
     
     try:
         subprocess.run(command_fastp, check=True)
@@ -146,6 +150,7 @@ def adapter_remove_for_species(species: str):
                 execute_fastp_paired_reads_remove_adapters_and_merge(r1, r2, adapter_removed_read_file, adapter_sequence_r1, adapter_sequence_r2)
         except Exception as e:
             print_error(f"Error processing paired-end reads for species {species}: {e}")
+            return
     
     # Process single-end reads
     if single_reads:
@@ -156,6 +161,7 @@ def adapter_remove_for_species(species: str):
                 execute_fastp_single_reads_remove_adapters(read_file_path, adapter_removed_read_file, adapter_sequence_r1)
         except Exception as e:
             print_error(f"Error processing single-end reads for species {species}: {e}")
+            return
     
     print_info(f"Adapter removal for species {species} completed successfully.")
 
