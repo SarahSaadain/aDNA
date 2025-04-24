@@ -58,6 +58,9 @@ def run_pipeline_reference_genome_processing():
     # determine coverage depth and breadth
     determine_coverage_depth_and_breadth.all_species_determine_coverage_depth_and_breath()
 
+    # extract special sequences 
+    extract_special_sequences.all_species_extract_special_sequences()
+
     # generate plots for all species to visualize results
     # these contain 
     # 1. coverage depth and breadth
@@ -109,9 +112,6 @@ def run_pipeline_raw_reads_processing():
 
     # generate quality check report (html) to easily access all qc results
     generate_quality_check_report.all_species_generate_quality_check_report()
-
-    # extract special sequences 
-    extract_special_sequences.all_species_extract_special_sequences()
 
     # determine reads processing before and after
     determine_reads_processing_result.all_species_determine_determine_reads_processing_result()
