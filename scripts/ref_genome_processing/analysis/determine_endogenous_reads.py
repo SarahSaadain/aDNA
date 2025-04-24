@@ -4,8 +4,11 @@ from common_aDNA_scripts import *
 def execute_samtools_count_mapped_reads(bam_file: str, threads: int=THREADS_DEFAULT) -> int:
     """Counts the number of mapped reads in a BAM file."""
     try:
+        command = [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_VIEW, "-@", str(threads), "-c", "-F", "4", bam_file]
+        print_debug(f"Executing command: {' '.join(command)}")
+
         result = subprocess.run(
-            [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_VIEW, "-@", str(threads), "-c", "-F", "4", bam_file], 
+            command, 
             capture_output=True, text=True, check=True
         )
         return int(result.stdout.strip())
@@ -15,8 +18,11 @@ def execute_samtools_count_mapped_reads(bam_file: str, threads: int=THREADS_DEFA
 def execute_samtools_count_total_reads(bam_file: str, threads: int=THREADS_DEFAULT) -> int:
     """Counts the total number of reads in a BAM file (mapped and unmapped)."""
     try:
+        command = [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_VIEW, "-@", str(threads), "-c", bam_file]
+        print_debug(f"Executing command: {' '.join(command)}")
+
         result = subprocess.run(
-            [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_VIEW, "-@", str(threads), "-c", bam_file], 
+            command, 
             capture_output=True, text=True, check=True
         )
         return int(result.stdout.strip())
@@ -34,6 +40,8 @@ def determine_endogenous_reads_for_species(species: str):
     if len(bam_files) == 0:
         print_warning(f"No BAM files found for species {species}. Skipping.")
         return
+    
+    print_debug(f"BAM files found for species {species}: {bam_files}")
 
     result_folder = get_folder_path_species_results_endogenous_reads(species)
     result_file_path = os.path.join(result_folder, f"{species}_endogenous_reads{FILE_ENDING_CSV}")
@@ -49,7 +57,7 @@ def determine_endogenous_reads_for_species(species: str):
 
             bam_filename = os.path.basename(bam_file)
 
-            print_info(f"Determining endogenous reads for {bam_filename}")
+            print_info(f"Determining endogenous reads for {bam_filename} ...")
 
             proportion = 0.0
             
@@ -67,6 +75,8 @@ def all_species_determine_endogenous_reads():
     print_execution("Determining endogenous reads for all species")
     for species in FOLDER_SPECIES: 
         determine_endogenous_reads_for_species(species)
+
+    print_success("Endogenous reads determination completed for all species.")
 
 def main():
     all_species_determine_endogenous_reads()
