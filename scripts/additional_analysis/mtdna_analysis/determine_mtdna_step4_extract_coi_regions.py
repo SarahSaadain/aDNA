@@ -53,6 +53,7 @@ def execute_samtools_extract_region_by_bed_file(fasta_file_path: str, mtdna_regi
         return
 
     command = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_FAIDX} {fasta_file_path} {mtdna_region} -i  > {mtdna_fasta}"
+    print_debug(f"Executing command: {command}")
 
      # Filter the BAM file for reads that map to the mtDNA region
     try:
@@ -73,12 +74,18 @@ def extract_mtdna_region_for_species(species: str):
         print_warning(f"No consensus sequence files found for species {species}. Skipping.")
         return
     
+    print_debug(f"Found {len(fasta_files)} consensus sequence files for species {species}.")
+    print_debug(f"Consensus sequence files: {fasta_files}")
+    
     bed_folder = get_folder_path_species_results_mtdna_regions(species)
     bed_files = get_files_in_folder_matching_pattern(bed_folder, f"*{FILE_ENDING_BED}")
     
     if len(bed_files) == 0:
         print_warning(f"No BED files found for species {species}. Skipping.")
         return
+    
+    print_debug(f"Found {len(bed_files)} BED files for species {species}.")
+    print_debug(f"BED files: {bed_files}")
 
     result_folder = get_folder_path_species_processed_mtdna_extracted_sequence(species)
 
