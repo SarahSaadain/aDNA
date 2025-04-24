@@ -321,6 +321,10 @@ pip install pysam
 pip install pandas  
 ```	
 
+```bash
+pip install pyyaml
+```
+
 ### R Packages
 
 The pipeline requires R beeing installed and uses the following R packages:
