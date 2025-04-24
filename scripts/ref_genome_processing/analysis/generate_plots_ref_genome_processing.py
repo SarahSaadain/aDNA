@@ -93,7 +93,7 @@ def species_generate_plots(species: str):
 
 def all_species_generate_plots():
 
-    print("Generating reference genome plots for all species")
+    print_execution("Generating reference genome plots for all species")
 
     for species in FOLDER_SPECIES:
         species_generate_plots(species)
