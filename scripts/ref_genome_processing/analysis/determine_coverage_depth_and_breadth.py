@@ -5,7 +5,7 @@ import pandas as pd
 
 from common_aDNA_scripts import *
 
-def execute_samtools_detpth(input_file: str, coverage_output_file: str, thread:int = THREADS_DEFAULT):
+def execute_samtools_detpth(input_file: str, coverage_output_file: str):
 
     print_info(f"Executing samtools depth for {input_file}")
 
@@ -16,9 +16,11 @@ def execute_samtools_detpth(input_file: str, coverage_output_file: str, thread:i
         print_info(f"Output file {coverage_output_file} already exists! Skipping!")
         return
 
+    command = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_DEPTH} -a {input_file} > {coverage_output_file}"
+    print_debug(f"Samtools depth command: {command}")
+
     try:
-        command = f"samtools depth -a {input_file} > {coverage_output_file}"
-        result = subprocess.run( command, shell=True,  check=True  )
+        result = subprocess.run(command, shell=True,  check=True  )
         print_success(f"Samtools depth complete for {input_file}")
     except Exception as e:
         print_error(f"Failed to execute samtools depth: {e}")
@@ -32,6 +34,9 @@ def determine_coverage_depth_and_breath(species: str):
     if len(list_of_bam_files) == 0:
         print_warning(f"No mapped files found for species {species}. Skipping.")
         return
+    
+    print_debug(f"Found {len(list_of_bam_files)} mapped files for species {species}")
+    print_debug(f"Mapped bam files: {list_of_bam_files}")
     
     depth_breath_output_folder = get_folder_path_species_results_qc_depth_breath(species)
 
@@ -54,6 +59,9 @@ def determine_coverage_depth_and_breath(species: str):
         print_error(f"No coverage files found for species {species}. Skipping.")
         return
     
+    print_debug(f"Found {len(list_of_coverage_files)} coverage files for species {species}")
+    print_debug(f"Coverage files: {list_of_coverage_files}")
+
     for coverage_file in list_of_coverage_files:
         coverage_file_base_name = os.path.basename(coverage_file)
 
@@ -93,7 +101,7 @@ def extended_analysis(coverage_file: str, analysis_file_path: str):
 
 
 def all_species_determine_coverage_depth_and_breath():
-    print_info("Determine coverage depth and breadth for all species")
+    print_execution("Determine coverage depth and breadth for all species")
     for species in FOLDER_SPECIES: 
         determine_coverage_depth_and_breath(species)
 
