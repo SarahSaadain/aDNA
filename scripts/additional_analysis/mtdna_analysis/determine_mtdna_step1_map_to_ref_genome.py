@@ -18,6 +18,7 @@ def execute_bwa_map_mtDNA_to_refgenome(input_file_path:str, ref_genome_path:str,
         return
     
     command_bwa = f"{PROGRAM_PATH_BWA} {PROGRAM_PATH_BWA_MEM} -M -T 50 -t {str(threads)} {ref_genome_path} {input_file_path} > {output_file_path}"
+    print_debug(f"Executing command: {command_bwa}")
 
     try:
         subprocess.run(command_bwa, shell=True, check=True)
@@ -35,14 +36,26 @@ def map_mtdna_to_refgenome_for_species(species: str):
     if len(list_of_mtrna_files) == 0:
         print_warning(f"No mtdna reads found for species {species}. Skipping.")
         return
+    
+    print_debug(f"Found {len(list_of_mtrna_files)} mtdna reads for species {species}")
+    print_debug(f"mtdna reads: {list_of_mtrna_files}")
 
     # get ref genome
     ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
+
+    # add fna files to reference genome list
     ref_genome_files = get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FNA}")
+    # add fasta files to reference genome list
+    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FASTA}")
+    # add fa files to reference genome list
+    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FA}")
 
     if len(ref_genome_files) == 0:
         print_warning(f"No reference genome found for species {species}. Skipping.")
         return
+    
+    print_debug(f"Found {len(ref_genome_files)} reference genome files for species {species}.")
+    print_debug(f"Reference genome files: {ref_genome_files}")
 
     output_folder = get_folder_path_species_processed_mtdna_mapped(species)
 
