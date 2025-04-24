@@ -46,7 +46,6 @@ def fastp_quality_filter_for_species(species: str):
     print_info(f"Running fastp quality filter for {species}")
 
     reads_folder = get_folder_path_species_processed_adapter_removed(species)
-    output_folder = get_folder_path_species_processed_quality_filtered(species)
 
     reads_files_list = get_files_in_folder_matching_pattern(reads_folder, f"*{FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ}")
 
