@@ -19,6 +19,9 @@ def check_extracted_region_for_species(species):
         print_warning(f"No extracted region files found for species {species}. Skipping.")
         return
     
+    print_debug(f"Found {len(extracted_region_files)} extracted region files for species {species}.")
+    print_debug(f"Extracted region files: {extracted_region_files}")
+    
     output_folder = get_folder_path_species_results_mtdna_regions(species)
     
     output_file = os.path.join(output_folder, f"{species}_extracted_region_analysis.tsv")
