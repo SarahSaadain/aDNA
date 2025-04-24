@@ -143,6 +143,9 @@ def adapter_remove_for_species(species: str):
 
     # Process paired reads
     if paired_reads:
+        print_debug(f"Found {len(paired_reads)} paired-end reads for species {species}.")
+        print_debug(f"Paired-end reads: {paired_reads}")
+
         print_info("Processing paired-end reads.")
         try:
             for r1, r2 in paired_reads:
@@ -154,6 +157,9 @@ def adapter_remove_for_species(species: str):
     
     # Process single-end reads
     if single_reads:
+        print_debug(f"Found {len(single_reads)} single-end reads for species {species}.")
+        print_debug(f"Single-end reads: {single_reads}")
+        
         print_info("Processing single-end reads.")
         try:
             for read_file_path in single_reads:
