@@ -18,6 +18,7 @@ def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THRE
 
             try:
                 command_sam_to_bam = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -@ {threads} -bS {sam_file} -o {bam_file}"
+                print_debug(f"Executing command: {command_sam_to_bam}")
                 subprocess.run(command_sam_to_bam, shell=True, check=True)
             except Exception as e:
                 print_error(f"Failed to convert {sam_file} to BAM: {e}")
@@ -30,6 +31,7 @@ def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THRE
         
         try:
             command_sort = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_SORT} -@ {threads} {bam_file} -o {sorted_bam}"
+            print_debug(f"Executing command: {command_sort}")
             subprocess.run(command_sort, shell=True, check=True)
 
             print_success(f"Conversion and sorting of {sam_file} completed successfully.")
@@ -52,6 +54,7 @@ def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THRE
         
         try:
             command_index = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_INDEX} -@ {threads} {sorted_bam} {indexed_bam}" 
+            print_debug(f"Executing command: {command_index}")
             subprocess.run(command_index, shell=True, check=True)
             print_success(f"Indexing of {sorted_bam} completed successfully.")
         except Exception as e:
@@ -64,13 +67,13 @@ def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THRE
 
 
 def convert_ref_genome_mapped_sam_to_bam_for_species(species):
-    print_info(f"Converting ref genome mapped sam to bam for species {species}")
+    print_info(f"Converting reference genome mapped sam to bam for species {species}")
 
     mapped_folder = get_folder_path_species_processed_mapped(species)
     sam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SAM}")
 
     if len(sam_files) == 0:
-        print_warning(f"No SAM ref genome files found for species {species}. Skipping.")
+        print_warning(f"No SAM reference genome files found for species {species}. Skipping.")
         return
 
     for sam_file in sam_files:
