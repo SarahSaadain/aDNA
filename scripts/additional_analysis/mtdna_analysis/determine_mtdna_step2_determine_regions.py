@@ -14,7 +14,7 @@ def execute_samtools_get_read_regions(bam_file: str, output_file: str, threads: 
         f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -h -@ {threads} {bam_file} | "
         f"{PROGRAM_PATH_BEDTOOLS} bamtobed -i - > {output_file}"
     )
-    #print_info(f"Running command: {command}")
+    print_debug(f"Executing command: {command}")
     
     try:
       # Execute the command
@@ -33,6 +33,9 @@ def mtdna_get_regions_for_species(species):
     if len(bam_files) == 0:
         print_warning(f"No BAM files found for species {species}. Skipping.")
         return
+    
+    print_debug(f"Found {len(bam_files)} BAM files for species {species}.")
+    print_debug(f"BAM files: {bam_files}")
     
     for bam_file in bam_files:
         print_info(f"Determining mtdna regions for {bam_file}")
