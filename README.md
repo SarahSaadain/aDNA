@@ -26,8 +26,11 @@ project_name: "aDNA_Project"
 project_description: "Analysis of ancient DNA data"
 threads_default: 10  # Default number of threads to use for parallel processing
 path_adna_project: "/path/to/aDNA" #Main project path
+log_level: "DEBUG"  # Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 processing:
+  fastqc:
+    threads: 10
   adapter_removal:
     adapters:
       r1: "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
@@ -42,7 +45,6 @@ species:
 
 # Paths to external tools
 tools:
-  cutadapt: "cutadapt"
   fastp: "fastp"
   sga: "sga"
   multiqc: "multiqc"
