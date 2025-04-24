@@ -64,6 +64,7 @@ def main():
     if download_files(update_script_url, update_script_target, force_update=args.force_update, check_only=True):
         print("Update script has changed. Updating only itself and exiting.")
         download_files(update_script_url, update_script_target, force_update=True)
+        print("Update script updated. Please run it again.")
         sys.exit()
 
     file_list = [
