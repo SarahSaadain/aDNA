@@ -74,6 +74,7 @@ def main():
         "scripts/common/common_config.py",
         "scripts/common/common_folder_functions.py",
         "scripts/common/common_helper_functions.py",
+        "scripts/common/common_logging.py",
     
         "scripts/raw_reads_processing/quality_checking/execute_multiqc.py",
         "scripts/raw_reads_processing/quality_checking/execute_fastqc.py",
