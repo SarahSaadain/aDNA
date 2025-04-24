@@ -5,8 +5,10 @@ _config = None  # Private module-level variable
 def load_config(config_file):
     """Loads the configuration from the specified YAML file."""
     global _config
+    
     with open(config_file, 'r') as f:
         _config = yaml.safe_load(f)
+        
     return _config
 
 def get_config():
