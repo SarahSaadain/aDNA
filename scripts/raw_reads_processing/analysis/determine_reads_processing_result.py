@@ -80,6 +80,9 @@ def determine_reads_processing_result(species: str):
         print_warning(f"No raw reads found for species {species}. Skipping.")
         return
     
+    print_debug(f"Found {len(raw_reads)} raw reads for species {species}.")
+    print_debug(f"Raw reads: {raw_reads}")
+    
     output_file_path = os.path.join(get_folder_path_species_results_qc_reads_processing(species),  get_file_name_reads_processing(species))
 
     if os.path.exists(output_file_path):
