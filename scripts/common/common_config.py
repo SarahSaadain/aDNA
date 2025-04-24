@@ -42,7 +42,6 @@ THREADS_DEFAULT = config['threads_default']
 FOLDER_SPECIES = list(config['species'].keys())
 
 # program related constants
-PROGRAM_PATH_CUTADAPT = config['tools']['cutadapt']
 PROGRAM_PATH_FASTP = config['tools']['fastp']
 PROGRAM_PATH_SGA = config['tools']['sga']
 PROGRAM_PATH_MULTIQC = config['tools']['multiqc']
