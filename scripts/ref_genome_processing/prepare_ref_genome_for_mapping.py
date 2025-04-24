@@ -25,6 +25,8 @@ def species_prepare_ref_genome(species: str):
     # add fa files to reference genome list
     reference_genome += get_files_in_folder_matching_pattern(get_folder_path_species_raw_ref_genome(species), f"*{FILE_ENDING_FA}")
 
+    print_debug(f"Reference genome files found: {reference_genome}")
+
     for reference_genome_path in reference_genome:
         execute_bwa_index_reference_genome(reference_genome_path)
 
@@ -39,7 +41,8 @@ def execute_bwa_index_reference_genome(reference_genome_path: str):
         print_info(f"Index file {index_file} already exists, skipping indexing.")
         return 
 
-    command_bwa = f"bwa index {reference_genome_path}"
+    command_bwa = f"{PROGRAM_PATH_BWA} {PROGRAM_PATH_BWA_INDEX} {reference_genome_path}"
+    print_debug(f"Command: {command_bwa}")
 
     try:
         subprocess.run(command_bwa, shell=True, check=True)
