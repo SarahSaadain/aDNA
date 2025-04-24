@@ -54,7 +54,8 @@ def fastp_quality_filter_for_species(species: str):
         print_warning(f"No adapter removed reads found for species {species}. Skipping.")
         return
     
-    print_debug(f"Adapter removed reads found for species {species}: {reads_files_list}")
+    print_debug(f"Found {len(reads_files_list)} adapter removed reads for species {species}.")
+    print_debug(f"Adapter removed reads: {reads_files_list}")
 
     for read_file_path in reads_files_list:
         output_file_path = get_quality_filtered_path_for_adapter_removed_reads(species, read_file_path)
