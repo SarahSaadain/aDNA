@@ -52,7 +52,8 @@ def fastp_deduplication_for_species(species: str):
         print_warning(f"No quality filtered reads found for species {species}. Skipping.")
         return
     
-    print_debug(f"Quality filtered reads found for species {species}: {reads_files_list}")
+    print_debug(f"Found {len(reads_files_list)} quality filtered reads for species {species}.")
+    print_debug(f"Quality filtered reads: {reads_files_list}")
     
     for read_file_path in reads_files_list:
         output_file_path = get_deduplication_path_for_quality_filtered_reads(species, read_file_path)
