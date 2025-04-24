@@ -5,7 +5,7 @@ FILE_NAME_PREPARE_SCRIPT = "prepare_for_mapping_to_ref_genome.py"
 
 def merge_all_fastq_files(species: str):
 
-    print_info(f"Merging  all the fastq files for {species}.")
+    print_info(f"Merging all the {FILE_ENDING_FASTQ_GZ} files for {species}.")
 
     # find all raw fastq files
     duplicates_removed_folder = get_folder_path_species_processed_duplicates_removed(species)
@@ -13,10 +13,11 @@ def merge_all_fastq_files(species: str):
 
     # if no files are found, exit
     if len(fastq_files) == 0:
-        print_warning(f"No duplicate removed fastq files found for species {species}. Exiting.")
+        print_warning(f"No duplicate removed {FILE_ENDING_FASTQ_GZ} files found for species {species}. Exiting.")
         return
     
-    print_info(f"Found {len(fastq_files)} fastq files")
+    print_info(f"Found {len(fastq_files)} relevant {FILE_ENDING_FASTQ_GZ} files")
+    print_debug(f"Files found: {fastq_files}")
 
     output_folder = get_folder_path_species_processed_prepared_for_ref_genome(species)
     output_file_path = os.path.join(output_folder, f"{species}_combined{FILE_ENDING_FASTQ_GZ}")
@@ -36,19 +37,20 @@ def merge_all_fastq_files(species: str):
 
      # if no files are found, exit
     if len(fastq_files_filtered) == 0:
-        print_warning(f"No fastq files found for species {species} after filtering. Exiting.")
+        print_warning(f"No {FILE_ENDING_FASTQ_GZ} files found for species {species} after filtering. Exiting.")
         return
 
     # call cat via subprocess
     try:
 
-        print_info(f"Concatenating {len(fastq_files_filtered)} fastq files (excluding 'LB' and 'EB') for pattern *{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}")
+        print_info(f"Concatenating {len(fastq_files_filtered)} {FILE_ENDING_FASTQ_GZ} files (excluding 'LB' and 'EB') for pattern *{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}")
        
         cat_command = f"cat {' '.join(fastq_files_filtered)} > {output_file_path}"
+        print_debug(f"cat command: {cat_command}")
         subprocess.run(cat_command, shell=True, check=True)
         print_success(f"Concatenation to {output_file_path} complete")
     except Exception as e:
-        print_error(f"Failed to concatenate all fastq files for species {species}: {e}")
+        print_error(f"Failed to concatenate all {FILE_ENDING_FASTQ_GZ} files for species {species}: {e}")
 
 
 def generate_fastq_patterns(file_paths: str) -> dict:
@@ -68,19 +70,22 @@ def generate_fastq_patterns(file_paths: str) -> dict:
 
 def merge_fastq_by_individual(species: str):
 
+    print_info(f"Merging {FILE_ENDING_FASTQ_GZ} files for each individual for {species}.")
+
     # find all raw fastq files
     duplicates_removed_folder = get_folder_path_species_processed_duplicates_removed(species)
     fastq_files = get_files_in_folder_matching_pattern(duplicates_removed_folder, f"*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}")
 
     # if no files are found, exit
     if len(fastq_files) == 0:
-        print_warning(f"No duplicate removed fastq files found for species {species}. Exiting.")
+        print_warning(f"No duplicate removed {FILE_ENDING_FASTQ_GZ} files found for species {species}. Exiting.")
         return
     
     for individual, pattern in generate_fastq_patterns(fastq_files).items():
         
         individual_fastq_files_per_pattern = get_files_in_folder_matching_pattern(duplicates_removed_folder, pattern)
-        print_info(f"Found {len(individual_fastq_files_per_pattern)} fastq files for pattern {pattern}")
+        print_info(f"Found {len(individual_fastq_files_per_pattern)} {FILE_ENDING_FASTQ_GZ} files for pattern {pattern}")
+        print_debug(f"Files found: {individual_fastq_files_per_pattern}")
 
         output_folder = get_folder_path_species_processed_prepared_for_ref_genome(species)
         output_file_path = os.path.join(output_folder,f"{individual}{FILE_ENDING_FASTQ_GZ}")
@@ -93,20 +98,21 @@ def merge_fastq_by_individual(species: str):
 
         # call cat via subprocess
         try:
-            print_info(f"Concatenating {len(individual_fastq_files_per_pattern)} fastq files for pattern {pattern}")
+            print_info(f"Concatenating {len(individual_fastq_files_per_pattern)} {FILE_ENDING_FASTQ_GZ} files for pattern {pattern}")
             cat_command = f"cat {input_pattern_path} > {output_file_path}"
+            print_debug(f"cat command: {cat_command}")
             subprocess.run(cat_command, shell=True, check=True)
             print_success(f"Concatenation for pattern {pattern} complete")
         except Exception as e:
-            print_error(f"Failed to concatenate fastq files for pattern {pattern}: {e}")
+            print_error(f"Failed to concatenate {FILE_ENDING_FASTQ_GZ} files for pattern {pattern}: {e}")
 
 def all_species_prepare():
 
-    print_info("Preparing fastq files for ref genome mapping for all species")
+    print_info(f"Preparing {FILE_ENDING_FASTQ_GZ} files for ref genome mapping for all species")
 
     for species in FOLDER_SPECIES: 
 
-        print_info(f"Preparing fastq files for {species} for ref genome mapping")
+        print_info(f"Preparing {FILE_ENDING_FASTQ_GZ} files for {species} for reference genome mapping")
         scripts_folder = get_folder_path_species_scripts(species)
 
         prepare_script_path = os.path.join(scripts_folder, FILE_NAME_PREPARE_SCRIPT)
@@ -122,7 +128,7 @@ def all_species_prepare():
         merge_all_fastq_files(species)
         merge_fastq_by_individual(species)
     
-    print_success("Finished preparing fastq files for ref genome mapping for all species")
+    print_success(f"Finished preparing {FILE_ENDING_FASTQ_GZ} files for reference genome mapping for all species")
         
 
 def main():
