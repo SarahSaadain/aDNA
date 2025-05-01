@@ -37,26 +37,17 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
     analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_ANALYSIS_TSV)
     analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
 
+    print_info(f"Performing extended analysis for {coverage_file}")
+
     if os.path.exists(analysis_file_path):
         print_info(f"Analysis file {analysis_file_path} already exists! Skipping extended analysis for {coverage_file}.")
         return  # Important: Exit the function, not the whole script
-
-    extended_analysis(coverage_file, analysis_file_path)
-    print_info(f"Finished analysis of {coverage_file}") # Add print here
-
-def extended_analysis(coverage_file: str, analysis_file_path: str):
-
-    print_info(f"Performing extended analysis for {coverage_file}")
 
     if not os.path.exists(coverage_file):
         print_error(f"Coverage file {coverage_file} does not exist! Skipping analysis.")
         return
 
-    if os.path.exists(analysis_file_path):
-        print_info(f"Output file {analysis_file_path} already exists! Skipping!")
-        return
-
-     #read tsv into dataframe
+    #read tsv into dataframe
     print_debug(f"Reading coverage file {coverage_file} into DataFrame ...")
     df = pd.read_csv(coverage_file, sep="\t", header=None, names=["scaffold", "position", "depth"])
 
