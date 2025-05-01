@@ -1,5 +1,7 @@
 import os
 from common_aDNA_scripts import *
+import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
+
 
 def execute_samtools_get_read_regions(bam_file: str, output_file: str, threads: int=THREADS_DEFAULT):
 
@@ -25,31 +27,43 @@ def execute_samtools_get_read_regions(bam_file: str, output_file: str, threads: 
 
 def mtdna_get_regions_for_species(species):
     print_info(f"Determining mtdna regions for species: {species}")
-    
-    mapped_folder = get_folder_path_species_processed_mtdna_mapped(species)
-    
-    bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
-    if len(bam_files) == 0:
-        print_warning(f"No BAM files found for species {species}. Skipping.")
+    try:
+        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+    except Exception as e:
+        print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
+
+    for ref_genome_tuple in ref_genome_list:
+        
+        # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
+        ref_genome_id = ref_genome_tuple[0]
+        #ref_genome_path = ref_genome_tuple[1]
     
-    print_debug(f"Found {len(bam_files)} BAM files for species {species}.")
-    print_debug(f"BAM files: {bam_files}")
-    
-    for bam_file in bam_files:
-        print_info(f"Determining mtdna regions for {bam_file}")
+        mapped_folder = get_folder_path_species_processed_refgenome_mtdna_mapped(species, ref_genome_id)
+        
+        bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
-        bam_file_name_wo_ext = get_filename_from_path_without_extension(bam_file)
-
-        result_folder = get_folder_path_species_results_mtdna_regions(species)
-        result_file_path = os.path.join(result_folder, f"{bam_file_name_wo_ext}_mtdna_region{FILE_ENDING_BED}")
-
-        if os.path.exists(result_file_path):
-            print_info(f"Result file {result_file_path} already exists for species {species}. Skipping.")
+        if len(bam_files) == 0:
+            print_warning(f"No BAM files found for species {species}. Skipping.")
             return
         
-        execute_samtools_get_read_regions(bam_file, result_file_path)
+        print_debug(f"Found {len(bam_files)} BAM files for species {species}.")
+        print_debug(f"BAM files: {bam_files}")
+        
+        for bam_file in bam_files:
+            print_info(f"Determining mtdna regions for {bam_file}")
+
+            bam_file_name_wo_ext = get_filename_from_path_without_extension(bam_file)
+
+            result_folder = get_folder_path_species_results_refgenome_mtdna_regions(species, ref_genome_id)
+            result_file_path = os.path.join(result_folder, f"{bam_file_name_wo_ext}_mtdna_region{FILE_ENDING_BED}")
+
+            if os.path.exists(result_file_path):
+                print_info(f"Result file {result_file_path} already exists for species {species}. Skipping.")
+                return
+            
+            execute_samtools_get_read_regions(bam_file, result_file_path)
 
     print_info(f"Finished determining mtdna regions for species {species}")
     

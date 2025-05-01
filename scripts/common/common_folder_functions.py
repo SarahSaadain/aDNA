@@ -103,28 +103,28 @@ def get_folder_path_species_processed_refgenome_mapped(species: str, reference_g
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna(species: str) -> str:
-    path = os.path.join(get_folder_path_species_processed(species), FOLDER_MTDNA)
+def get_folder_path_species_processed_refgenome_mtdna(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_refgenome(species, reference_genome_id), FOLDER_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna_extracted_sequence(species: str) -> str:
-    path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_EXTRACTED_SEQUENCES)
+def get_folder_path_species_processed_refgenome_mtdna_extracted_sequence(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_refgenome_mtdna(species, reference_genome_id), FOLDER_EXTRACTED_SEQUENCES)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna_mapped(species: str) -> str:
-    path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_MAPPED)
+def get_folder_path_species_processed_refgenome_mtdna_mapped(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_refgenome_mtdna(species, reference_genome_id), FOLDER_MAPPED)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna_consensus_sequences(species: str) -> str:
-    path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_CONSENSUS_SEQUENCES)
+def get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_refgenome_mtdna(species, reference_genome_id), FOLDER_CONSENSUS_SEQUENCES)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mtdna_consensus_sequences_mapped(species: str) -> str:
-    path = os.path.join(get_folder_path_species_processed_mtdna(species), FOLDER_CONSENSUS_SEQUENCES_MAPPED)
+def get_folder_path_species_processed_refgenome_mtdna_consensus_sequences_mapped(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_refgenome_mtdna(species, reference_genome_id), FOLDER_CONSENSUS_SEQUENCES_MAPPED)
     check_folder_exists_or_create(path)
     return path
 
@@ -169,7 +169,7 @@ def get_folder_path_species_processed_non_concatenated(species: str) -> str:
     return path
 
 def get_folder_path_species_processed_refgenome_qc(species: str, reference_genome_id: str) -> str:
-    path = os.path.join(get_folder_path_species_processed(species, reference_genome_id), FOLDER_QUALITYCONTROL)
+    path = os.path.join(get_folder_path_species_processed_refgenome(species, reference_genome_id), FOLDER_QUALITYCONTROL)
     check_folder_exists_or_create(path)
     return path 
 
@@ -188,13 +188,13 @@ def get_folder_path_species_results_refgenome(species: str, reference_genome_id:
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_mtdna(species: str) -> str:
-    path = os.path.join(get_folder_path_species_results(species), FOLDER_MTDNA)
+def get_folder_path_species_results_refgenome_mtdna(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome(species), FOLDER_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_mtdna_regions(species: str) -> str:
-    path = os.path.join(get_folder_path_species_results_mtdna(species), FOLDER_REGIONS)
+def get_folder_path_species_results_refgenome_mtdna_regions(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome_mtdna(species, reference_genome_id), FOLDER_REGIONS)
     check_folder_exists_or_create(path)
     return path
 

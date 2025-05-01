@@ -1,5 +1,6 @@
 import os
 from common_aDNA_scripts import *
+import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
 
 from ref_genome_processing.convert_mapped_sam2bam import execute_convert_sam_to_bam
 
@@ -40,26 +41,20 @@ def map_mtdna_to_refgenome_for_species(species: str):
     print_debug(f"Found {len(list_of_mtrna_files)} mtdna reads for species {species}")
     print_debug(f"mtdna reads: {list_of_mtrna_files}")
 
-    # get ref genome
-    ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
-
-    # add fna files to reference genome list
-    ref_genome_files = get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FNA}")
-    # add fasta files to reference genome list
-    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FASTA}")
-    # add fa files to reference genome list
-    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FA}")
-
-    if len(ref_genome_files) == 0:
-        print_warning(f"No reference genome found for species {species}. Skipping.")
+    try:
+        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+    except Exception as e:
+        print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
-    
-    print_debug(f"Found {len(ref_genome_files)} reference genome files for species {species}.")
-    print_debug(f"Reference genome files: {ref_genome_files}")
 
-    output_folder = get_folder_path_species_processed_mtdna_mapped(species)
+    for ref_genome_tuple in ref_genome_list:
+        
+        # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
+        ref_genome_id = ref_genome_tuple[0]
+        ref_genome_path = ref_genome_tuple[1]
 
-    for ref_genome_path in ref_genome_files:
+        output_folder = get_folder_path_species_processed_refgenome_mtdna_mapped(species, ref_genome_id)
+        
 
         ref_genome_filename = get_filename_from_path_without_extension(ref_genome_path)
 

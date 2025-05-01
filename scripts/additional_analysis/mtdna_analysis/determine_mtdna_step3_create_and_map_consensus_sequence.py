@@ -78,7 +78,7 @@ def create_consensus_sequence_for_species(species: str):
         print_debug(f"Found {len(list_of_mapped_aDNA_files)} mapped reads for species {species}.")
         print_debug(f"Mapped reads: {list_of_mapped_aDNA_files}")
 
-        output_folder_consensus_seq = get_folder_path_species_processed_mtdna_consensus_sequences(species)
+        output_folder_consensus_seq = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species, ref_genome_id)
 
         for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files:
 
@@ -93,7 +93,7 @@ def map_consensus_sequence_for_species(species: str):
     print_info(f"Mapping aDNA consensus sequence to reference genome for species {species} ...")
 
     #get reads
-    read_folder = get_folder_path_species_processed_mtdna_consensus_sequences(species)
+    read_folder = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species)
     list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FASTQ_GZ}")
 
     if len(list_of_read_files) == 0:
@@ -103,7 +103,7 @@ def map_consensus_sequence_for_species(species: str):
     print_debug(f"Found {len(list_of_read_files)} reads for species {species}.")
     print_debug(f"Reads: {list_of_read_files}")
     
-    output_folder = get_folder_path_species_processed_mtdna_consensus_sequences_mapped(species)
+    output_folder = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences_mapped(species)
 
       # get ref genome
     ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
@@ -121,7 +121,7 @@ def map_consensus_sequence_for_species(species: str):
     print_debug(f"Found {len(ref_genome_files)} reference genome files for species {species}.")
     print_debug(f"Reference genome files: {ref_genome_files}")
 
-    output_folder = get_folder_path_species_processed_mtdna_mapped(species)
+    output_folder = get_folder_path_species_processed_refgenome_mtdna_mapped(species)
 
     for ref_genome_path in ref_genome_files:
 

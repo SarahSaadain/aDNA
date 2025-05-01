@@ -3,6 +3,7 @@ import csv
 
 from Bio import SeqIO
 from common_aDNA_scripts import *
+import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
 
 
 def check_extracted_region_for_species(species):
@@ -10,7 +11,7 @@ def check_extracted_region_for_species(species):
     print_info(f"Checking extracted region for species {species} ...")
 
     # Get the folder containing the extracted region sequences
-    extracted_region_folder = get_folder_path_species_processed_mtdna_extracted_sequence(species)
+    extracted_region_folder = get_folder_path_species_processed_refgenome_mtdna_extracted_sequence(species)
 
     # Get the list of extracted region files
     extracted_region_files = get_files_in_folder_matching_pattern(extracted_region_folder, f"*{FILE_ENDING_FASTA}")
@@ -22,7 +23,7 @@ def check_extracted_region_for_species(species):
     print_debug(f"Found {len(extracted_region_files)} extracted region files for species {species}.")
     print_debug(f"Extracted region files: {extracted_region_files}")
     
-    output_folder = get_folder_path_species_results_mtdna_regions(species)
+    output_folder = get_folder_path_species_results_refgenome_mtdna_regions(species)
     
     output_file = os.path.join(output_folder, f"{species}_extracted_region_analysis.tsv")
 

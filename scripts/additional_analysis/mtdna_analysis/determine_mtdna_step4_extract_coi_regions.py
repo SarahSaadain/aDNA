@@ -1,6 +1,8 @@
 import os
 import subprocess
 from common_aDNA_scripts import *
+import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
+
 
 def get_region_from_bed_file(file_path):
 
@@ -66,32 +68,44 @@ def execute_samtools_extract_region_by_bed_file(fasta_file_path: str, mtdna_regi
 
 def extract_mtdna_region_for_species(species: str):
     print_info(f"Extracting mtDNA regions for species: {species}")
-    
-    consensus_sequences_folder = get_folder_path_species_processed_mtdna_consensus_sequences(species)
-    fasta_files = get_files_in_folder_matching_pattern(consensus_sequences_folder, f"*{FILE_ENDING_FA_GZ}")
 
-    if len(fasta_files) == 0:
-        print_warning(f"No consensus sequence files found for species {species}. Skipping.")
+    try:
+        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+    except Exception as e:
+        print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
-    
-    print_debug(f"Found {len(fasta_files)} consensus sequence files for species {species}.")
-    print_debug(f"Consensus sequence files: {fasta_files}")
-    
-    bed_folder = get_folder_path_species_results_mtdna_regions(species)
-    bed_files = get_files_in_folder_matching_pattern(bed_folder, f"*{FILE_ENDING_BED}")
-    
-    if len(bed_files) == 0:
-        print_warning(f"No BED files found for species {species}. Skipping.")
-        return
-    
-    print_debug(f"Found {len(bed_files)} BED files for species {species}.")
-    print_debug(f"BED files: {bed_files}")
 
-    result_folder = get_folder_path_species_processed_mtdna_extracted_sequence(species)
+    for ref_genome_tuple in ref_genome_list:
+        
+        # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
+        ref_genome_id = ref_genome_tuple[0]
+        ref_genome_path = ref_genome_tuple[1]
+    
+        consensus_sequences_folder = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species, ref_genome_id)
+        fasta_files = get_files_in_folder_matching_pattern(consensus_sequences_folder, f"*{FILE_ENDING_FA_GZ}")
 
-    for fasta_file in fasta_files:
-        for bed_file in bed_files:
-            execute_samtools_extract_region_by_bed_file(fasta_file, bed_file, result_folder)
+        if len(fasta_files) == 0:
+            print_warning(f"No consensus sequence files found for species {species}. Skipping.")
+            return
+        
+        print_debug(f"Found {len(fasta_files)} consensus sequence files for species {species}.")
+        print_debug(f"Consensus sequence files: {fasta_files}")
+        
+        bed_folder = get_folder_path_species_results_refgenome_mtdna_regions(species, ref_genome_id)
+        bed_files = get_files_in_folder_matching_pattern(bed_folder, f"*{FILE_ENDING_BED}")
+        
+        if len(bed_files) == 0:
+            print_warning(f"No BED files found for species {species}. Skipping.")
+            return
+        
+        print_debug(f"Found {len(bed_files)} BED files for species {species}.")
+        print_debug(f"BED files: {bed_files}")
+
+        result_folder = get_folder_path_species_processed_refgenome_mtdna_extracted_sequence(species, ref_genome_id)
+
+        for fasta_file in fasta_files:
+            for bed_file in bed_files:
+                execute_samtools_extract_region_by_bed_file(fasta_file, bed_file, result_folder)
 
     print_info(f"Finished determining mtDNA regions for species {species}")
 
