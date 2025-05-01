@@ -2,6 +2,8 @@ import os
 import subprocess
 import pandas as pd
 
+from multiprocessing import Pool, cpu_count
+
 from common_aDNA_scripts import *
 
 import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
@@ -25,6 +27,22 @@ def execute_samtools_detpth(input_file: str, coverage_output_file: str):
         print_success(f"Samtools depth complete for {input_file}")
     except Exception as e:
         print_error(f"Failed to execute samtools depth: {e}")
+
+def analyze_coverage_file(coverage_file, depth_breath_output_folder):
+    """
+    Performs extended analysis on a single coverage file.  This is a helper
+    function to be used with multiprocessing.
+    """
+    coverage_file_base_name = get_filename_from_path(coverage_file)
+    analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_ANALYSIS_TSV)
+    analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
+
+    if os.path.exists(analysis_file_path):
+        print_info(f"Analysis file {analysis_file_path} already exists! Skipping extended analysis for {coverage_file}.")
+        return  # Important: Exit the function, not the whole script
+
+    extended_analysis(coverage_file, analysis_file_path)
+    print_info(f"Finished analysis of {coverage_file}") # Add print here
 
 def extended_analysis(coverage_file: str, analysis_file_path: str):
 
@@ -116,14 +134,26 @@ def execute_samtools_depth_for_species(species: str, reference_genome_id: str):
 
     depth_breath_output_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
 
-    for mapped_bam_file in list_of_bam_files:
-        mapped_bam_file_base_name = get_filename_from_path(mapped_bam_file)
-        coverage_file_name = mapped_bam_file_base_name.replace(FILE_ENDING_SORTED_BAM, FILE_ENDING_SAMTOOLS_DEPTH_TSV)
-
-        coverage_output_file = os.path.join(depth_breath_output_folder, coverage_file_name)
-        execute_samtools_detpth(mapped_bam_file, coverage_output_file)
+       # Create a pool of worker processes.
+    num_processes = THREADS_DEFAULT
+    with Pool(processes=num_processes) as pool:
+        # Create a list of tuples, where each tuple contains the arguments
+        # for the process_bam_file function.
+        tasks = [(bam_file, depth_breath_output_folder) for bam_file in list_of_bam_files]
+        pool.starmap(process_bam_file, tasks)
 
     print_info(f"Finished executing samtools depth for species {species}")
+
+def process_bam_file(mapped_bam_file, depth_breath_output_folder):
+    """
+    Executes samtools depth on a single BAM file.  This helper function is for use with multiprocessing.
+    """
+    mapped_bam_file_base_name = get_filename_from_path(mapped_bam_file)
+    coverage_file_name = mapped_bam_file_base_name.replace(FILE_ENDING_SORTED_BAM, FILE_ENDING_SAMTOOLS_DEPTH_TSV)
+    coverage_output_file = os.path.join(depth_breath_output_folder, coverage_file_name)
+    execute_samtools_detpth(mapped_bam_file, coverage_output_file)
+    
+    print_info(f"Finished samtools depth for {mapped_bam_file}") 
 
 def perform_extended_analysis_for_species(species: str, reference_genome_id: str):
     """
@@ -141,16 +171,17 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
     print_debug(f"Found {len(list_of_coverage_files)} coverage files for species {species}")
     print_debug(f"Coverage files: {list_of_coverage_files}")
 
-    for coverage_file in list_of_coverage_files:
-        coverage_file_base_name = get_filename_from_path(coverage_file)
-        analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_ANALYSIS_TSV)
-        analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
-
-        if os.path.exists(analysis_file_path):
-            print_info(f"Analysis file {analysis_file_path} already exists! Skipping extended analysis for {coverage_file}.")
-            continue
-
-        extended_analysis(coverage_file, analysis_file_path)
+    # Create a pool of worker processes.  Use a context manager (with)
+    # to ensure the pool is properly closed.
+    # You can specify the number of processes here.
+    num_processes = THREADS_DEFAULT
+    with Pool(processes=num_processes) as pool:
+        # Create a list of tuples, where each tuple contains the arguments
+        # for the analyze_coverage_file function.
+        tasks = [(file, depth_breath_output_folder) for file in list_of_coverage_files]
+        # Use pool.starmap to apply the function to each set of arguments.
+        # starmap unpacks the tuples and passes the elements as separate arguments.
+        pool.starmap(analyze_coverage_file, tasks)
 
     print_info(f"Finished performing extended analysis for species {species}")
 
