@@ -27,7 +27,6 @@ def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THRE
         else:
             print_info(f"Conversion for {sam_file} already exists. Skipping.")
 
-   
         print_info(f"Sorting {bam_file}...")
         
         try:
