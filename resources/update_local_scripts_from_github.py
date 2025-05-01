@@ -2,6 +2,7 @@ import os
 import requests
 import argparse
 import sys
+import time
 
 def download_files(file_url: str, target_file: str, force_update: bool=False, check_only: bool=False):
 
