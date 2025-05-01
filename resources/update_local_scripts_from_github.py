@@ -47,7 +47,7 @@ def get_remote_file_content(file_url: str):
         'Pragma': 'no-cache',         # Older HTTP/1.0 clients
     }
 
-    response = requests.get(file_url), headers=headers
+    response = requests.get(file_url, headers=headers)
     if response.status_code != 200:
         raise Exception('Failed to download file')
     return response.content
