@@ -145,6 +145,11 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
         coverage_file_base_name = get_filename_from_path(coverage_file)
         analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_ANALYSIS_TSV)
         analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
+
+        if os.path.exists(analysis_file_path):
+            print_info(f"Analysis file {analysis_file_path} already exists! Skipping extended analysis for {coverage_file}.")
+            continue
+
         extended_analysis(coverage_file, analysis_file_path)
 
     print_info(f"Finished performing extended analysis for species {species}")
