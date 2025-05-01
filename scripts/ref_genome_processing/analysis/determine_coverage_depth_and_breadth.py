@@ -110,7 +110,7 @@ def execute_samtools_depth_for_species(species: str, reference_genome_id: str):
     print_debug(f"Found {len(list_of_bam_files)} BAM files for species {species}")
     print_debug(f"BAM files: {list_of_bam_files}")
 
-    depth_breath_output_folder = get_folder_path_species_processed_qc_depth_breath(species, reference_genome_id)
+    depth_breath_output_folder = get_folder_path_species_processed_refgenome_qc_depth_breath(species, reference_genome_id)
 
     for mapped_bam_file in list_of_bam_files:
         mapped_bam_file_base_name = get_filename_from_path(mapped_bam_file)
@@ -127,7 +127,7 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
     """
     print_info(f"Performing extended analysis on depth files for species: {species}")
 
-    depth_breath_output_folder = get_folder_path_species_processed_qc_depth_breath(species, reference_genome_id)
+    depth_breath_output_folder = get_folder_path_species_processed_refgenome_qc_depth_breath(species, reference_genome_id)
     list_of_coverage_files = get_files_in_folder_matching_pattern(depth_breath_output_folder, f"*{FILE_ENDING_SAMTOOLS_DEPTH_TSV}")
 
     if len(list_of_coverage_files) == 0:
@@ -151,7 +151,7 @@ def combine_analysis_files(species: str, reference_genome_id: str):
     Calculates overall metrics per BAM file from the per-scaffold analysis results.
     """
     print_info(f"Combining extended analysis files for species: {species}")
-    individual_files_folder = get_folder_path_species_processed_qc_depth_breath(species, reference_genome_id)
+    individual_files_folder = get_folder_path_species_processed_refgenome_qc_depth_breath(species, reference_genome_id)
     analysis_folder = get_folder_path_species_results_qc_depth_breath(species, reference_genome_id)
     
     combined_file_path = os.path.join(analysis_folder, f"{species}_combined_coverage_analysis{FILE_ENDING_CSV}") # Using CSV for combined output

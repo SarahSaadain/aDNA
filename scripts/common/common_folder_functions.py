@@ -173,7 +173,7 @@ def get_folder_path_species_processed_refgenome_qc(species: str, reference_genom
     check_folder_exists_or_create(path)
     return path 
 
-def get_folder_path_species_processed_qc_refgenome_depth_breath(species: str, reference_genome_id: str) -> str:
+def get_folder_path_species_processed_refgenome_qc_depth_breath(species: str, reference_genome_id: str) -> str:
     path = os.path.join(get_folder_path_species_processed_refgenome_qc(species, reference_genome_id), FOLDER_DEPTH_BREADTH)
     check_folder_exists_or_create(path)
     return path
@@ -303,7 +303,7 @@ def get_folder_path_species_results_refgenome_plots_breadth_sample(species: str,
     check_folder_exists_or_create(path) 
     return path
 
-def get_folder_path_species_results_plots_refgenome_endogenous_reads(species: str, reference_genome_id: str) -> str:
+def get_folder_path_species_results_refgenome_plots_endogenous_reads(species: str, reference_genome_id: str) -> str:
     path = os.path.join(get_folder_path_species_results_refgenome_plots(species, reference_genome_id), FOLDER_ENDOGENOUS_READS)
     check_folder_exists_or_create(path)
     return path

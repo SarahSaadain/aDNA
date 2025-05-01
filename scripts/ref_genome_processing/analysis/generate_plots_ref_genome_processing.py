@@ -78,7 +78,7 @@ def plot_endogenous_reads(species: str, reference_genome_id: str):
 
     for analysis_file in analysis_files:
 
-        output_folder_path = get_folder_path_species_results_plots_endogenous_reads(species, reference_genome_id)
+        output_folder_path = get_folder_path_species_results_refgenome_plots_endogenous_reads(species, reference_genome_id)
 
         if os.path.exists(output_folder_path):
             print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
