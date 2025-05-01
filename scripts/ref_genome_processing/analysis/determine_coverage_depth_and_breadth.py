@@ -125,12 +125,14 @@ def execute_samtools_depth_for_species(species: str, reference_genome_id: str):
 
     depth_breath_output_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
 
-       # Create a pool of worker processes.
+    # Create a pool of worker processes to parallelize the execution.
     num_processes = THREADS_DEFAULT
     with Pool(processes=num_processes) as pool:
         # Create a list of tuples, where each tuple contains the arguments
         # for the process_bam_file function.
         tasks = [(bam_file, depth_breath_output_folder) for bam_file in list_of_bam_files]
+        # Use pool.starmap to apply the function to each set of arguments.
+        # starmap unpacks the tuples and passes the elements as separate arguments.
         pool.starmap(process_bam_file, tasks)
 
     print_info(f"Finished executing samtools depth for species {species}")
@@ -162,9 +164,7 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
     print_debug(f"Found {len(list_of_coverage_files)} coverage files for species {species}")
     print_debug(f"Coverage files: {list_of_coverage_files}")
 
-    # Create a pool of worker processes.  Use a context manager (with)
-    # to ensure the pool is properly closed.
-    # You can specify the number of processes here.
+    # Create a pool of worker processes to parallelize the analysis.
     num_processes = THREADS_DEFAULT
     with Pool(processes=num_processes) as pool:
         # Create a list of tuples, where each tuple contains the arguments
