@@ -53,26 +53,39 @@ def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir:
 def create_consensus_sequence_for_species(species: str):
     print_info(f"Creating consensus sequence for species {species} ...")
 
-    #get reads
-    aDNA_reads_folder = get_folder_path_species_processed_mapped(species)
-    list_of_mapped_aDNA_files = get_files_in_folder_matching_pattern(aDNA_reads_folder, f"*{FILE_ENDING_SORTED_BAM}")
-
-    if len(list_of_mapped_aDNA_files) == 0:
-        print_warning(f"No mapped reads found for species {species}. Skipping.")
+    try:
+        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+    except Exception as e:
+        print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
-    
-    print_debug(f"Found {len(list_of_mapped_aDNA_files)} mapped reads for species {species}.")
-    print_debug(f"Mapped reads: {list_of_mapped_aDNA_files}")
 
-    output_folder_consensus_seq = get_folder_path_species_processed_mtdna_consensus_sequences(species)
+    for ref_genome_tuple in ref_genome_list:
 
-    for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files:
+        # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
+        ref_genome_id = ref_genome_tuple[0]
+        #ref_genome_path = ref_genome_tuple[1]
 
-        print_info(f"Creating consensus sequence for {mapped_aDNA_read_file_path} ...")
+        aDNA_reads_folder = get_folder_path_species_processed_mapped(species, ref_genome_id)
 
-        execute_angsd_create_and_map_consensus_sequence(mapped_aDNA_read_file_path, output_folder_consensus_seq)
+        #get mapped reads
+        list_of_mapped_aDNA_files = get_files_in_folder_matching_pattern(aDNA_reads_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
-    print_info(f"Creating consensus sequence for species {species} complete")
+        if len(list_of_mapped_aDNA_files) == 0:
+            print_warning(f"No mapped reads found for species {species}. Skipping.")
+            return
+        
+        print_debug(f"Found {len(list_of_mapped_aDNA_files)} mapped reads for species {species}.")
+        print_debug(f"Mapped reads: {list_of_mapped_aDNA_files}")
+
+        output_folder_consensus_seq = get_folder_path_species_processed_mtdna_consensus_sequences(species)
+
+        for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files:
+
+            print_info(f"Creating consensus sequence for {mapped_aDNA_read_file_path} ...")
+
+            execute_angsd_create_and_map_consensus_sequence(mapped_aDNA_read_file_path, output_folder_consensus_seq)
+
+        print_info(f"Creating consensus sequence for species {species} complete")
 
 
 def map_consensus_sequence_for_species(species: str):   

@@ -2,6 +2,7 @@ import pysam
 import os
 from collections import Counter
 from common_aDNA_scripts import *
+import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
 
 DEPTH_THRESHOLD = 1000
 MINIMUM_SEQUENCE_LENGTH = 100
@@ -125,14 +126,35 @@ def execute_extract_unmapped_regions(bam_file_path: str, output_folder: str, min
 def extract_special_sequences_for_species(species: str, depth_threshold: int = DEPTH_THRESHOLD):
     print_info(f"Extracting special sequences for species {species} with depth threshold: {depth_threshold}")
 
-    mapped_folder = get_folder_path_species_processed_mapped(species)
-    target_folder = get_folder_path_species_results_special_sequences(species)
+    try:
+        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+    except Exception as e:
+        print_error(f"Failed to get reference genome files for species {species}: {e}")
+        return
 
-    bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_BAM}")
+    for ref_genome_tuple in ref_genome_list:
 
-    for bam_file in bam_files:
-        execute_extract_special_sequences(bam_file, target_folder, depth_threshold)
-        #execute_extract_unmapped_regions(bam_file, target_folder, 1000, 10000)
+        # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
+        ref_genome_id = ref_genome_tuple[0]
+        #ref_genome_path = ref_genome_tuple[1]
+
+        print_info(f"Extracting special sequences for species {species} and reference genome {ref_genome_id}...")
+
+        mapped_folder = get_folder_path_species_processed_mapped(species, ref_genome_id)
+        target_folder = get_folder_path_species_results_special_sequences(species, ref_genome_id)
+
+        bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_BAM}")
+
+        if len(bam_files) == 0:
+            print_warning(f"No BAM files found in {mapped_folder} for species {species}. Skipping.")
+            return
+
+        print_debug(f"Found {len(bam_files)} BAM files.")
+        print_debug(f"BAM files: {bam_files}")
+
+        for bam_file in bam_files:
+            execute_extract_special_sequences(bam_file, target_folder, depth_threshold)
+            #execute_extract_unmapped_regions(bam_file, target_folder, 1000, 10000)
     
     print_info(f"Finished extracting special sequences for species {species}")
 

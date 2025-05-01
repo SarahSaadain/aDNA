@@ -1,6 +1,7 @@
 import os
 import subprocess
 from common_aDNA_scripts import *
+import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
 
 def execute_bwa_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, output_file_path:str, threads:int = THREADS_DEFAULT):
     
@@ -39,35 +40,32 @@ def map_aDNA_to_refgenome_for_species(species: str):
     print_debug(f"Found {len(list_of_read_files)} read files for species {species}.")
     print_debug(f"Read files: {list_of_read_files}")
 
-    # get ref genome
-    ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
-
-    # add fna files to reference genome list
-    ref_genome_files = get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FNA}")
-    # add fasta files to reference genome list
-    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FASTA}")
-    # add fa files to reference genome list
-    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FA}")
-
-    if len(ref_genome_files) == 0:
-        print_warning(f"No reference genome found for species {species}. Skipping.")
+    try:
+        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+    except Exception as e:
+        print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
-    
-    print_debug(f"Found {len(ref_genome_files)} reference genome files for species {species}.")
-    print_debug(f"Reference genome files: {ref_genome_files}")
 
-    output_folder = get_folder_path_species_processed_mapped(species)
+    for ref_genome_tuple in ref_genome_list:
 
-    for ref_genome_path in ref_genome_files:
+        # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
+        ref_genome_id = ref_genome_tuple[0]
+        ref_genome_path = ref_genome_tuple[1]
 
-        ref_genome_filename = get_filename_from_path_without_extension(ref_genome_path)
+        print_debug(f"Reference genome file: {ref_genome_path}")
+
+        output_folder = get_folder_path_species_processed_mapped(species, ref_genome_id)
+
+        print_debug(f"Reference genome file: {ref_genome_id}")
 
         for read_file_path in list_of_read_files:
 
             print_info(f"Mapping {read_file_path} to reference genome {ref_genome_path} ...")
 
             read_name = get_filename_from_path_without_extension(read_file_path)
-            output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}.sam")
+            output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_id}.sam")
+
+            print_debug(f"Output file: {output_file_path}")
 
             execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
 

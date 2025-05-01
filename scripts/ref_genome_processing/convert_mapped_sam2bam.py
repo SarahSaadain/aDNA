@@ -2,6 +2,7 @@ import os
 import subprocess
 
 from common_aDNA_scripts import *
+import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
 
 def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THREADS_DEFAULT, detlete_unsorted_bam: bool=True):
 
@@ -69,15 +70,32 @@ def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THRE
 def convert_ref_genome_mapped_sam_to_bam_for_species(species):
     print_info(f"Converting reference genome mapped sam to bam for species {species}")
 
-    mapped_folder = get_folder_path_species_processed_mapped(species)
-    sam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SAM}")
-
-    if len(sam_files) == 0:
-        print_warning(f"No SAM reference genome files found for species {species}. Skipping.")
+    try:
+        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+    except Exception as e:
+        print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
 
-    for sam_file in sam_files:
-        execute_convert_sam_to_bam(sam_file, mapped_folder)    
+    for ref_genome_tuple in ref_genome_list:
+
+        # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
+        ref_genome_id = ref_genome_tuple[0]
+        #ref_genome_path = ref_genome_tuple[1]
+
+        print_info(f"Converting mapped SAM files for reference genome {ref_genome_id} for species {species}")
+
+        mapped_folder = get_folder_path_species_processed_mapped(species, ref_genome_id)
+        sam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SAM}")
+
+        if len(sam_files) == 0:
+            print_warning(f"No mapped SAM files found for reference genome {ref_genome_id} for species {species}. Skipping.")
+            return
+        
+        print_debug(f"Found {len(sam_files)} mapped SAM files for reference genome {ref_genome_id} for species {species}.")
+        print_debug(f"Mapped SAM files: {sam_files}")
+
+        for sam_file in sam_files:
+            execute_convert_sam_to_bam(sam_file, mapped_folder)    
 
 
 def convert_sam_to_bam_for_species(species):

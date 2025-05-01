@@ -15,7 +15,7 @@ import raw_reads_processing.analysis.generate_plots_raw_reads_processing as gene
 import ref_genome_processing.prepare_ref_genome_for_mapping as prepare_ref_genome_for_mapping
 import ref_genome_processing.prepare_species_for_map_to_ref_genome as prepare_species_for_map_to_ref_genome
 import ref_genome_processing.map_aDNA_to_refgenome as map_aDNA_to_refgenome
-import ref_genome_processing.convert_ref_genome_sam2bam as convert_ref_genome_sam2bam
+import ref_genome_processing.convert_mapped_sam2bam as convert_mapped_sam2bam
 import ref_genome_processing.analysis.determine_endogenous_reads as determine_endogenous_reads
 import ref_genome_processing.analysis.extract_special_sequences as extract_special_sequences
 import ref_genome_processing.analysis.determine_coverage_depth_and_breadth as determine_coverage_depth_and_breadth
@@ -49,7 +49,7 @@ def run_pipeline_reference_genome_processing():
     map_aDNA_to_refgenome.all_species_map_aDNA_to_refgenome()
 
     # convert mapped reads from sam to bam. also sorts the bam file and indexes it
-    convert_ref_genome_sam2bam.all_species_convert_sam_to_bam()
+    convert_mapped_sam2bam.all_species_convert_sam_to_bam()
 
     # quality control for mapped reads
     # determine endogenous reads
