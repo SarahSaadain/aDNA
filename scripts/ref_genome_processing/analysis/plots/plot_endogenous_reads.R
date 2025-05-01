@@ -1,5 +1,3 @@
-##aDNA sequence length distribution plot##
-
 #load libraries
 library(dplyr)
 library(ggplot2)
@@ -14,15 +12,15 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
   df <- read.table(
     source_file, 
     sep =",", 
-    header = FALSE, 
-    col.names = c("file", "reads_endogenous", "reads_total", "percent_endogenous"))
+    header = TRUE) # Changed to TRUE to read the header
   
   # Add the Non-Endogenous reads and their percentages to the original dataframe
   df <- df %>%
     mutate(
-      reads_non_endogenous = reads_total - reads_endogenous,  # Calculate Non-Endogenous reads
-      percent_endogenous = percent_endogenous * 100, 
-      percent_non_endogenous = (reads_non_endogenous / reads_total) * 100  # Calculate percentage
+      Non_Endogenous = TotalReads - MappedReads,  # Changed to use new column names
+      Proportion = MappedReads / TotalReads,
+      percent_endogenous = Proportion * 100, 
+      percent_non_endogenous = (Non_Endogenous / TotalReads) * 100  # Calculate percentage
     )
   
   # Loop over each row of the dataframe
@@ -33,10 +31,10 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
     # Create a long format for the row (pie chart data)
     row_long <- data.frame(
       read_type = c("Endogenous", "Non-Endogenous"),
-      count = c(row_data$reads_endogenous, row_data$reads_non_endogenous),
+      count = c(row_data$MappedReads, row_data$Non_Endogenous), # Changed to use new column names
       percent = c(row_data$percent_endogenous, row_data$percent_non_endogenous)
     )
-
+    
     # Create the pie chart
     p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
       geom_bar(stat = "identity", width = 1) +
@@ -45,7 +43,7 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
                 position = position_stack(vjust = 0.5), size = 5, color = "white") +
       scale_fill_manual(values = c("Endogenous" = "#209557",  # Green
                                   "Non-Endogenous" = "#1f5bb4")) + # Blue
-      labs(x = NULL, y = NULL, fill = "Read Type", title = paste("Endogenous vs Non-Endogenous Reads:", row_data$file)) +  # Include protocol in title
+      labs(x = NULL, y = NULL, fill = "Read Type", title = paste("Endogenous vs Non-Endogenous Reads:", row_data$Filename)) +  # Include filename in title
       theme_bw() +  # Apply the black-and-white theme
       theme(
         panel.grid = element_blank(),
@@ -57,9 +55,9 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
         axis.ticks.y = element_blank(),  # Remove y-axis ticks
         axis.text.x = element_blank()    # Remove x-axis labels if needed
       )
-
+    
     # Create file name and path for each chart
-    file_name <- paste0(row_data$file, "_endogenous_reads_pie_chart.png")
+    file_name <- paste0(row_data$Filename, "_endogenous_reads_pie_chart.png") # Changed to use Filename
     file_path <- file.path(target_folder, file_name)
     
     # Save the plot
