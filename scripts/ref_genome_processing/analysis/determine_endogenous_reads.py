@@ -48,7 +48,10 @@ def determine_endogenous_reads_for_bam_file(bam_file: str, processed_folder: str
 
     proportion = 0.0
 
+    print_debug(f"Counting mapped reads in {bam_filename} ...")
     mapped_reads = execute_samtools_count_mapped_reads(bam_file)
+
+    print_debug(f"Counting total reads in {bam_filename} ...")
     total_reads = execute_samtools_count_total_reads(bam_file)
 
     if total_reads != 0:
@@ -57,7 +60,6 @@ def determine_endogenous_reads_for_bam_file(bam_file: str, processed_folder: str
     print_info(f"Endogenous reads for {bam_filename}: {mapped_reads}/{total_reads} -> {proportion:.4f}")
 
     print_debug(f"Writing results for {bam_filename} to {target_file_path}")
-
     try:
         with open(target_file_path, "w") as result_file:
             

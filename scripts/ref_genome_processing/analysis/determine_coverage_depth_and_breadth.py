@@ -39,6 +39,7 @@ def extended_analysis(coverage_file: str, analysis_file_path: str):
         return
 
      #read tsv into dataframe
+    print_debug(f"Reading coverage file {coverage_file} into DataFrame ...")
     df = pd.read_csv(coverage_file, sep="\t", header=None, names=["scaffold", "position", "depth"])
 
     if df.empty:
@@ -46,6 +47,7 @@ def extended_analysis(coverage_file: str, analysis_file_path: str):
         return
 
     # Group by scaffold and calculate metrics
+    print_debug(f"Grouping by scaffold and calculating metrics ...")
     summary = df.groupby("scaffold").agg(
         avg_depth=("depth", "mean"),
         max_depth=("depth", "max"),
@@ -54,9 +56,11 @@ def extended_analysis(coverage_file: str, analysis_file_path: str):
     )
 
     # Compute coverage percentage
+    print_debug(f"Calculating coverage percentage ...")
     summary["percent_covered"] = (summary["covered_bases"] / summary["total_bases"]) * 100
 
     # Save to file
+    print_debug(f"Saving summary to file {analysis_file_path} ...")
     summary.to_csv(analysis_file_path, sep="\t")
 
     print_success(f"Extended analysis complete for {coverage_file}")
