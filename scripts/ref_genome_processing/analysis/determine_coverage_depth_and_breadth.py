@@ -26,53 +26,6 @@ def execute_samtools_detpth(input_file: str, coverage_output_file: str):
     except Exception as e:
         print_error(f"Failed to execute samtools depth: {e}")
 
-# def determine_coverage_depth_and_breath(species: str):
-#     print_info(f"Determine coverage depth and breadth for species {species}")
-
-#     input_folder = get_folder_path_species_processed_mapped(species)
-#     list_of_bam_files = get_files_in_folder_matching_pattern(input_folder, f"*{FILE_ENDING_SORTED_BAM}")
-
-#     if len(list_of_bam_files) == 0:
-#         print_warning(f"No mapped files found for species {species}. Skipping.")
-#         return
-    
-#     print_debug(f"Found {len(list_of_bam_files)} mapped files for species {species}")
-#     print_debug(f"Mapped bam files: {list_of_bam_files}")
-    
-#     depth_breath_output_folder = get_folder_path_species_results_qc_depth_breath(species)
-
-#     for mapped_bam_file in list_of_bam_files:
-
-#         mapped_bam_file_base_name = get_filename_from_path(mapped_bam_file)
-
-#         coverage_file_name = mapped_bam_file_base_name.replace(FILE_ENDING_SORTED_BAM, FILE_ENDING_SAMTOOLS_DEPTH_TSV)
-
-#         coverage_output_file = os.path.join(depth_breath_output_folder, coverage_file_name)
-
-#         execute_samtools_detpth(mapped_bam_file, coverage_output_file)
-
-
-#     print_info(f"Performing extended analysis for species {species}")
-
-#     list_of_coverage_files = get_files_in_folder_matching_pattern(depth_breath_output_folder, f"*{FILE_ENDING_SAMTOOLS_DEPTH_TSV}")
-
-#     if len(list_of_coverage_files) == 0:
-#         print_error(f"No coverage files found for species {species}. Skipping.")
-#         return
-    
-#     print_debug(f"Found {len(list_of_coverage_files)} coverage files for species {species}")
-#     print_debug(f"Coverage files: {list_of_coverage_files}")
-
-#     for coverage_file in list_of_coverage_files:
-#         coverage_file_base_name = os.path.basename(coverage_file)
-
-#         analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_ANALYSIS_TSV)
-#         analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
-
-#         extended_analysis(coverage_file, analysis_file_path)
-
-#     print_info(f"Determine coverage depth and breadth for species {species} complete")
-
 def extended_analysis(coverage_file: str, analysis_file_path: str):
 
     print_info(f"Performing extended analysis for {coverage_file}")
@@ -147,7 +100,7 @@ def execute_samtools_depth_for_species(species: str, reference_genome_id: str):
     """
     print_info(f"Executing samtools depth for all BAM files for species: {species}")
 
-    mapped_folder = get_folder_path_species_processed_mapped(species, reference_genome_id)
+    mapped_folder = get_folder_path_species_processed_refgenome_mapped(species, reference_genome_id)
     list_of_bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
     if len(list_of_bam_files) == 0:

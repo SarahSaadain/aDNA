@@ -93,8 +93,13 @@ def get_folder_path_species_raw_ref_genome(species: str) -> str:
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_mapped(species: str, reference_genome_id: str) -> str:
-    path = os.path.join(get_folder_path_species_processed(species), FOLDER_MAPPED, reference_genome_id)
+def get_folder_path_species_processed_refgenome(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed(species), reference_genome_id)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_processed_refgenome_mapped(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_refgenome(species, reference_genome_id), FOLDER_MAPPED)
     check_folder_exists_or_create(path)
     return path
 
@@ -148,8 +153,8 @@ def get_folder_path_species_processed_genomedelta(species: str) -> str:
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_endogenous_reads(species: str, reference_genome_id: str) -> str:
-    path = os.path.join(get_folder_path_species_processed(species), FOLDER_ENDOGENOUS_READS, reference_genome_id)
+def get_folder_path_species_processed_refgenome_endogenous_reads(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_refgenome(species, reference_genome_id), FOLDER_ENDOGENOUS_READS)
     check_folder_exists_or_create(path)
     return path
 
@@ -163,18 +168,23 @@ def get_folder_path_species_processed_non_concatenated(species: str) -> str:
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_processed_qc(species: str) -> str:
-    path = os.path.join(get_folder_path_species_processed(species), FOLDER_QUALITYCONTROL)
+def get_folder_path_species_processed_refgenome_qc(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed(species, reference_genome_id), FOLDER_QUALITYCONTROL)
     check_folder_exists_or_create(path)
     return path 
 
-def get_folder_path_species_processed_qc_depth_breath(species: str, reference_genome_id: str) -> str:
-    path = os.path.join(get_folder_path_species_processed_qc(species), FOLDER_DEPTH_BREADTH, reference_genome_id)
+def get_folder_path_species_processed_qc_refgenome_depth_breath(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_refgenome_qc(species, reference_genome_id), FOLDER_DEPTH_BREADTH)
     check_folder_exists_or_create(path)
     return path
 
 def get_folder_path_species_results_genomedelta(species: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_GENOMEDELTA)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_refgenome(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results(species), reference_genome_id)
     check_folder_exists_or_create(path)
     return path
 
@@ -190,6 +200,11 @@ def get_folder_path_species_results_mtdna_regions(species: str) -> str:
 
 def get_folder_path_species_results_qc(species: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_QUALITYCONTROL)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_refgenome_qc(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results(species, reference_genome_id), FOLDER_QUALITYCONTROL)
     check_folder_exists_or_create(path)
     return path
 
@@ -244,7 +259,7 @@ def get_folder_path_species_results_qc_multiqc_duplicates_removed(species: str) 
     return path
 
 def get_folder_path_species_results_qc_depth_breath(species: str, reference_genome_id: str) -> str:
-    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_DEPTH_BREADTH, reference_genome_id)
+    path = os.path.join(get_folder_path_species_results_refgenome_qc(species, reference_genome_id), FOLDER_DEPTH_BREADTH)
     check_folder_exists_or_create(path)
     return path
 
@@ -258,34 +273,38 @@ def get_folder_path_species_results_plots(species: str) -> str:
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_results_refgenome_plots(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results(species, reference_genome_id), FOLDER_PLOTS)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_results_plots_reads_processing(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_PROCESSED_READS)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_plots_depth(species: str) -> str:
-    path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_DEPTH)
+def get_folder_path_species_results_refgenome_plots_depth(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome_plots(species, reference_genome_id), FOLDER_DEPTH)
     check_folder_exists_or_create(path) 
     return path
 
-def get_folder_path_species_results_plots_depth_sample(species: str, reference_genome_id: str, sample_name: str) -> str:
-    path = os.path.join(get_folder_path_species_results_plots_depth(species), reference_genome_id, sample_name)
+def get_folder_path_species_results_refgenome_plots_depth_sample(species: str, reference_genome_id: str, sample_name: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome_plots_depth(species, reference_genome_id), sample_name)
     check_folder_exists_or_create(path) 
     return path
 
-
-def get_folder_path_species_results_plots_breadth(species: str) -> str:
-    path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_BREADTH)
+def get_folder_path_species_results_refgenome_plots_breadth(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome_plots(species, reference_genome_id), FOLDER_BREADTH)
     check_folder_exists_or_create(path) 
     return path
 
-def get_folder_path_species_results_plots_breadth_sample(species: str, reference_genome_id: str, sample_name: str) -> str:
-    path = os.path.join(get_folder_path_species_results_plots_breadth(species), reference_genome_id, sample_name)
+def get_folder_path_species_results_refgenome_plots_breadth_sample(species: str, reference_genome_id: str, sample_name: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome_plots_breadth(species, reference_genome_id), sample_name)
     check_folder_exists_or_create(path) 
     return path
 
-def get_folder_path_species_results_plots_endogenous_reads(species: str, reference_genome_id: str) -> str:
-    path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_ENDOGENOUS_READS, reference_genome_id)
+def get_folder_path_species_results_plots_refgenome_endogenous_reads(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome_plots(species, reference_genome_id), FOLDER_ENDOGENOUS_READS)
     check_folder_exists_or_create(path)
     return path
 
@@ -294,13 +313,13 @@ def get_folder_path_species_results_plots_read_length_distribution(species: str)
     check_folder_exists_or_create(path)
     return path
 
-def get_folder_path_species_results_special_sequences(species: str, reference_genome_id: str) -> str:
+def get_folder_path_species_results_refgenome_special_sequences(species: str, reference_genome_id: str) -> str:
     path = os.path.join(get_folder_path_species_results(species), FOLDER_SPECIAL_SEQUENCES, reference_genome_id)
     check_folder_exists_or_create(path) 
     return path
 
-def get_folder_path_species_results_endogenous_reads(species: str, reference_genome_id: str) -> str:
-    path = os.path.join(get_folder_path_species_results(species), FOLDER_ENDOGENOUS_READS, reference_genome_id)
+def get_folder_path_species_results_refgenome_endogenous_reads(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome(species, reference_genome_id), FOLDER_ENDOGENOUS_READS)
     check_folder_exists_or_create(path)
     return path
 

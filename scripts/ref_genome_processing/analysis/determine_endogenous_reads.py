@@ -74,8 +74,8 @@ def combine_endogenous_reads_files(species: str, ref_genome_id: str):
     
     print_info(f"Combining endogenous reads files for species: {species}")
     
-    processed_folder = get_folder_path_species_processed_endogenous_reads(species, ref_genome_id)
-    result_folder = get_folder_path_species_results_endogenous_reads(species, ref_genome_id)
+    processed_folder = get_folder_path_species_processed_refgenome_endogenous_reads(species, ref_genome_id)
+    result_folder = get_folder_path_species_results_refgenome_endogenous_reads(species, ref_genome_id)
     
     combined_file_path = os.path.join(result_folder, f"{species}_combined_endogenous_reads{FILE_ENDING_CSV}")
 
@@ -129,8 +129,8 @@ def determine_endogenous_reads_for_species(species: str, ref_genome_id: str):
     """Processes all BAM files for a species, creating individual result files."""
     print_info(f"Processing BAM files to determine endogenous reads for species: {species}")
 
-    mapped_folder = get_folder_path_species_processed_mapped(species, ref_genome_id)
-    processed_folder = get_folder_path_species_processed_endogenous_reads(species, ref_genome_id)
+    mapped_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
+    processed_folder = get_folder_path_species_processed_refgenome_endogenous_reads(species, ref_genome_id)
 
     bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 

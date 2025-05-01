@@ -83,7 +83,7 @@ def convert_ref_genome_mapped_sam_to_bam_for_species(species):
 
         print_info(f"Converting mapped SAM files for reference genome {ref_genome_id} for species {species}")
 
-        mapped_folder = get_folder_path_species_processed_mapped(species, ref_genome_id)
+        mapped_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
         sam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SAM}")
 
         if len(sam_files) == 0:

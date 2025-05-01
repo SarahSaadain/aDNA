@@ -66,7 +66,7 @@ def create_consensus_sequence_for_species(species: str):
         ref_genome_id = ref_genome_tuple[0]
         #ref_genome_path = ref_genome_tuple[1]
 
-        aDNA_reads_folder = get_folder_path_species_processed_mapped(species, ref_genome_id)
+        aDNA_reads_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
 
         #get mapped reads
         list_of_mapped_aDNA_files = get_files_in_folder_matching_pattern(aDNA_reads_folder, f"*{FILE_ENDING_SORTED_BAM}")

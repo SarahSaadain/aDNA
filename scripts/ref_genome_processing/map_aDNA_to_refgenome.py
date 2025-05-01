@@ -54,7 +54,7 @@ def map_aDNA_to_refgenome_for_species(species: str):
 
         print_debug(f"Reference genome file: {ref_genome_path}")
 
-        output_folder = get_folder_path_species_processed_mapped(species, ref_genome_id)
+        output_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
 
         print_debug(f"Reference genome file: {ref_genome_id}")
 

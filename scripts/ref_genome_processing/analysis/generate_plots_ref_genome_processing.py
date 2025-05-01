@@ -22,7 +22,7 @@ def plot_depth_analysis(species: str, reference_genome_id: str):
 
         sample = get_filename_from_path(analysis_file).replace(FILE_ENDING_ANALYSIS_TSV, "")
 
-        output_folder_path = get_folder_path_species_results_plots_depth_sample(species, reference_genome_id, sample)
+        output_folder_path = get_folder_path_species_results_refgenome_plots_depth_sample(species, reference_genome_id, sample)
 
         if os.path.exists(output_folder_path):
             print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
@@ -51,7 +51,7 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
 
         sample = get_filename_from_path(analysis_file).replace(FILE_ENDING_ANALYSIS_TSV, "")
 
-        output_folder_path = get_folder_path_species_results_plots_breadth_sample(species, reference_genome_id, sample)
+        output_folder_path = get_folder_path_species_results_refgenome_plots_breadth_sample(species, reference_genome_id, sample)
 
         if os.path.exists(output_folder_path):
             print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
@@ -66,7 +66,7 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
 def plot_endogenous_reads(species: str, reference_genome_id: str):
     print_info(f"Plotting endogenous reads for species {species}")
 
-    endogenous_reads_analysis_folder = get_folder_path_species_results_endogenous_reads(species, reference_genome_id)
+    endogenous_reads_analysis_folder = get_folder_path_species_results_refgenome_endogenous_reads(species, reference_genome_id)
 
     analysis_files = get_files_in_folder_matching_pattern(endogenous_reads_analysis_folder, f"*_endogenous_reads{FILE_ENDING_CSV}")
 
