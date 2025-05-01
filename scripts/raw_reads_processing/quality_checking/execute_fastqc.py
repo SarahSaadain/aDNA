@@ -125,7 +125,7 @@ def execute_fastqc(species: str, reads_file_list: list, output_folder: str):
     command = f"{PROGRAM_PATH_FASTQC} -o {output_folder} -t {threads} {' '.join(reads_file_list)}"
     try:
         subprocess.run(command, shell=True, check=True)
-        print_success(f"Fastqc for {reads_file} complete")
+        print_success(f"Fastqc for species {species} complete")
     except Exception as e:
         print_error(f"Failed to run fastqc for species {species}: {e}")
 
