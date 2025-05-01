@@ -126,13 +126,22 @@ def execute_samtools_depth_for_species(species: str, reference_genome_id: str):
     depth_breath_output_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
 
     # Create a pool of worker processes to parallelize the execution.
-    num_processes = THREADS_DEFAULT
+    # Using cpu_count() to get the number of available CPU cores
+    # use THREADS_DEFAULT to limit the number of processes as long as it is not higher than the number of cores
+    # If THREADS_DEFAULT is higher than the number of cores, use the number of cores instead
+    num_processes = min(THREADS_DEFAULT, cpu_count())
+    
     with Pool(processes=num_processes) as pool:
         # Create a list of tuples, where each tuple contains the arguments
         # for the process_bam_file function.
         tasks = [(bam_file, depth_breath_output_folder) for bam_file in list_of_bam_files]
         # Use pool.starmap to apply the function to each set of arguments.
         # starmap unpacks the tuples and passes the elements as separate arguments.
+        # process_bam_file is the function to be executed in parallel.
+        # Each task is a tuple of (mapped_bam_file, depth_breath_output_folder)
+        # The function will be called with the arguments from each tuple.
+        # This allows for parallel processing of the BAM files.
+        # starmap will block until all tasks are completed.
         pool.starmap(process_bam_file, tasks)
 
     print_info(f"Finished executing samtools depth for species {species}")
@@ -164,14 +173,23 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
     print_debug(f"Found {len(list_of_coverage_files)} coverage files for species {species}")
     print_debug(f"Coverage files: {list_of_coverage_files}")
 
-    # Create a pool of worker processes to parallelize the analysis.
-    num_processes = THREADS_DEFAULT
+    # Create a pool of worker processes to parallelize the execution.
+    # Using cpu_count() to get the number of available CPU cores
+    # use THREADS_DEFAULT to limit the number of processes as long as it is not higher than the number of cores
+    # If THREADS_DEFAULT is higher than the number of cores, use the number of cores instead
+    num_processes = min(THREADS_DEFAULT, cpu_count())
+
     with Pool(processes=num_processes) as pool:
         # Create a list of tuples, where each tuple contains the arguments
         # for the analyze_coverage_file function.
         tasks = [(file, depth_breath_output_folder) for file in list_of_coverage_files]
         # Use pool.starmap to apply the function to each set of arguments.
         # starmap unpacks the tuples and passes the elements as separate arguments.
+        # analyze_coverage_file is the function to be executed in parallel.
+        # Each task is a tuple of (coverage_file, depth_breath_output_folder)
+        # The function will be called with the arguments from each tuple.
+        # This allows for parallel processing of the coverage files.
+        # starmap will block until all tasks are completed.
         pool.starmap(analyze_coverage_file, tasks)
 
     print_info(f"Finished performing extended analysis for species {species}")
