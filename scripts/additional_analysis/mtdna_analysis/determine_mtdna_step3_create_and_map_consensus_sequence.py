@@ -1,6 +1,7 @@
 import os
 import subprocess
 from common_aDNA_scripts import *
+import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
 
 from ref_genome_processing.map_aDNA_to_refgenome import execute_bwa_map_aDNA_to_refgenome
 
