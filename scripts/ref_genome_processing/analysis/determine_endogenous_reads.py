@@ -152,11 +152,13 @@ def all_species_determine_endogenous_reads():
     print_execution("Determining endogenous reads for all species")
     for species in FOLDER_SPECIES: 
 
+        print_info(f"Determining endogenous reads for species {species}")
+
         try:
             ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
         except Exception as e:
             print_error(f"Failed to get reference genome files for species {species}: {e}")
-            return
+            continue
 
         for ref_genome_tuple in ref_genome_list:
 
