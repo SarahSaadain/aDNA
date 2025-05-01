@@ -94,7 +94,7 @@ def main():
         "scripts/ref_genome_processing/convert_mapped_sam2bam.py",
         "scripts/ref_genome_processing/prepare_species_for_map_to_ref_genome.py",
         "scripts/ref_genome_processing/prepare_ref_genome_for_mapping.py",
-        "scripts/ref_genome_processing/helpers/ref_genome_processing_helpers.py",
+        "scripts/ref_genome_processing/helpers/ref_genome_processing_helper.py",
         "scripts/ref_genome_processing/analysis/extract_special_sequences.py",
         "scripts/ref_genome_processing/analysis/determine_endogenous_reads.py",
         "scripts/ref_genome_processing/analysis/determine_coverage_depth_and_breadth.py",
