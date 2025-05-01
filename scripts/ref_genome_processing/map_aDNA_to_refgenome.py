@@ -18,7 +18,7 @@ def execute_bwa_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, 
         return
     
     command_bwa = f"{PROGRAM_PATH_BWA} {PROGRAM_PATH_BWA_MEM} -t {str(threads)} {ref_genome_path} {input_file_path} > {output_file_path}"
-    print_info(f"BWA command: {command_bwa}")
+    print_debug(f"BWA command: {command_bwa}")
 
     try:
         subprocess.run(command_bwa, shell=True, check=True)
