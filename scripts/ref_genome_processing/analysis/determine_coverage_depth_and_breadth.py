@@ -72,7 +72,7 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
     print_debug(f"Saving summary to file {analysis_file_path} ...")
     summary.to_csv(analysis_file_path, sep="\t")
 
-    print_success(f"Extended analysis complete for {coverage_file}")
+    print_info(f"Extended analysis complete for {coverage_file}")
 
 
 def determine_coverage_depth_and_breath(species: str):
@@ -270,7 +270,7 @@ def all_species_determine_coverage_depth_and_breath():
     for species in FOLDER_SPECIES: 
         determine_coverage_depth_and_breath(species)
 
-    print_info("Finished determining coverage depth and breadth for all species")
+    print_success("Finished determining coverage depth and breadth for all species")
 
 def main():
     all_species_determine_coverage_depth_and_breath()
