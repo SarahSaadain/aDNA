@@ -42,6 +42,8 @@ def download_files(file_url: str, target_file: str, force_update: bool=False, ch
 
 def get_remote_file_content(file_url: str):
 
+    file_url = file_url + f"?timestamp={int(time.time())}"
+
     headers = {
         'Cache-Control': 'no-cache',  # Disables caching
         'Pragma': 'no-cache',         # Older HTTP/1.0 clients
