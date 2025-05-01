@@ -1,7 +1,7 @@
 import os
 from common_aDNA_scripts import *
 
-from scripts.ref_genome_processing.convert_mapped_sam2bam import execute_convert_sam_to_bam
+from ref_genome_processing.convert_mapped_sam2bam import execute_convert_sam_to_bam
 
 def execute_bwa_map_mtDNA_to_refgenome(input_file_path:str, ref_genome_path:str, output_file_path:str, threads:int = THREADS_DEFAULT):
     
