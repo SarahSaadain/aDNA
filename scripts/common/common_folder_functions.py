@@ -184,7 +184,7 @@ def get_folder_path_species_results_refgenome(species: str, reference_genome_id:
     return path
 
 def get_folder_path_species_results_refgenome_mtdna(species: str, reference_genome_id: str) -> str:
-    path = os.path.join(get_folder_path_species_results_refgenome(species), FOLDER_MTDNA)
+    path = os.path.join(get_folder_path_species_results_refgenome(species, reference_genome_id), FOLDER_MTDNA)
     check_folder_exists_or_create(path)
     return path
 
