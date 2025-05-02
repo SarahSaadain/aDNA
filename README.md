@@ -24,13 +24,13 @@ Example `config.yaml`
 # Global settings
 project_name: "aDNA_Project"
 project_description: "Analysis of ancient DNA data"
-threads_default: 10  # Default number of threads to use for parallel processing
-path_adna_project: "/path/to/aDNA" #Main project path
-log_level: "DEBUG"  # Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+threads_default: 50  # Default number of threads to use for parallel processing
+path_adna_project: "/mnt/data5/sarah/aDNA" #Main project path
+log_level: "INFO"
 
 processing:
   fastqc:
-    threads: 10
+    threads: 25 # separate threads for fastqc due to memory requirements
   adapter_removal:
     adapters:
       r1: "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA"
@@ -39,9 +39,29 @@ processing:
 # Species-specific settings
 species:
   Bger:
-    folder_name: "species1"
+    name: "Blatella germanica"
+    folder_name: "Bger"
   Dsim:
-    folder_name: "species2"
+    name: "Drosophila simulans"
+    folder_name: "Dsim"
+  Phortica:
+    name: "Phortica"
+    folder_name: "Phortica"
+
+# cross-species comparison of depth/breadth, endogenous reads, ...
+compare_species:
+  Bger_Dsim_comparison: # Unique Name
+    Bger:
+      reference_genome: "refgenome.fna"
+    Dsim:
+      reference_genome: "refgenome.fna"
+    Bger_Dsim_Phortica_comparison: # Unique Name
+      Bger:
+        reference_genome: "refgenome.fna"
+      Dsim:
+        reference_genome: "refgenome.fna"
+      Phortica:
+        reference_genome: "refgenome.fna"
 
 # Paths to external tools
 tools:
