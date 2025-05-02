@@ -93,12 +93,28 @@ tools:
 ### Species-Specific Settings
 
 *   `species`: A dictionary containing settings for each species.
+    *   `name`: The name of the species
     *   `folder_name`: The name of the folder for the species.
     *   `processing`: Optional processing config. If not provided, the default values are used.
         *   `adapter_removal`
             *   `adapters`:
                 *   `r1`: Adapter sequence for read 1.
                 *   `r2`: Adapter sequence for read 2.
+
+### Comparison of species results
+*   `compare_species`
+    * `comparison ID/Name`:  First comparison. Unique Name used for file names
+        * `species ID 1`: first species 
+            * `reference_genome`: Name of reference genome fo comparison. e.g.: "refgenome.fna"
+        * `species ID 2`: second species 
+            * `reference_genome`: Name of reference genome fo comparison. e.g.: "refgenome.fna"
+        * `species ID ...`: ...
+            * `reference_genome`: ...
+        * `species ID N`: n-th species 
+            * `reference_genome`: Name of reference genome fo comparison. e.g.: "refgenome.fna"
+    * `comparison ID/Name`:  Second comparison. Unique Name used for file names
+        * `species ID 1`: first species 
+        * ...
 
 ### Paths to External Tools
 
