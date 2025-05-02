@@ -146,12 +146,12 @@ def create_and_map_consensus_sequence_for_species(species):
     print_info(f"Consensus sequence of {species} created and mapped successfully.")
 
 def all_species_create_and_map_consensus_sequence():
-    print_execution("Mapping aDNA to reference genome for all species")
+    print_execution("Creating and mapping consensus sequence for all species")
 
     for species in FOLDER_SPECIES: 
         create_and_map_consensus_sequence_for_species(species)
 
-    print_info("Mapping aDNA to reference genome for all species complete")
+    print_info("Creating and mapping consensus sequence for all species complete")
 
 def main():
     all_species_create_and_map_consensus_sequence()
