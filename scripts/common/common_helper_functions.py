@@ -66,7 +66,7 @@ def call_r_script(script_path: str, *args):
 
     try:
         subprocess.run(command, check=True)
-        print_success(f"Successfully executed {command}")
+        print_info(f"Successfully executed {command}")
     except subprocess.CalledProcessError as e:
         print_error(f"Error executing {script_path}: {e}")
 
