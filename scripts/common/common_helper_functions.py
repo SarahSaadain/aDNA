@@ -14,6 +14,14 @@ from common.common_folder_functions import *
 def is_species(species: str) -> bool:
     return species in config['species']
 
+def get_species_name(species_id):
+
+    if not is_species(species_id):
+        raise ValueError(f"Invalid species ID: {species_id}")
+   
+    return config['species'][species_id]['name']
+
+
 def is_sam_file_sorted(sam_file: str) -> bool:
     """
     Checks if a SAM file is sorted by coordinate.
