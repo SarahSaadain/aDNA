@@ -5,6 +5,37 @@ library(purrr)
 library(ggplot2)
 library(tools)
 
+plot_depth_coverage_violon <- function(df_depth, species) {
+
+  df_depth$species <- species
+
+  # Plot depth
+  plot_depth_violin <- ggplot(df_depth, aes(x = factor(species), y = avg_depth)) +
+    scale_y_continuous(
+      trans = "log10",
+      breaks = scales::trans_breaks("log10", function(x) 10^x),
+      labels = scales::comma
+    ) +
+    geom_violin(scale = "width") +
+    theme_bw() +
+    ylab("Avg. Depth") +
+    xlab("Species") +
+    ggtitle("Distribution of Average Depth") +
+    theme(axis.text.x = element_text(size = 18, angle = 45, vjust = 1, hjust = 1),
+          legend.text = element_text(size = 18),
+          axis.text.y = element_text(size = 18),
+          axis.title.x = element_text(size = 20, face = "bold"),
+          axis.title.y = element_text(size = 20, face = "bold"),
+          plot.title = element_text(size = 24, face = "bold", hjust = 0.5),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "white", colour = "black"),
+          legend.position = "none") #+
+    #scale_fill_manual(values = species_colors)
+
+    return(plot_depth_violin)
+}
+
 # Define the function
 plot_depth_coverage <- function(depth, lengthScaffoldRange) {
   
@@ -18,7 +49,7 @@ plot_depth_coverage <- function(depth, lengthScaffoldRange) {
     summarise(nr_scaffolds = n(), .groups = "drop")
   
   # Create the plot
-  ggplot(depth_filtered_mean, aes(x = rounded_avg_depth, y = nr_scaffolds)) + 
+  plot_depth_coverage <- ggplot(depth_filtered_mean, aes(x = rounded_avg_depth, y = nr_scaffolds)) + 
     geom_line(color = "blue", size = 0.3) +  # Line for Mean Depth
     geom_point(color = "blue", size = 0.1) +  # Points for Mean Depth
     labs(title = paste("Depth Coverage of Scaffolds",  
@@ -32,6 +63,8 @@ plot_depth_coverage <- function(depth, lengthScaffoldRange) {
     scale_y_log10() +
     theme_bw() +
     theme(legend.title = element_blank())
+
+    return(plot_depth_coverage)
 }
 
 save_plot <- function(plot, target_folder, file_name){
@@ -116,6 +149,9 @@ plot_coverage_depth <- function(species, depth_breath_analysis_file_path, target
   save_plot(plot_MaxDepthCoverageOfSmallScaffolds, target_folder, "plot_MaxDepthCoverageOfSmallScaffolds.png")
   save_plot(plot_MaxDepthCoverageOfMediumScaffolds, target_folder, "plot_MaxDepthCoverageOfMediumScaffolds.png")
   save_plot(plot_MaxDepthCoverageOfLargeScaffolds, target_folder, "plot_MaxDepthCoverageOfLargeScaffolds.png")
+
+  plot_depth_violin <- plot_depth_coverage_violon(df_depth, species)
+  save_plot(plot_depth_violin, target_folder, "plot_depthCoverage_violin.png")
   
 }
 

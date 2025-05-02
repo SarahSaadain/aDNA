@@ -3,6 +3,30 @@ library(dplyr)
 library(readr)
 library(tools)
 
+plot_coverage_breadth_violoin <- function(df_breadth, species) {
+  df_breadth$species <- species
+  
+  plot_breadth <- ggplot(all_data, aes(x = factor(species), y = percent_covered)) +
+    geom_violin(scale = "width") +
+    theme_bw() +
+    ylab("Percent Covered") +
+    xlab("Species") +
+    ggtitle("Distribution of Percent Covered") +
+    theme(axis.text.x = element_text(size = 18, angle = 45, vjust = 1, hjust = 1),
+          legend.text = element_text(size = 18),
+          axis.text.y = element_text(size = 18),
+          axis.title.x = element_text(size = 20, face = "bold"),
+          axis.title.y = element_text(size = 20, face = "bold"),
+          plot.title = element_text(size = 24, face = "bold", hjust = 0.5),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "white", colour = "black"),
+          legend.position = "none") #+
+    #scale_fill_manual(values = species_colors)
+
+    return(plot_breadth)
+}
+
 plot_coverage_breadth <- function(species, filepath, target_folder) {
   # Read the TSV file into a data frame
   df <- read_tsv(filepath)
