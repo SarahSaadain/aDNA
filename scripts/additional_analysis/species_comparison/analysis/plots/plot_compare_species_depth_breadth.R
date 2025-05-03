@@ -107,8 +107,23 @@ if (!dir.exists(output_folder)) {
   dir.create(output_folder, recursive = TRUE)
 }
 
+# Check if the root folder exists
+if (!dir.exists(root_folder)) {
+  stop(paste("Root folder does not exist:", root_folder))
+}
+
+# Check if the config file exists
+if (!file.exists(config_file)) {
+  stop(paste("Config file does not exist:", config_file))
+}
+
 # Read the config file
 config <- yaml.load_file(config_file) # Load the config file
+
+# Check if any relevant configuration is present
+if (is.null(config$compare_species) || length(config$compare_species) == 0) {
+  stop("No comparisons found in the config file.")
+}
 
 # Iterate through the comparisons in the config file.
 for (comparison_name in names(config$compare_species)) {

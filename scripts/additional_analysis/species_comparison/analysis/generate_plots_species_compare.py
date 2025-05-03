@@ -79,34 +79,20 @@ def plot_endogenous_reads():
     call_r_script(r_script, root_folder_path, config_file_path, output_folder_path)
     print_info(f"Finished plotting endogenous reads comparison.")
 
-def species_generate_comparison_plots(species: list, reference_genomes: dict):
-    """
-    Generates all comparison plots for the given species.
-
-    This function calls the individual plotting functions for reads processing results,
-    depth and breadth analysis, and endogenous reads.
-
-    Args:
-        species (list): A list of species names (strings).
-        reference_genomes (dict): A dictionary of species names and their reference genomes.
-    """
-    #plot_reads_processing_result(species, reference_genomes)
-    plot_depth_breadth_analysis()
-    plot_endogenous_reads(species, reference_genomes)
-    print_info(f"Finished generating plots for species {species}")
-
-def generate_plot_comparison_for_config():
+def species_generate_comparison_plots():
+    
     print_execution("Generating comparison plots for species based on config")
 
-    species_generate_comparison_plots()
-
-    print_success("Finished processing all comparisons from config.")
+    #plot_reads_processing_result(species, reference_genomes)
+    plot_depth_breadth_analysis()
+    plot_endogenous_reads()
+    print_info(f"Finished generating comparison plots")
 
 def main():
     """
     Main function to parse arguments and run the comparison plot generation.
     """
-    generate_plot_comparison_for_config()
+    species_generate_comparison_plots()
 
 if __name__ == "__main__":
     main()
