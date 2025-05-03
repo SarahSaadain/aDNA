@@ -51,8 +51,64 @@ def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir:
     except Exception as e:
         print_error(f"Failed to create consensus sequence of {input_file}: {e}")
 
-def create_consensus_sequence_for_species(species: str):
+def create_consensus_sequence_for_species(species: str, ref_genome_id: str):
     print_info(f"Creating consensus sequence for species {species} ...")
+
+    aDNA_reads_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
+
+    #get mapped reads
+    list_of_mapped_aDNA_files = get_files_in_folder_matching_pattern(aDNA_reads_folder, f"*{FILE_ENDING_SORTED_BAM}")
+
+    if len(list_of_mapped_aDNA_files) == 0:
+        print_warning(f"No mapped reads found for species {species}. Skipping.")
+        return
+    
+    print_debug(f"Found {len(list_of_mapped_aDNA_files)} mapped reads for species {species}.")
+    print_debug(f"Mapped reads: {list_of_mapped_aDNA_files}")
+
+    output_folder_consensus_seq = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species, ref_genome_id)
+
+    for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files:
+
+        print_info(f"Creating consensus sequence for {mapped_aDNA_read_file_path} ...")
+
+        execute_angsd_create_and_map_consensus_sequence(mapped_aDNA_read_file_path, output_folder_consensus_seq)
+
+    print_info(f"Creating consensus sequence for species {species} complete")
+
+
+def map_consensus_sequence_for_species(species: str, ref_genome_tuple: tuple):
+    print_info(f"Mapping aDNA consensus sequence to reference genome for species {species} ...")
+
+     # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
+    ref_genome_id = ref_genome_tuple[0]
+    ref_genome_path = ref_genome_tuple[1]
+
+    #get reads
+    read_folder = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species, ref_genome_id)
+    list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FASTQ_GZ}")
+
+    if len(list_of_read_files) == 0:
+        print_warning(f"No reads found for species {species}. Skipping.")
+        return
+    
+    print_debug(f"Found {len(list_of_read_files)} reads for species {species}.")
+    print_debug(f"Reads: {list_of_read_files}")
+    
+    output_folder = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences_mapped(species, ref_genome_id)
+
+    for read_file_path in list_of_read_files:
+
+        print_info(f"Mapping {read_file_path} to reference genome {ref_genome_path} ...")
+
+        read_name = os.path.splitext(os.path.basename(read_file_path))[0]
+        output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_id}{FILE_ENDING_SAM}")
+
+        execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
+
+    print_info(f"Mapping aDNA consensus sequence to reference genome for species {species} complete")
+
+def create_and_map_consensus_sequence_for_species(species):
 
     try:
         ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
@@ -65,83 +121,9 @@ def create_consensus_sequence_for_species(species: str):
         # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
         ref_genome_id = ref_genome_tuple[0]
         #ref_genome_path = ref_genome_tuple[1]
-
-        aDNA_reads_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
-
-        #get mapped reads
-        list_of_mapped_aDNA_files = get_files_in_folder_matching_pattern(aDNA_reads_folder, f"*{FILE_ENDING_SORTED_BAM}")
-
-        if len(list_of_mapped_aDNA_files) == 0:
-            print_warning(f"No mapped reads found for species {species}. Skipping.")
-            return
-        
-        print_debug(f"Found {len(list_of_mapped_aDNA_files)} mapped reads for species {species}.")
-        print_debug(f"Mapped reads: {list_of_mapped_aDNA_files}")
-
-        output_folder_consensus_seq = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species, ref_genome_id)
-
-        for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files:
-
-            print_info(f"Creating consensus sequence for {mapped_aDNA_read_file_path} ...")
-
-            execute_angsd_create_and_map_consensus_sequence(mapped_aDNA_read_file_path, output_folder_consensus_seq)
-
-        print_info(f"Creating consensus sequence for species {species} complete")
-
-
-def map_consensus_sequence_for_species(species: str):   
-    print_info(f"Mapping aDNA consensus sequence to reference genome for species {species} ...")
-
-    #get reads
-    read_folder = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species)
-    list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FASTQ_GZ}")
-
-    if len(list_of_read_files) == 0:
-        print_warning(f"No reads found for species {species}. Skipping.")
-        return
     
-    print_debug(f"Found {len(list_of_read_files)} reads for species {species}.")
-    print_debug(f"Reads: {list_of_read_files}")
-    
-    output_folder = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences_mapped(species)
-
-      # get ref genome
-    ref_genome_folder = get_folder_path_species_raw_ref_genome(species)
-    # add fna files to reference genome list
-    ref_genome_files = get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FNA}")
-    # add fasta files to reference genome list
-    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FASTA}")
-    # add fa files to reference genome list
-    ref_genome_files += get_files_in_folder_matching_pattern(ref_genome_folder, f"*{FILE_ENDING_FA}")
-
-    if len(ref_genome_files) == 0:
-        print_warning(f"No reference genome found for species {species}. Skipping.")
-        return
-    
-    print_debug(f"Found {len(ref_genome_files)} reference genome files for species {species}.")
-    print_debug(f"Reference genome files: {ref_genome_files}")
-
-    output_folder = get_folder_path_species_processed_refgenome_mtdna_mapped(species)
-
-    for ref_genome_path in ref_genome_files:
-
-        ref_genome_filename = os.path.splitext(os.path.basename(ref_genome_path))[0]
-
-        for read_file_path in list_of_read_files:
-
-            print_info(f"Mapping {read_file_path} to reference genome {ref_genome_path} ...")
-
-            read_name = os.path.splitext(os.path.basename(read_file_path))[0]
-            output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}{FILE_ENDING_SAM}")
-
-            execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
-
-    print_info(f"Mapping aDNA consensus sequence to reference genome for species {species} complete")
-
-def create_and_map_consensus_sequence_for_species(species):
-    
-    create_consensus_sequence_for_species(species)
-    map_consensus_sequence_for_species(species)        
+        create_consensus_sequence_for_species(species, ref_genome_id)
+        map_consensus_sequence_for_species(species, ref_genome_tuple)        
 
     print_info(f"Consensus sequence of {species} created and mapped successfully.")
 
