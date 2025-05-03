@@ -6,7 +6,7 @@ library(tools)
 plot_coverage_breadth_violoin <- function(df_breadth, species) {
   df_breadth$species <- species
   
-  plot_breadth <- ggplot(all_data, aes(x = factor(species), y = percent_covered)) +
+  plot_breadth <- ggplot(df_breadth, aes(x = factor(species), y = percent_covered)) +
     geom_violin(scale = "width") +
     theme_bw() +
     ylab("Percent Covered") +
