@@ -10,7 +10,7 @@ process_and_plot_before_after <- function(root_folder, species_list, output_fold
     if (species == "Bger") {
       filepath <- file.path(root_folder, species, "results", "qualitycontrol", "processed_reads", paste0(species, "_reads_processing_result.tsv"))
       if (file.exists(filepath)) {
-        df <- read.table(filepath, header = TRUE)
+        df <- read.table(filepath, sep =",", header = TRUE)
         Bger1_before_after <- df %>% filter(individual == "C1")
         Bger2_before_after <- df %>% filter(individual == "C2")
         Bger3_before_after <- df %>% filter(individual == "C3")

@@ -6,7 +6,7 @@ import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_
 def plot_depth_analysis(species: str, reference_genome_id: str):
     print_info(f"Plotting depth analysis for species {species} and reference genome {reference_genome_id}")
 
-    analysis_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
+    analysis_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
 
     print_debug(f"Analysis folder: {analysis_folder}")
     print_debug(f"looking for files with pattern *{FILE_ENDING_ANALYSIS_TSV}")
@@ -39,7 +39,7 @@ def plot_depth_analysis(species: str, reference_genome_id: str):
 def plot_breadth_analysis(species: str, reference_genome_id: str):
     print_info(f"Plotting breadth analysis for species {species}")
 
-    analysis_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
+    analysis_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
 
     print_debug(f"Analysis folder: {analysis_folder}")
     print_debug(f"looking for files with pattern *{FILE_ENDING_ANALYSIS_TSV}")

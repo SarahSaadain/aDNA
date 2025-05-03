@@ -14,7 +14,7 @@ def plot_comparison_reads_processing_results(species: list, reference_genomes: d
 
         analysis_folder_path = get_folder_path_species_results_refgenome_coverage(species_name, reference_genomes[species_name])
 
-        combined_file_path = os.path.join(analysis_folder_path, f"{species}_combined_coverage_analysis{FILE_ENDING_CSV}") # Using CSV for combined output
+        combined_file_path = os.path.join(analysis_folder_path, f"{species}_combined_coverage_{FILE_ENDING_ANALYSIS_TSV}") # Using CSV for combined output
 
         if not os.path.exists(combined_file_path):
             print_info(f"Combined coverage analysis file not found for {species_name}. Skipping.")

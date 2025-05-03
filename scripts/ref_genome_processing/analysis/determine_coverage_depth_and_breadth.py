@@ -203,7 +203,7 @@ def combine_analysis_files(species: str, reference_genome_id: str):
     individual_files_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
     analysis_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
     
-    combined_file_path = os.path.join(analysis_folder, f"{species}_combined_coverage_analysis{FILE_ENDING_CSV}") # Using CSV for combined output
+    combined_file_path = os.path.join(analysis_folder, f"{species}_combined_coverage_{FILE_ENDING_ANALYSIS_CSV}") # Using CSV for combined output
 
     # Find all individual analysis files
     individual_analysis_files = get_files_in_folder_matching_pattern(individual_files_folder, f"*{FILE_ENDING_ANALYSIS_TSV}")

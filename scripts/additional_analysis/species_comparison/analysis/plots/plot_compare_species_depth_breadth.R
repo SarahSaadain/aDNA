@@ -10,7 +10,7 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
   for (i in 1:length(analysis_files)) {
     filepath <- analysis_files[i]
     if (file.exists(filepath)) {
-      df <- read.table(filepath, header = TRUE)
+      df <- read.table(filepath, sep =",", header = TRUE)
       df$species_id <- names(species_names)[i] #get the species ID
       df$species <- species_names[[i]]  # Get species long name from the provided list
       depth_breadth_data[[df$species_id[1]]] <- df # use species id to store
@@ -43,7 +43,7 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
   names(species_colors) <- levels(all_data$species) # Ensure names match factor levels
   
   # Plot breadth
-  plot_breadth <- ggplot(all_data, aes(x = factor(species), y = percent_covered, fill = species)) +
+  plot_breadth <- ggplot(all_data, aes(x = factor(species), y = OverallPercentCovered, fill = species)) +
     geom_violin(scale = "width") +
     theme_bw() +
     ylab("Percent Covered") +
@@ -65,7 +65,7 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
   ggsave(file.path(output_folder, paste0("plot_breadth_", comparison_name, ".png")), plot_breadth, width = 12, height = 8, dpi = 300)
   
   # Plot depth
-  plot_depth <- ggplot(all_data, aes(x = factor(species), y = avg_depth, fill = species)) +
+  plot_depth <- ggplot(all_data, aes(x = factor(species), y = OverallAvgDepth, fill = species)) +
     scale_y_continuous(
       trans = "log10",
       breaks = scales::trans_breaks("log10", function(x) 10^x),
