@@ -4,17 +4,23 @@ from common_aDNA_scripts import *
 import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
 
 def plot_depth_analysis(species: str, reference_genome_id: str):
-    print_info(f"Plotting depth analysis for species {species}")
+    print_info(f"Plotting depth analysis for species {species} and reference genome {reference_genome_id}")
 
     analysis_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
+
+    print_debug(f"Analysis folder: {analysis_folder}")
+    print_debug(f"looking for files with pattern *{FILE_ENDING_ANALYSIS_TSV}")
 
     # gives a list with the path and file names
     analysis_files = get_files_in_folder_matching_pattern(analysis_folder, f"*{FILE_ENDING_ANALYSIS_TSV}")
 
     # here have multiple files, one for each sample, hence the list
     if len(analysis_files) == 0:
-        print_warning(f"No depth analysis files found for species {species}. Skipping.")
+        print_warning(f"No depth analysis files found for species {species} and reference genome {reference_genome_id}. Skipping.")
         return
+    
+    print_debug(f"Found {len(analysis_files)} depth analysis files for species {species} and reference genome {reference_genome_id}.")
+    print_debug(f"Depth analysis files: {analysis_files}")
 
     r_script = get_r_script(R_SCRIPT_PLOT_DEPTH, FOLDER_REF_GENOME_PROCESSING)
 
@@ -24,26 +30,28 @@ def plot_depth_analysis(species: str, reference_genome_id: str):
 
         output_folder_path = get_folder_path_species_results_refgenome_plots_depth_sample(species, reference_genome_id, sample)
 
-        if os.path.exists(output_folder_path):
-            print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
-            continue
-
         print_info(f"Plotting depth analysis for file {analysis_file} to {output_folder_path}")
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
 
-    print_info(f"Finished plotting depth analysis for species {species}")
+    print_info(f"Finished plotting depth analysis for species {species} and reference genome {reference_genome_id}")
 
 def plot_breadth_analysis(species: str, reference_genome_id: str):
     print_info(f"Plotting breadth analysis for species {species}")
 
     analysis_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
 
+    print_debug(f"Analysis folder: {analysis_folder}")
+    print_debug(f"looking for files with pattern *{FILE_ENDING_ANALYSIS_TSV}")
+
     analysis_files = get_files_in_folder_matching_pattern(analysis_folder, f"*{FILE_ENDING_ANALYSIS_TSV}")
 
     if len(analysis_files) == 0:
         print_warning(f"No breadth analysis files found for species {species}. Skipping.")
         return
+    
+    print_debug(f"Found {len(analysis_files)} depth analysis files for species {species} and reference genome {reference_genome_id}.")
+    print_debug(f"Depth analysis files: {analysis_files}")
 
     r_script = get_r_script(R_SCRIPT_PLOT_BREADTH, FOLDER_REF_GENOME_PROCESSING)
 
@@ -61,18 +69,25 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
 
-    print_info(f"Finished plotting breadth analysis for species {species}")
+    print_info(f"Finished plotting breadth analysis for species {species} and reference genome {reference_genome_id}")
 
 def plot_endogenous_reads(species: str, reference_genome_id: str):
-    print_info(f"Plotting endogenous reads for species {species}")
+    print_info(f"Plotting endogenous reads for species {species} and reference genome {reference_genome_id}")
 
     endogenous_reads_analysis_folder = get_folder_path_species_results_refgenome_endogenous_reads(species, reference_genome_id)
 
     analysis_files = get_files_in_folder_matching_pattern(endogenous_reads_analysis_folder, f"*_endogenous_reads{FILE_ENDING_CSV}")
 
+    print_debug(f"Analysis folder: {endogenous_reads_analysis_folder}")
+    print_debug(f"looking for files with pattern *{FILE_ENDING_ANALYSIS_TSV}")
+
     if len(analysis_files) == 0:
-        print_warning(f"No endogenous reads files found for species {species}. Skipping.")
+        print_warning(f"No endogenous reads files found for species {species} and reference genome {reference_genome_id}.. Skipping.")
         return
+    
+    print_debug(f"Found {len(analysis_files)} depth analysis files for species {species} and reference genome {reference_genome_id}.")
+    print_debug(f"Depth analysis files: {analysis_files}")
+
 
     r_script = get_r_script(R_SCRIPT_PLOT_ENDOGENOUS_READS, FOLDER_REF_GENOME_PROCESSING)
 
@@ -88,7 +103,7 @@ def plot_endogenous_reads(species: str, reference_genome_id: str):
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
 
-    print_info(f"Finished plotting endogenous reads for species {species}")
+    print_info(f"Finished plotting endogenous reads for species {species} and reference genome {reference_genome_id}")
 
 def species_generate_plots(species: str):
     print_info(f"Generating reference genome plots for species {species}")
