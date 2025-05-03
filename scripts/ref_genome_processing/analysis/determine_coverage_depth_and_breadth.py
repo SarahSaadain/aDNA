@@ -74,7 +74,7 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
     )
     analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
 
-    print_info(f"Performing extended analysis for {coverage_file} with PID {pid}")
+    print_info(f"Performing extended analysis for {coverage_file_base_name} with PID {pid}")
 
     # Skip processing if output already exists
     if os.path.exists(analysis_file_path):
@@ -91,10 +91,10 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
         with open(coverage_file, 'r') as f:
             total_lines = sum(1 for _ in f)
     except Exception as e:
-        print_error(f"[PID {pid}] Error counting lines in {coverage_file}: {e}")
+        print_error(f"[PID {pid}] Error counting lines in {coverage_file_base_name}: {e}")
         return
 
-    print_debug(f"[PID {pid}] {coverage_file}: ~{total_lines:,} lines detected")
+    print_debug(f"[PID {pid}] {coverage_file_base_name}: ~{total_lines:,} lines detected")
 
     # Dictionary to hold aggregated stats per scaffold
     summary_data = collections.defaultdict(lambda: {
@@ -139,7 +139,7 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
                     milestones[milestone] = True
 
             # Regular progress printout (can be silenced if too verbose)
-            print_debug(f"[PID {pid}] {coverage_file}: {lines_processed:,}/{total_lines:,} lines ({percent_done:.1f}%) processed")
+            print_debug(f"[PID {pid}] Progress for {coverage_file_base_name}: {lines_processed:,}/{total_lines:,} lines ({percent_done:.1f}%) processed")
 
     except Exception as e:
         print_error(f"[PID {pid}] Failed during processing of {coverage_file}: {e}")
