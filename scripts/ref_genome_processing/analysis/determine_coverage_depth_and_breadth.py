@@ -165,15 +165,17 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
     """
     print_info(f"Performing extended analysis on depth files for species: {species}")
 
-    depth_breath_output_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
-    list_of_coverage_files = get_files_in_folder_matching_pattern(depth_breath_output_folder, f"*{FILE_ENDING_SAMTOOLS_DEPTH_TSV}")
+    samtools_depth_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
+    list_of_coverage_files = get_files_in_folder_matching_pattern(samtools_depth_folder, f"*{FILE_ENDING_SAMTOOLS_DEPTH_TSV}")
 
     if len(list_of_coverage_files) == 0:
-        print_warning(f"No samtools depth files found in {depth_breath_output_folder} for species {species}. Skipping extended analysis.")
+        print_warning(f"No samtools depth files found in {samtools_depth_folder} for species {species}. Skipping extended analysis.")
         return
 
     print_debug(f"Found {len(list_of_coverage_files)} coverage files for species {species}")
     print_debug(f"Coverage files: {list_of_coverage_files}")
+
+    target_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
 
     # Create a pool of worker processes to parallelize the execution.
     # Using cpu_count() to get the number of available CPU cores
@@ -184,7 +186,7 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
     with Pool(processes=num_processes) as pool:
         # Create a list of tuples, where each tuple contains the arguments
         # for the analyze_coverage_file function.
-        tasks = [(file, depth_breath_output_folder) for file in list_of_coverage_files]
+        tasks = [(file, target_folder) for file in list_of_coverage_files]
         # Use pool.starmap to apply the function to each set of arguments.
         # starmap unpacks the tuples and passes the elements as separate arguments.
         # analyze_coverage_file is the function to be executed in parallel.
