@@ -135,7 +135,7 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
             # Log specific progress milestones (only once each)
             for milestone in milestones:
                 if not milestones[milestone] and percent_done >= milestone:
-                    print_info(f"[PID {pid}] {coverage_file}: {milestone}% completed")
+                    print_info(f"[PID {pid}] Progress for {coverage_file_base_name}: {milestone}% completed")
                     milestones[milestone] = True
 
             # Regular progress printout (can be silenced if too verbose)
