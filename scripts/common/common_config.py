@@ -1,39 +1,56 @@
+import os
+from datetime import datetime
 import logging
-import common.config_manager as config_manager  # Assuming config_manager.py is in the same directory
-
-from common.common_logging import *
+import common.common_constants as common_constants
+import common.common_logging as common_logging
+import common.config_manager as config_manager 
 
 # Load the configuration file (only once)
 try:
-
-    print_execution("Loading configuration file ...")
+    common_logging.print_execution("Loading configuration file ...")
     # Path to your config file. we assume it is in the same directory where this script is located
     config_file_path = 'config.yaml'  
 
-    print_info(f"Loading config file: {config_file_path}")
+    common_logging.print_info(f"Loading config file: {config_file_path}")
 
     config = config_manager.load_config(config_file_path)  # Or however you specify the path
     
-    print_success("Config loaded successfully.")
+    common_logging.print_info("Config loaded successfully.")
     
-    print_info(f"Project path: {config['path_adna_project']}")
-    print_info(f"Species: {config['species'].keys()}")
-    print_info(f"Threads default: {config['threads_default']}")
+    common_logging.print_info(f"Project path: {config['path_adna_project']}")
+    common_logging.print_info(f"Species: {config['species'].keys()}")
+    common_logging.print_info(f"Threads default: {config['threads_default']}")
 
     # Set up logging based on the config
     # Assuming the config has a 'log_level' key
-    # and you want to set the logging level accordingly
-    log_level_str = config.get("log_level", "INFO").upper()
-    log_level = getattr(logging, log_level_str, logging.INFO)
+    # and you want to set the logging level accordingly#
+    # --- Update Log Level (if in config) ---
+    if 'log_level' in config:
+        log_level_str = config.get("log_level", "INFO").upper()
+        log_level = getattr(logging, log_level_str, common_logging.print_info)
 
-    # update the logging level
-    logging.getLogger().setLevel(log_level)
-    print_info(f"Log level set to {log_level_str}")
+        # update the logging level
+        logging.getLogger().setLevel(log_level)
+        common_logging.print_info(f"Log level set to {log_level_str}")
 
-    print_debug(f"Loaded Config: {config}") 
+    # --- Add File Handler ---
+    log_dir = os.path.join(config['path_adna_project'], common_constants.FOLDER_LOGS)
+    os.makedirs(log_dir, exist_ok=True)
+
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    log_filename = os.path.join(log_dir, f'{timestamp}_pipeline.log')
+
+    common_logging.print_info(f"Log file: {log_filename}")
+
+    file_handler = logging.FileHandler(log_filename)
+    file_handler.setFormatter(logging.Formatter(common_logging.LOG_FORMAT, datefmt=common_logging.LOG_DATE_FORMAT))
+    
+    logging.getLogger().addHandler(file_handler)
+
+    common_logging.print_debug(f"Loaded Config: {config}") 
 
 except FileNotFoundError:
-    print_error("Config file not found.  Exiting.")
+    common_logging.print_error("Config file not found.  Exiting.")
     exit(1) #Or handle more gracefully
 
 
