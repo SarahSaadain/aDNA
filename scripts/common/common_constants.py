@@ -12,7 +12,6 @@ FOLDER_REF_GENOME_PROCESSING = "ref_genome_processing"
 FOLDER_ADDITIONAL_ANALYSIS = "additional_analysis"
 FOLDER_MTDNA_ANALYSIS = "mtdna_analysis"
 FOLDER_SPECIES_COMPARISON = "species_comparison"
-FOLDER_QUALITY_CHECKING = "quality_checking"
 FOLDER_PLOTS = "plots"
 
 # processed folders

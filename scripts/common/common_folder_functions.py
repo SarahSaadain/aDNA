@@ -21,6 +21,11 @@ def get_folder_path_results() -> str:
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_logs() -> str:
+    path = os.path.join(get_folder_aDNA(), FOLDER_LOGS)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_results_plots() -> str:
     path = os.path.join(get_folder_path_results(), FOLDER_PLOTS)
     check_folder_exists_or_create(path)
