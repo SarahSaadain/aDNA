@@ -18,12 +18,25 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
     
     # Check if the file exists
     if (file.exists(file_path)) {
-      # Read the CSV file
-      df <- read.csv(file_path, header = FALSE)
+      # Read the CSV file, now with header=TRUE
+      df <- read.csv(file_path, header = TRUE)
       
-      # Assign column names
+      # Assign column names to the expected names
       col_names <- c("sample", "endogenous", "total", "percent_endogenous")
-      colnames(df) <- col_names
+
+      # Check if the file contains the expected columns.  If not, error.
+      if (!all(c("Filename", "MappedReads", "TotalReads", "Proportion") %in% colnames(df))){
+        stop(paste("File", file_path, "does not contain the expected columns: Filename, MappedReads, TotalReads, Proportion. Please check the input data."))
+      }
+      
+      # Rename the columns to standard names
+      df <- df %>%
+        rename(
+          sample = Filename,
+          endogenous = MappedReads,
+          total = TotalReads,
+          percent_endogenous = Proportion
+        )
       
       df$species_id <- names(species_names)[i]  # Get species ID
       df$species <- species_names[[i]] #get species long name
@@ -144,7 +157,7 @@ for (comparison_name in names(config$compare_species)) {
     next
   }
 
-    # Information about the species analyzed to console
+  # Information about the species analyzed to console
   cat("Species analyzed for comparison:", comparison_name, "\n")
   cat("Species IDs:", names(species_names), "\n")
   cat("Species long names:", species_names, "\n")
