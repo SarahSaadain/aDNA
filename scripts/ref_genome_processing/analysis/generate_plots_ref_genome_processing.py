@@ -6,13 +6,13 @@ import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_
 def plot_depth_analysis(species: str, reference_genome_id: str):
     print_info(f"Plotting depth analysis for species {species} and reference genome {reference_genome_id}")
 
-    analysis_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
+    analysis_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
 
     print_debug(f"Analysis folder: {analysis_folder}")
-    print_debug(f"looking for files with pattern *{FILE_ENDING_ANALYSIS_TSV}")
+    print_debug(f"looking for files with pattern *{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV}")
 
     # gives a list with the path and file names
-    analysis_files = get_files_in_folder_matching_pattern(analysis_folder, f"*{FILE_ENDING_ANALYSIS_TSV}")
+    analysis_files = get_files_in_folder_matching_pattern(analysis_folder, f"*{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV}")
 
     # here have multiple files, one for each sample, hence the list
     if len(analysis_files) == 0:
@@ -26,7 +26,7 @@ def plot_depth_analysis(species: str, reference_genome_id: str):
 
     for analysis_file in analysis_files:
 
-        sample = get_filename_from_path(analysis_file).replace(FILE_ENDING_ANALYSIS_TSV, "")
+        sample = get_filename_from_path(analysis_file).replace(FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV, "")
 
         output_folder_path = get_folder_path_species_results_refgenome_plots_depth_sample(species, reference_genome_id, sample)
 
@@ -42,9 +42,9 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
     analysis_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
 
     print_debug(f"Analysis folder: {analysis_folder}")
-    print_debug(f"looking for files with pattern *{FILE_ENDING_ANALYSIS_TSV}")
+    print_debug(f"looking for files with pattern *{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV}")
 
-    analysis_files = get_files_in_folder_matching_pattern(analysis_folder, f"*{FILE_ENDING_ANALYSIS_TSV}")
+    analysis_files = get_files_in_folder_matching_pattern(analysis_folder, f"*{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV}")
 
     if len(analysis_files) == 0:
         print_warning(f"No breadth analysis files found for species {species}. Skipping.")
@@ -57,7 +57,7 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
 
     for analysis_file in analysis_files:
 
-        sample = get_filename_from_path(analysis_file).replace(FILE_ENDING_ANALYSIS_TSV, "")
+        sample = get_filename_from_path(analysis_file).replace(FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV, "")
 
         output_folder_path = get_folder_path_species_results_refgenome_plots_breadth_sample(species, reference_genome_id, sample)
 
@@ -76,7 +76,7 @@ def plot_endogenous_reads(species: str, reference_genome_id: str):
 
     endogenous_reads_analysis_folder = get_folder_path_species_results_refgenome_endogenous_reads(species, reference_genome_id)
 
-    analysis_files = get_files_in_folder_matching_pattern(endogenous_reads_analysis_folder, f"*_endogenous_reads{FILE_ENDING_CSV}")
+    analysis_files = get_files_in_folder_matching_pattern(endogenous_reads_analysis_folder, f"*{FILE_ENDING_ENDOGENOUS_READS_CSV}")
 
     print_debug(f"Analysis folder: {endogenous_reads_analysis_folder}")
     print_debug(f"looking for files with pattern *{FILE_ENDING_ANALYSIS_TSV}")

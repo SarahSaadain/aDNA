@@ -79,10 +79,10 @@ def combine_endogenous_reads_files(species: str, ref_genome_id: str):
     processed_folder = get_folder_path_species_processed_refgenome_endogenous_reads(species, ref_genome_id)
     result_folder = get_folder_path_species_results_refgenome_endogenous_reads(species, ref_genome_id)
     
-    combined_file_path = os.path.join(result_folder, f"{species}_combined_endogenous_reads{FILE_ENDING_CSV}")
+    combined_file_path = os.path.join(result_folder, f"{species}{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV}")
 
     # Check if there are any individual files to combine
-    individual_files = get_files_in_folder_matching_pattern(processed_folder, f"*_endogenous_reads{FILE_ENDING_CSV}")
+    individual_files = get_files_in_folder_matching_pattern(processed_folder, f"*{FILE_ENDING_ENDOGENOUS_READS_CSV}")
 
     if not individual_files:
         print_warning(f"No individual endogenous read files found to combine for species {species}.")
