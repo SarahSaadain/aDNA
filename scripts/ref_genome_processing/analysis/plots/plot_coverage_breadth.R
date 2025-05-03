@@ -33,48 +33,57 @@ plot_coverage_breadth <- function(species, filepath, target_folder) {
     filepath, 
     sep =",", 
     header = TRUE) # Changed to TRUE to read the header
+
+  # Check if the target folder exists; if not, create it
+  if (!dir.exists(target_folder)) {
+    dir.create(target_folder, recursive = TRUE)
+    print(paste("Created directory:", target_folder))
+  }
+
+   # Extract the filename without extension
+  filename <- file_path_sans_ext(basename(filepath))
+
+  plot_coverage_breadth_violoin_var <- plot_coverage_breadth_violoin(df, species)
+  save_plot(plot_coverage_breadth_violoin_var, target_folder, paste0(filename, "_breadth_violoin.png"))
   
+  plot_coverage_breadth_bins_var <- plot_coverage_breadth_bins(df)
+  save_plot(plot_coverage_breadth_bins_var, target_folder, paste0(filename, "_breadth_bins.png"))
+  
+}
+
+save_plot <- function(plot, target_folder, file_name){
+  print(paste("Plotting", file_name, "to target folder:", target_folder))
+  ggsave(file.path(target_folder, file_name), plot = plot, width = 10, height = 6)
+}
+
+plot_coverage_breadth_bins <- function(df_breadth) {
   # Bin the scaffolds based on their length (total_bases)
   bins <- c(0, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000, 20000000, Inf)  # Updated bins for scaffold length
   bin_labels <- c('0-100k', '100k-250k', '250k-500k', '500k-1M', '1M-2.5M', '2.5M-5M', '5M-10M', '10M-20M', '20M+')
-  
+
   # Create a new column for the length bin
-  df$length_bin <- cut(df$total_bases, breaks = bins, labels = bin_labels, right = FALSE)
-  
+  df_breadth$length_bin <- cut(df$total_bases, breaks = bins, labels = bin_labels, right = FALSE)
+
   # Calculate the average percent_covered, count of scaffolds, and standard deviation for each bin
-  avg_coverage_by_bin <- df %>%
+  avg_coverage_by_bin <- df_breadth %>%
     group_by(length_bin) %>%
     summarise(
       avg_coverage = mean(percent_covered, na.rm = TRUE),
       scaffold_count = n(),
       std_dev = sd(percent_covered, na.rm = TRUE)
     )
-  
-  # Extract the filename without extension
-  filename <- file_path_sans_ext(basename(filepath))
-  
-  # Check if the target folder exists; if not, create it
-  if (!dir.exists(target_folder)) {
-    dir.create(target_folder, recursive = TRUE)
-    print(paste("Created directory:", target_folder))
-  }
-  
+
   # Create the plot with error bars for standard deviation
   plot <- ggplot(avg_coverage_by_bin, aes(x = length_bin, y = avg_coverage, group = 1)) +
     geom_bar(stat = "identity", fill = "skyblue", color = "black") +
     geom_errorbar(aes(ymin = avg_coverage - std_dev, ymax = avg_coverage + std_dev), 
                   width = 0.2, color = "black") +  # Error bars for standard deviation
     labs(x = "Scaffold Length Bin", y = "Average Percent Covered", 
-         title = paste("Average Coverage by Scaffold Length Bin:", filename)) +
+          title = paste("Average Coverage by Scaffold Length Bin:", filename)) +
     theme_bw() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
-  
-  # Save the plot as a PNG file in the target folder
-  output_filepath <- file.path(target_folder, paste0(filename, ".png"))
-  ggsave(output_filepath, plot = plot, width = 10, height = 6)
-  
-  # Print message with the output path
-  print(paste("Plot saved as:", output_filepath))
+
+  return(plot)
 }
 
 # Command-line arguments
