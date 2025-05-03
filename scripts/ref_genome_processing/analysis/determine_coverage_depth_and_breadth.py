@@ -1,5 +1,6 @@
 import os
 import subprocess
+import collections
 import pandas as pd
 
 from multiprocessing import Pool, cpu_count
@@ -30,51 +31,133 @@ def execute_samtools_detpth(input_file: str, coverage_output_file: str):
 
 def analyze_coverage_file(coverage_file, depth_breath_output_folder):
     """
-    Performs extended analysis on a single coverage file.  This is a helper
-    function to be used with multiprocessing.
+    Processes a SAMtools depth TSV file and generates per-scaffold coverage metrics,
+    using memory-efficient chunked reading. Progress is printed at key milestones.
     """
 
-    pid = os.getpid()
+    # The `analyze_coverage_file()` function was originally processing the entire coverage file 
+    # in-memory at once. However, this approach posed significant memory limitations when working 
+    # with large coverage files (common in bioinformatics tasks). Processing large files as a whole 
+    # would result in high memory usage and may cause the program to crash, particularly when 
+    # dealing with files that contain millions of lines (such as BAM depth files).
 
+    # ### Key Reasons for Switching to Chunked Processing:
+    # 1. **Memory Efficiency:**
+    #    - By processing the file in **chunks** rather than reading it all at once, we keep memory usage low. 
+    #      This allows the program to handle much larger files, even if the system’s memory is limited.
+    #    - The chunk size (set as `10^6` lines) can be adjusted based on system memory availability, offering flexibility.
+
+    # 2. **Avoiding Memory Overload:**
+    #    - If the entire file were read into memory at once (especially for large files), it could exhaust 
+    #      available system RAM, leading to slowdowns or crashes. By processing chunks sequentially, only a 
+    #      small portion of the file is in memory at any given time, reducing memory load.
+
+    # 3. **Improved Performance on Large Datasets:**
+    #    - Chunked processing allows us to process large datasets in manageable pieces. It helps avoid issues 
+    #      with memory leaks or excessive garbage collection time (as only small portions of the file are processed at once).
+    #    - It ensures that the program continues to run even for files that might otherwise exceed available memory.
+
+    # 4. **Progress Tracking and Monitoring:**
+    #    - When processing in chunks, progress can be tracked at meaningful intervals. 
+    #      In this case, the program reports progress every time a chunk is processed, providing 
+    #      real-time feedback on how much of the file has been completed.
+    #    - This is particularly helpful in bioinformatics tasks, where large files may take a significant 
+    #      amount of time to process.
+
+    pid = os.getpid()  # Get current process ID for logging
+
+    # Generate output file path based on input file name
     coverage_file_base_name = get_filename_from_path(coverage_file)
-    analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV)
+    analysis_file = coverage_file_base_name.replace(
+        FILE_ENDING_SAMTOOLS_DEPTH_TSV,
+        FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV
+    )
     analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
 
     print_info(f"Performing extended analysis for {coverage_file} with PID {pid}")
 
+    # Skip processing if output already exists
     if os.path.exists(analysis_file_path):
-        print_info(f"Analysis file {analysis_file_path} already exists! Skipping extended analysis for {coverage_file}.")
-        return  # Important: Exit the function, not the whole script
+        print_info(f"Analysis file {analysis_file_path} already exists! Skipping.")
+        return
 
+    # Check that the input file exists
     if not os.path.exists(coverage_file):
-        print_error(f"Coverage file {coverage_file} does not exist! Skipping analysis.")
+        print_error(f"Coverage file {coverage_file} does not exist! Skipping.")
         return
 
-    #read tsv into dataframe
-    print_debug(f"Reading coverage file {coverage_file} into DataFrame ...")
-    df = pd.read_csv(coverage_file, sep="\t", header=None, names=["scaffold", "position", "depth"])
-
-    if df.empty:
-        print_warning(f"Coverage file {coverage_file} is empty or malformed. Skipping analysis.")
+    # Count total lines in the file to estimate processing progress
+    try:
+        with open(coverage_file, 'r') as f:
+            total_lines = sum(1 for _ in f)
+    except Exception as e:
+        print_error(f"Error counting lines in {coverage_file}: {e}")
         return
-    
-     # Append the overall metrics for this BAM file to the combined data list
 
-    # Group by scaffold and calculate metrics
-    print_debug(f"Grouping by scaffold and calculating metrics ...")
-    summary = df.groupby("scaffold").agg(
-        avg_depth=("depth", "mean"),
-        max_depth=("depth", "max"),
-        covered_bases=("depth", lambda x: (x > 0).sum()),
-        total_bases=("depth", "count")
-    )
+    print_debug(f"{coverage_file}: ~{total_lines:,} lines detected")
 
-    # Compute coverage percentage
-    print_debug(f"Calculating coverage percentage ...")
+    # Dictionary to hold aggregated stats per scaffold
+    summary_data = collections.defaultdict(lambda: {
+        "depth_sum": 0,         # Sum of all depth values (used to calculate avg_depth)
+        "max_depth": 0,         # Maximum depth seen
+        "covered_bases": 0,     # Number of positions with depth > 0
+        "total_bases": 0        # Total number of positions (regardless of depth)
+    })
+
+    lines_processed = 0                 # Running total of how many lines have been read
+    chunk_size = 10**6                  # Number of rows per chunk (adjustable for tuning)
+
+    # Dictionary to track progress milestones. Once a milestone is reached, it is marked as True
+    # This prevents multiple printouts for the same milestone
+    milestones = {25: False, 50: False, 75: False}
+
+    try:
+        # Process the file in chunks using pandas for memory efficiency
+        for chunk in pd.read_csv(coverage_file, sep="\t", header=None,
+                                 names=["scaffold", "position", "depth"],
+                                 chunksize=chunk_size):
+
+            # Group each chunk by scaffold and update cumulative statistics
+            grouped = chunk.groupby("scaffold")
+            for scaffold, group in grouped:
+                summary_data[scaffold]["depth_sum"] += group["depth"].sum()
+                summary_data[scaffold]["max_depth"] = max(
+                    summary_data[scaffold]["max_depth"],
+                    group["depth"].max()
+                )
+                summary_data[scaffold]["covered_bases"] += (group["depth"] > 0).sum()
+                summary_data[scaffold]["total_bases"] += len(group)
+
+            # Update line count and calculate percent progress
+            lines_processed += len(chunk)
+            percent_done = (lines_processed / total_lines) * 100
+
+            # Log specific progress milestones (only once each)
+            for milestone in milestones:
+                if not milestones[milestone] and percent_done >= milestone:
+                    print_info(f"[PID {pid}] {coverage_file}: {milestone}% completed")
+                    milestones[milestone] = True
+
+            # Regular progress printout (can be silenced if too verbose)
+            print_debug(f"[PID {pid}] {coverage_file}: {lines_processed:,}/{total_lines:,} lines ({percent_done:.1f}%) processed")
+
+    except Exception as e:
+        print_error(f"Failed during processing of {coverage_file}: {e}")
+        return
+
+    # Convert cumulative summary data into a pandas DataFrame
+    summary = pd.DataFrame.from_dict(summary_data, orient="index")
+    summary.index.name = "scaffold"  # Label index for clarity
+
+    # Calculate final metrics
+    summary["avg_depth"] = summary["depth_sum"] / summary["total_bases"]
     summary["percent_covered"] = (summary["covered_bases"] / summary["total_bases"]) * 100
 
-    # Save to file
-    print_debug(f"Saving summary to file {analysis_file_path} ...")
+    # Reorder and filter columns to match expected output format
+    summary = summary[["avg_depth", "max_depth", "covered_bases", "total_bases", "percent_covered"]]
+
+    # Save result to CSV
+    print_debug(f"Saving summary to {analysis_file_path} ...")
     summary.to_csv(analysis_file_path)
 
     print_info(f"Extended analysis complete for {coverage_file}")
