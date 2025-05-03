@@ -127,7 +127,7 @@ for (comparison_name in names(config$compare_species)) {
   # Construct full paths to analysis files and extract species names.
   analysis_files <- sapply(names(comparison_data), function(species_name) {
     species_folder <- config$species[[species_name]]$folder_name
-    ref_genome_name <- str_replace(basename(comparison_data[[species_name]]$reference_genome), "\\..*$", "")
+    ref_genome_name <- tools::file_path_sans_ext(basename(comparison_data[[species_name]]$reference_genome))
     file.path(root_folder, species_folder, "results", ref_genome_name, "endogenous_reads", paste0(species_name, "_combined_endogenous_reads.csv"))
   })
   

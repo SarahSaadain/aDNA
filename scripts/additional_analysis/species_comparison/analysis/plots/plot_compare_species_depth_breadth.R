@@ -132,7 +132,7 @@ for (comparison_name in names(config$compare_species)) {
   # Construct full paths to analysis files and extract species names and long names.
   analysis_files <- sapply(names(comparison_data), function(species_id) {
     species_folder <- config$species[[species_id]]$folder_name
-    ref_genome_name <- str_replace(basename(comparison_data[[species_id]]$reference_genome), "\\..*$", "")
+    ref_genome_name <- tools::file_path_sans_ext(basename(comparison_data[[species_name]]$reference_genome))
     file.path(root_folder, species_folder, "results", ref_genome_name, "coverage_depth_breadth", paste0(species_id, "_combined_coverage_analysis.csv"))
   })
 
