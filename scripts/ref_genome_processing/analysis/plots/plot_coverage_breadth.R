@@ -79,7 +79,7 @@ plot_coverage_breadth_bins <- function(df_breadth) {
     geom_errorbar(aes(ymin = avg_coverage - std_dev, ymax = avg_coverage + std_dev), 
                   width = 0.2, color = "black") +  # Error bars for standard deviation
     labs(x = "Scaffold Length Bin", y = "Average Percent Covered", 
-          title = paste("Average Coverage by Scaffold Length Bin:", filename)) +
+          title = paste("Average Coverage by Scaffold Length Bin")) +
     theme_bw() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
 
