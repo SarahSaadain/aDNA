@@ -33,11 +33,14 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
     Performs extended analysis on a single coverage file.  This is a helper
     function to be used with multiprocessing.
     """
+
+    pid = os.getpid()
+
     coverage_file_base_name = get_filename_from_path(coverage_file)
     analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV)
     analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
 
-    print_info(f"Performing extended analysis for {coverage_file}")
+    print_info(f"Performing extended analysis for {coverage_file} with PID {pid}")
 
     if os.path.exists(analysis_file_path):
         print_info(f"Analysis file {analysis_file_path} already exists! Skipping extended analysis for {coverage_file}.")
@@ -152,7 +155,13 @@ def process_bam_file(mapped_bam_file, depth_breath_output_folder):
     """
     Executes samtools depth on a single BAM file.  This helper function is for use with multiprocessing.
     """
+
+    pid = os.getpid()
+
     mapped_bam_file_base_name = get_filename_from_path(mapped_bam_file)
+
+    print_info(f"Processing BAM file {mapped_bam_file} with PID {pid}")
+
     coverage_file_name = mapped_bam_file_base_name.replace(FILE_ENDING_SORTED_BAM, FILE_ENDING_SAMTOOLS_DEPTH_TSV)
     coverage_output_file = os.path.join(depth_breath_output_folder, coverage_file_name)
     execute_samtools_detpth(mapped_bam_file, coverage_output_file)
