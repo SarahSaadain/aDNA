@@ -151,7 +151,7 @@ for (comparison_name in names(config$compare_species)) {
 
     # Information about the species analyzed to console
   cat("Species analyzed for comparison:", comparison_name, "\n")
-  cat("Species IDs:", names(comparison_data), "\n")
+  cat("Species IDs:", names(species_names), "\n")
   cat("Species long names:", species_names, "\n")
   cat("Analysis files:", analysis_files, "\n")
   cat("Reference genomes:", sapply(names(comparison_data), function(species_id) {
