@@ -78,12 +78,12 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
 
     # Skip processing if output already exists
     if os.path.exists(analysis_file_path):
-        print_info(f"Analysis file {analysis_file_path} already exists! Skipping.")
+        print_info(f"[PID {pid}] Analysis file {analysis_file_path} already exists! Skipping.")
         return
 
     # Check that the input file exists
     if not os.path.exists(coverage_file):
-        print_error(f"Coverage file {coverage_file} does not exist! Skipping.")
+        print_error(f"[PID {pid}] Coverage file {coverage_file} does not exist! Skipping.")
         return
 
     # Count total lines in the file to estimate processing progress
@@ -91,10 +91,10 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
         with open(coverage_file, 'r') as f:
             total_lines = sum(1 for _ in f)
     except Exception as e:
-        print_error(f"Error counting lines in {coverage_file}: {e}")
+        print_error(f"[PID {pid}] Error counting lines in {coverage_file}: {e}")
         return
 
-    print_debug(f"{coverage_file}: ~{total_lines:,} lines detected")
+    print_debug(f"[PID {pid}] {coverage_file}: ~{total_lines:,} lines detected")
 
     # Dictionary to hold aggregated stats per scaffold
     summary_data = collections.defaultdict(lambda: {
@@ -142,7 +142,7 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
             print_debug(f"[PID {pid}] {coverage_file}: {lines_processed:,}/{total_lines:,} lines ({percent_done:.1f}%) processed")
 
     except Exception as e:
-        print_error(f"Failed during processing of {coverage_file}: {e}")
+        print_error(f"[PID {pid}] Failed during processing of {coverage_file}: {e}")
         return
 
     # Convert cumulative summary data into a pandas DataFrame
@@ -157,10 +157,10 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
     summary = summary[["avg_depth", "max_depth", "covered_bases", "total_bases", "percent_covered"]]
 
     # Save result to CSV
-    print_debug(f"Saving summary to {analysis_file_path} ...")
+    print_debug(f"[PID {pid}] Saving summary to {analysis_file_path} ...")
     summary.to_csv(analysis_file_path)
 
-    print_info(f"Extended analysis complete for {coverage_file}")
+    print_info(f"[PID {pid}] Extended analysis complete for {coverage_file}")
 
 
 def determine_coverage_depth_and_breath(species: str):
@@ -249,7 +249,7 @@ def process_bam_file(mapped_bam_file, depth_breath_output_folder):
     coverage_output_file = os.path.join(depth_breath_output_folder, coverage_file_name)
     execute_samtools_detpth(mapped_bam_file, coverage_output_file)
     
-    print_info(f"Finished samtools depth for {mapped_bam_file}") 
+    print_info(f"[PID {pid}] Finished samtools depth for {mapped_bam_file}") 
 
 def perform_extended_analysis_for_species(species: str, reference_genome_id: str):
     """
