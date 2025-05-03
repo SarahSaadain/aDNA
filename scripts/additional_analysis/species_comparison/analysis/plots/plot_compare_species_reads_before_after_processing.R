@@ -3,61 +3,33 @@ library(ggplot2)
 library(tidyr)
 library(scales)
 
-process_and_plot_before_after <- function(root_folder, species_list, output_folder) {
+process_and_plot_before_after <- function(analysis_files, output_folder, species_names, comparison_name) {
   before_after_data <- list()
   
-  for (species in species_list) {
-    if (species == "Bger") {
-      filepath <- file.path(root_folder, species, "results", "qualitycontrol", "processed_reads", paste0(species, "_reads_processing_result.tsv"))
-      if (file.exists(filepath)) {
-        df <- read.table(filepath, sep =",", header = TRUE)
-        Bger1_before_after <- df %>% filter(individual == "C1")
-        Bger2_before_after <- df %>% filter(individual == "C2")
-        Bger3_before_after <- df %>% filter(individual == "C3")
-        
-        Bger1_before_after$species <- "German cockroach Individual 1"
-        Bger2_before_after$species <- "German cockroach Individual 2"
-        Bger3_before_after$species <- "German cockroach Individual 3"
-        
-        before_after_data[["German cockroach Individual 1"]] <- Bger1_before_after
-        before_after_data[["German cockroach Individual 2"]] <- Bger2_before_after
-        before_after_data[["German cockroach Individual 3"]] <- Bger3_before_after
-      } else {
-        warning(paste("File not found:", filepath))
-      }
+  for (i in 1:length(analysis_files)) {
+    filepath <- analysis_files[i]
+    if (file.exists(filepath)) {
+      df <- read.table(filepath, sep ="\t", header = TRUE)
+      df$species_id <- names(species_names)[i] #get the species ID
+      df$species <- species_names[[i]]  # Get species long name from the provided list
+      before_after_data[[df$species_id[1]]] <- df # use species id to store
     } else {
-      filepath <- file.path(root_folder, species, "results", "qualitycontrol", "processed_reads", paste0(species, "_reads_processing_result.tsv"))
-      if (file.exists(filepath)) {
-        df <- read.table(filepath, header = TRUE)
-        if(species == "trial_Dmel"){
-          df$species <- "Drosophila melanogaster"
-        } else if (species == "trial_Dsim"){
-          df$species <- "trial Drosophila simulans"
-        } else if (species == "trial_Phortica"){
-          df$species <- "trial Phortica"
-        } else if (species == "trial_Mmus"){
-          df$species <- "trial House mouse"
-        } else if (species == "trial_Sepsis"){
-          df$species <- "trial Sepsis"
-        } else if (species == "trial_Bger"){
-          df$species <- "trial German cockroach"
-        }
-        
-        before_after_data[[df$species[1]]] <- df
-      } else {
-        warning(paste("File not found:", filepath))
-      }
-    }
-  }
-  
-  for (i in seq_along(before_after_data)){
-    before_after_data[[i]]$protocol <- as.character(before_after_data[[i]]$protocol)
-    if("individual" %in% colnames(before_after_data[[i]])){
-      before_after_data[[i]]$individual <- as.character(before_after_data[[i]]$individual)
+      warning(paste("File not found:", filepath))
     }
   }
   
   df_before_after <- bind_rows(before_after_data)
+
+  #check if the species column exists
+  if (!("species" %in% colnames(df_before_after))){
+    stop("Error: 'species' column not found in the dataframes.  Check the input files.")
+  }
+
+  # Create a factor for the 'species' column, defining the order of the levels.
+  if (!is.null(species_names)) {
+    desired_order = unname(species_names) # use the long names for ordering
+    df_before_after$species <- factor(df_before_after$species, levels = desired_order)
+  }
   
   df_species <- df_before_after %>%
     group_by(species) %>%
@@ -80,9 +52,12 @@ process_and_plot_before_after <- function(root_folder, species_list, output_fold
         read_type, levels = c("raw_count_absolute",
                               "adapter_removed_count_absolute",
                               "duplicates_removed_count_absolute")))
-  
-  desired_order <- c("German cockroach Individual 1", "German cockroach Individual 2", "German cockroach Individual 3", "trial German cockroach", "trial Drosophila simulans", "Drosophila melanogaster", "trial Phortica", "trial House mouse", "trial Sepsis")
-  df_long_species$species <- factor(df_long_species$species, levels = desired_order)
+
+  # Create a factor for the 'species' column, defining the order of the levels.
+  if (!is.null(species_names)) {
+    desired_order = unname(species_names) # use the long names for ordering
+    df_long_species$species <- factor(df_long_species$species, levels = desired_order)
+  }                            
   
   plot_before_after <- ggplot(df_long_species, aes(x = species, y = count, fill = read_type)) +
     geom_bar(stat = "identity", position = position_dodge(preserve = "single")) +
@@ -107,19 +82,20 @@ process_and_plot_before_after <- function(root_folder, species_list, output_fold
           panel.grid.minor = element_blank(),
           panel.background = element_rect(fill = "white", colour = "black"))
   
-  ggsave(file.path(output_folder, paste0("plot_before_after_", paste(species_list, collapse = "_"), ".png")), plot_before_after, width = 12, height = 8, dpi = 300)
+  ggsave(file.path(output_folder, paste0("plot_before_after_", paste(comparison_name, collapse = "_"), ".png")), plot_before_after, width = 12, height = 8, dpi = 300)
 }
+
 
 
 # Command line argument handling
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) < 3) {
-  stop("Usage: Rscript script_name.R <root_folder> <species_list (comma-separated)> <output_folder>")
+  stop("Usage: Rscript script_name.R <output_folder> <config_file> <root_folder>")
 }
 
 root_folder <- args[1]
-species_list <- unlist(strsplit(args[2], ","))
+config_file <- args[2] #  argument for the config file
 output_folder <- args[3]
 
 # Create the output directory if it doesn't exist
@@ -127,4 +103,51 @@ if (!dir.exists(output_folder)) {
   dir.create(output_folder, recursive = TRUE)
 }
 
-process_and_plot_before_after(root_folder, species_list, output_folder)
+# Check if the root folder exists
+if (!dir.exists(root_folder)) {
+  stop(paste("Root folder does not exist:", root_folder))
+}
+
+# Check if the config file exists
+if (!file.exists(config_file)) {
+  stop(paste("Config file does not exist:", config_file))
+}
+
+# Read the config file
+config <- yaml.load_file(config_file) # Load the config file
+
+# Check if any relevant configuration is present
+if (is.null(config$compare_species) || length(config$compare_species) == 0) {
+  stop("No comparisons found in the config file.")
+}
+
+# Iterate through the comparisons in the config file.
+for (comparison_name in names(config$compare_species)) {
+  comparison_data <- config$compare_species[[comparison_name]]
+  
+  # Construct full paths to analysis files and extract species names and long names.
+  analysis_files <- sapply(names(comparison_data), function(species_id) {
+    species_folder <- config$species[[species_id]]$folder_name
+    file.path(root_folder, species_folder, "results", "qualitycontrol", paste0(species_id,"_reads_processing_result.tsv"))
+  })
+
+  species_names <- sapply(names(comparison_data), function(species_id) {
+    config$species[[species_id]]$name
+  })
+  names(species_names) <- names(comparison_data)
+  
+  # Check if analysis_files is empty
+  if (length(analysis_files) == 0) {
+    warning(paste("No analysis files found for comparison:", comparison_name))
+    next # Skip to the next comparison
+  }
+
+    # Information about the species analyzed to console
+  cat("Species analyzed for comparison:", comparison_name, "\n")
+  cat("Species IDs:", names(species_names), "\n")
+  cat("Species long names:", species_names, "\n")
+  cat("Analysis files:", analysis_files, "\n")
+
+  process_and_plot_before_after(analysis_files, output_folder, species_names, comparison_name)
+}
+
