@@ -79,7 +79,7 @@ def extract_mtdna_region_for_species(species: str):
         
         # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
         ref_genome_id = ref_genome_tuple[0]
-        ref_genome_path = ref_genome_tuple[1]
+        #ref_genome_path = ref_genome_tuple[1]
     
         consensus_sequences_folder = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species, ref_genome_id)
         fasta_files = get_files_in_folder_matching_pattern(consensus_sequences_folder, f"*{FILE_ENDING_FA_GZ}")
