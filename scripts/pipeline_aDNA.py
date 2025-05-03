@@ -152,7 +152,9 @@ def run_pipeline_post_processing():
 
 def run_pipeline():
 
-    print_execution("Starting pipeline ...")
+    pid = os.getpid()
+
+    print_execution(f"Starting pipeline (Main PID: {pid}) ...")
     
     ############################################################
     # Processing of reads
