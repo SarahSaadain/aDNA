@@ -93,8 +93,8 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
     except Exception as e:
         print_error(f"[PID {pid}] Error counting lines in {coverage_file_base_name}: {e}")
         return
-
-    print_debug(f"[PID {pid}] {coverage_file_base_name}: ~{total_lines:,} lines detected")
+    
+    print_info(f"[PID {pid}] Total lines in {coverage_file_base_name} to analyze: {total_lines:,}")
 
     # Dictionary to hold aggregated stats per scaffold
     summary_data = collections.defaultdict(lambda: {
