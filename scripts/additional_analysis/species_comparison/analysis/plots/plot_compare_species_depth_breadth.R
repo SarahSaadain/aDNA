@@ -136,6 +136,8 @@ for (comparison_name in names(config$compare_species)) {
     file.path(root_folder, species_folder, "results", ref_genome_name, "coverage_depth_breadth", paste0(species_id, "_combined_coverage_analysis.csv"))
   })
 
+
+
   species_names <- sapply(names(comparison_data), function(species_id) {
     config$species[[species_id]]$name
   })
@@ -146,6 +148,15 @@ for (comparison_name in names(config$compare_species)) {
     warning(paste("No analysis files found for comparison:", comparison_name))
     next # Skip to the next comparison
   }
+
+    # Information about the species analyzed to console
+  cat("Species analyzed for comparison:", comparison_name, "\n")
+  cat("Species IDs:", names(comparison_data), "\n")
+  cat("Species long names:", species_names, "\n")
+  cat("Analysis files:", analysis_files, "\n")
+  cat("Reference genomes:", sapply(names(comparison_data), function(species_id) {
+    comparison_data[[species_id]]$reference_genome
+  }), "\n")
   
   process_and_plot_depth_breadth(analysis_files, output_folder, species_names, comparison_name)
 }

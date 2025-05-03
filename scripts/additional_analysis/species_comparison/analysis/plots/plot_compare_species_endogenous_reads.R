@@ -130,7 +130,7 @@ for (comparison_name in names(config$compare_species)) {
     ref_genome_name <- tools::file_path_sans_ext(basename(comparison_data[[species_name]]$reference_genome))
     file.path(root_folder, species_folder, "results", ref_genome_name, "endogenous_reads", paste0(species_name, "_combined_endogenous_reads.csv"))
   })
-  
+
   # Extract species names
   species_names <- sapply(names(comparison_data), function(species_id) {
     config$species[[species_id]]$name
@@ -142,6 +142,15 @@ for (comparison_name in names(config$compare_species)) {
     warning(paste("No analysis files found for comparison:", comparison_name))
     next
   }
+
+    # Information about the species analyzed to console
+  cat("Species analyzed for comparison:", comparison_name, "\n")
+  cat("Species IDs:", names(comparison_data), "\n")
+  cat("Species long names:", species_names, "\n")
+  cat("Analysis files:", analysis_files, "\n")
+  cat("Reference genomes:", sapply(names(comparison_data), function(species_id) {
+    comparison_data[[species_id]]$reference_genome
+  }), "\n")
   
   # Call the function
   process_and_plot_endogenous_reads(analysis_files, output_folder, species_names, comparison_name)
