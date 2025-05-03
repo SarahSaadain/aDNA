@@ -61,10 +61,6 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
 
         output_folder_path = get_folder_path_species_results_refgenome_plots_breadth_sample(species, reference_genome_id, sample)
 
-        if os.path.exists(output_folder_path):
-            print_info(f"Output folder already exists: {output_folder_path}. Skipping.")
-            continue
-
         print_info(f"Plotting breadth analysis for file {analysis_file} to {output_folder_path}")
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
