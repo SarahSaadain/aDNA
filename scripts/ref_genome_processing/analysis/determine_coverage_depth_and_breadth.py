@@ -34,7 +34,7 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
     function to be used with multiprocessing.
     """
     coverage_file_base_name = get_filename_from_path(coverage_file)
-    analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_ANALYSIS_TSV)
+    analysis_file = coverage_file_base_name.replace(FILE_ENDING_SAMTOOLS_DEPTH_TSV, FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV)
     analysis_file_path = os.path.join(depth_breath_output_folder, analysis_file)
 
     print_info(f"Performing extended analysis for {coverage_file}")
@@ -54,6 +54,8 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
     if df.empty:
         print_warning(f"Coverage file {coverage_file} is empty or malformed. Skipping analysis.")
         return
+    
+     # Append the overall metrics for this BAM file to the combined data list
 
     # Group by scaffold and calculate metrics
     print_debug(f"Grouping by scaffold and calculating metrics ...")
@@ -70,7 +72,7 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
 
     # Save to file
     print_debug(f"Saving summary to file {analysis_file_path} ...")
-    summary.to_csv(analysis_file_path, sep="\t")
+    summary.to_csv(analysis_file_path)
 
     print_info(f"Extended analysis complete for {coverage_file}")
 
@@ -163,7 +165,7 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
     """
     print_info(f"Performing extended analysis on depth files for species: {species}")
 
-    depth_breath_output_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
+    depth_breath_output_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
     list_of_coverage_files = get_files_in_folder_matching_pattern(depth_breath_output_folder, f"*{FILE_ENDING_SAMTOOLS_DEPTH_TSV}")
 
     if len(list_of_coverage_files) == 0:
@@ -206,7 +208,7 @@ def combine_analysis_files(species: str, reference_genome_id: str):
     combined_file_path = os.path.join(analysis_folder, f"{species}{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV}") # Using CSV for combined output
 
     # Find all individual analysis files
-    individual_analysis_files = get_files_in_folder_matching_pattern(individual_files_folder, f"*{FILE_ENDING_ANALYSIS_TSV}")
+    individual_analysis_files = get_files_in_folder_matching_pattern(individual_files_folder, f"*{FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV}")
 
     if not individual_analysis_files:
         print_warning(f"No individual analysis files found to combine for species {species} in {analysis_folder}. Skipping combining step.")
@@ -221,7 +223,7 @@ def combine_analysis_files(species: str, reference_genome_id: str):
         try:
             # Read the individual analysis file (per-scaffold summary)
             # Assuming the analysis file has columns: scaffold, avg_depth, max_depth, covered_bases, total_bases, percent_covered
-            df_analysis = pd.read_csv(analysis_file, sep="\t")
+            df_analysis = pd.read_csv(analysis_file)
 
             if df_analysis.empty:
                 print_warning(f"Analysis file {analysis_file} is empty. Skipping.")
@@ -246,7 +248,7 @@ def combine_analysis_files(species: str, reference_genome_id: str):
 
             # Determine the original BAM filename from the analysis filename
             # Use the new helper function
-            original_bam_base = get_filename_from_path(analysis_file).replace(FILE_ENDING_ANALYSIS_TSV, "")
+            original_bam_base = get_filename_from_path(analysis_file).replace(FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV, "")
             original_bam_filename = original_bam_base + FILE_ENDING_SORTED_BAM
 
 

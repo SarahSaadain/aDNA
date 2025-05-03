@@ -10,7 +10,7 @@ plot_depth_coverage_violon <- function(df_depth, species) {
   df_depth$species <- species
 
   # Plot depth
-  plot_depth_violin <- ggplot(df_depth, aes(x = factor(species), y = OverallAvgDepth)) +
+  plot_depth_violin <- ggplot(df_depth, aes(x = factor(species), y = avg_depth)) +
     scale_y_continuous(
       trans = "log10",
       breaks = scales::trans_breaks("log10", function(x) 10^x),
@@ -41,7 +41,7 @@ plot_depth_coverage <- function(depth, lengthScaffoldRange) {
   
   # Filter the data based on the scaffold length range
   depth_filtered <- depth %>%
-    filter(OverallTotalBases >= lengthScaffoldRange[1] & OverallTotalBases <= lengthScaffoldRange[2])
+    filter(total_bases >= lengthScaffoldRange[1] & total_bases <= lengthScaffoldRange[2])
   
   # Summarize the filtered data by average depth
   depth_filtered_mean <- depth_filtered %>%
@@ -76,7 +76,7 @@ save_plot <- function(plot, target_folder, file_name){
 plot_max_depth_coverage <- function(depth, lengthScaffoldRange) {
   
   # Filter based on bin size range
-  depth_filtered <- depth[depth$OverallTotalBases >= lengthScaffoldRange[1] & depth$OverallTotalBases <= lengthScaffoldRange[2], ]
+  depth_filtered <- depth[depth$total_bases >= lengthScaffoldRange[1] & depth$total_bases <= lengthScaffoldRange[2], ]
   
   depth_filtered_summary <- depth_filtered %>%
     group_by(rounded_max_depth) %>%
@@ -115,19 +115,16 @@ plot_coverage_depth <- function(species, depth_breath_analysis_file_path, target
   print("Executing plot_coverage_depth")
   
   # depth coverage for each scaffold
-  df_depth <- read.table(
-    depth_breath_analysis_file_path, 
-    sep =",", 
-    header = TRUE) # Changed to TRUE to read the header
+  df_depth <- read.table(depth_breath_analysis_file_path, sep=",", header=TRUE)
   
   # Calculate the mean depth for each scaffold
   df_depth <- df_depth %>%
     mutate(
-      rounded_avg_depth = round(OverallAvgDepth),
-      rounded_max_depth = round(OverallMaxDepth)
+      rounded_avg_depth = round(avg_depth),
+      rounded_max_depth = round(max_depth)
     )
   
-  max_length_of_scaffold <- max(df_depth$OverallTotalBases, na.rm = TRUE)
+  max_length_of_scaffold <- max(df_depth$total_bases, na.rm = TRUE)
 
   plot_DepthCoverageOfAllScaffolds <- plot_depth_coverage(df_depth, c(0, max_length_of_scaffold))
   plot_DepthCoverageOfSuperSmallScaffolds <- plot_depth_coverage(df_depth, c(0, 1000) )

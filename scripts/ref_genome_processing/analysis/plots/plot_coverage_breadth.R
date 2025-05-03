@@ -6,7 +6,7 @@ library(tools)
 plot_coverage_breadth_violoin <- function(df_breadth, species) {
   df_breadth$species <- species
   
-  plot_breadth <- ggplot(all_data, aes(x = factor(species), y = OverallPercentCovered)) +
+  plot_breadth <- ggplot(all_data, aes(x = factor(species), y = percent_covered)) +
     geom_violin(scale = "width") +
     theme_bw() +
     ylab("Percent Covered") +
@@ -29,25 +29,25 @@ plot_coverage_breadth_violoin <- function(df_breadth, species) {
 
 plot_coverage_breadth <- function(species, filepath, target_folder) {
   # Read the TSV file into a data frame
-    df <- read.table(
-      filepath, 
-      sep =",", 
-      header = TRUE) # Changed to TRUE to read the header
+  df <- read.table(
+    filepath, 
+    sep =",", 
+    header = TRUE) # Changed to TRUE to read the header
   
-  # Bin the scaffolds based on their length (OverallTotalBases)
+  # Bin the scaffolds based on their length (total_bases)
   bins <- c(0, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000, 20000000, Inf)  # Updated bins for scaffold length
   bin_labels <- c('0-100k', '100k-250k', '250k-500k', '500k-1M', '1M-2.5M', '2.5M-5M', '5M-10M', '10M-20M', '20M+')
   
   # Create a new column for the length bin
-  df$length_bin <- cut(df$OverallTotalBases, breaks = bins, labels = bin_labels, right = FALSE)
+  df$length_bin <- cut(df$total_bases, breaks = bins, labels = bin_labels, right = FALSE)
   
-  # Calculate the average OverallPercentCovered, count of scaffolds, and standard deviation for each bin
+  # Calculate the average percent_covered, count of scaffolds, and standard deviation for each bin
   avg_coverage_by_bin <- df %>%
     group_by(length_bin) %>%
     summarise(
-      avg_coverage = mean(OverallPercentCovered, na.rm = TRUE),
+      avg_coverage = mean(percent_covered, na.rm = TRUE),
       scaffold_count = n(),
-      std_dev = sd(OverallPercentCovered, na.rm = TRUE)
+      std_dev = sd(percent_covered, na.rm = TRUE)
     )
   
   # Extract the filename without extension
