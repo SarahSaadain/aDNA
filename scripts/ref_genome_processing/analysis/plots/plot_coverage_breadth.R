@@ -28,6 +28,11 @@ plot_coverage_breadth_violoin <- function(df_breadth, species) {
 }
 
 plot_coverage_breadth <- function(species, filepath, target_folder) {
+
+  # Define output file constants
+  PLOT_BREADTH_VIOLIN <- "plot_breadth_violoin.png"
+  PLOT_BREADTH_BINS <- "plot_breadth_bins.png"
+
   # Read the TSV file into a data frame
   df <- read.table(
     filepath, 
@@ -40,23 +45,22 @@ plot_coverage_breadth <- function(species, filepath, target_folder) {
     print(paste("Created directory:", target_folder))
   }
 
-   # Extract the filename without extension
-  filename <- file_path_sans_ext(basename(filepath))
-
-  if (!file.exists(file.path(target_folder, paste0(filename, "_breadth_violoin.png")))) {  
+  # Check and generate plot for coverage breadth violoin
+  if (!file.exists(file.path(target_folder, PLOT_BREADTH_VIOLIN))) {  
     plot_coverage_breadth_violoin_var <- plot_coverage_breadth_violoin(df, species)
-    save_plot(plot_coverage_breadth_violoin_var, target_folder, paste0(filename, "_breadth_violoin.png"))
-    cat("Generating and saving plot: ", paste0(filename, "_breadth_violoin.png"), "\n")
+    save_plot(plot_coverage_breadth_violoin_var, target_folder, PLOT_BREADTH_VIOLIN)
+    cat("Generating and saving plot: ", PLOT_BREADTH_VIOLIN, "\n")
   } else {
-    cat("File already exists, skipping plot generation: ", paste0(filename, "_breadth_violoin.png"), "\n")
+    cat("File already exists, skipping plot generation: ", PLOT_BREADTH_VIOLIN, "\n")
   }
 
-  if (!file.exists(file.path(target_folder, paste0(filename, "_breadth_bins.png")))) {  
+  # Check and generate plot for coverage breadth bins
+  if (!file.exists(file.path(target_folder, PLOT_BREADTH_BINS))) {  
     plot_coverage_breadth_bins_var <- plot_coverage_breadth_bins(df)
-    save_plot(plot_coverage_breadth_bins_var, target_folder, paste0(filename, "_breadth_bins.png"))
-   cat("Generating and saving plot: ", paste0(filename, "_breadth_bins.png"), "\n")
+    save_plot(plot_coverage_breadth_bins_var, target_folder, PLOT_BREADTH_BINS)
+    cat("Generating and saving plot: ", PLOT_BREADTH_BINS, "\n")
   } else {
-    cat("File already exists, skipping plot generation: ", paste0(filename, "_breadth_bins.png"), "\n")
+    cat("File already exists, skipping plot generation: ", PLOT_BREADTH_BINS, "\n")
   }
   
 }
