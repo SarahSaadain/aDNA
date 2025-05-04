@@ -13,4 +13,4 @@ scripts/try_and_error/
 sequencing_data/
 config.yaml
 fetch_results.sh
-update_remote_scripts.sh
+update_roco_scripts.sh
