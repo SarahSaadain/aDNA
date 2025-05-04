@@ -9,6 +9,9 @@ process_and_plot_before_after <- function(analysis_files, output_folder, species
   
   for (i in 1:length(analysis_files)) {
     filepath <- analysis_files[i]
+
+    print(paste("Processing file:", file_path))
+
     if (file.exists(filepath)) {
       df <- read.table(
         filepath,
@@ -183,6 +186,8 @@ for (comparison_name in names(config$compare_species)) {
     species_names,    # Named vector of species long names
     comparison_name   # Name of the current comparison, for labeling
   )
+
+  print(paste("Before/after plot saved for comparison:", comparison_name))
 }
 
 

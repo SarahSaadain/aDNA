@@ -9,6 +9,9 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
   
   for (i in 1:length(analysis_files)) {
     filepath <- analysis_files[i]
+
+    print(paste("Processing file:", file_path))
+
     if (file.exists(filepath)) {
       df <- read.table(filepath, sep =",", header = TRUE)
       df$species_id <- names(species_names)[i] #get the species ID
@@ -188,4 +191,6 @@ for (comparison_name in names(config$compare_species)) {
     species_names,    # Named vector of species long names
     comparison_name   # Name of the current comparison, for labeling
   )
+
+  print(paste("Depth and breadth plot saved for comparison:", comparison_name))
 }

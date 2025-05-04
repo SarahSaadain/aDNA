@@ -15,6 +15,8 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
   # Iterate over each analysis file
   for (i in 1:length(analysis_files)) {
     file_path <- analysis_files[i]
+
+    print(paste("Processing file:", file_path))
     
     # Check if the file exists
     if (file.exists(file_path)) {
@@ -195,4 +197,6 @@ for (comparison_name in names(config$compare_species)) {
     species_names,    # Named vector of species long names
     comparison_name   # Name of the current comparison, for labeling
   )
+
+  print(paste("Endogenous reads plot saved for comparison:", comparison_name))
 }
