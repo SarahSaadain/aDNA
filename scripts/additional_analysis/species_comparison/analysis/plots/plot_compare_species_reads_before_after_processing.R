@@ -10,7 +10,7 @@ process_and_plot_before_after <- function(analysis_files, output_folder, species
   for (i in 1:length(analysis_files)) {
     filepath <- analysis_files[i]
     if (file.exists(filepath)) {
-      df <- read.table(filepath, sep ="\t", header = TRUE)
+      df <- read.table(filepath, sep ="\t", header = TRUE, colClasses = c(individual = "character"))
       df$species_id <- names(species_names)[i] #get the species ID
       df$species <- species_names[[i]]  # Get species long name from the provided list
       before_after_data[[df$species_id[1]]] <- df # use species id to store
