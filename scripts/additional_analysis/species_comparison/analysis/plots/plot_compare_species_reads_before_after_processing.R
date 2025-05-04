@@ -2,6 +2,7 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(scales)
+library(yaml) # Load the yaml library
 
 process_and_plot_before_after <- function(analysis_files, output_folder, species_names, comparison_name) {
   before_after_data <- list()
