@@ -62,7 +62,7 @@ plot_coverage_breadth_bins <- function(df_breadth) {
   bin_labels <- c('0-100k', '100k-250k', '250k-500k', '500k-1M', '1M-2.5M', '2.5M-5M', '5M-10M', '10M-20M', '20M+')
 
   # Create a new column for the length bin
-  df_breadth$length_bin <- cut(df$total_bases, breaks = bins, labels = bin_labels, right = FALSE)
+  df_breadth$length_bin <- cut(df_breadth$total_bases, breaks = bins, labels = bin_labels, right = FALSE)
 
   # Calculate the average percent_covered, count of scaffolds, and standard deviation for each bin
   avg_coverage_by_bin <- df_breadth %>%
