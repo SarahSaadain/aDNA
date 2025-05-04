@@ -129,7 +129,7 @@ for (comparison_name in names(config$compare_species)) {
   # Construct full paths to analysis files and extract species names and long names.
   analysis_files <- sapply(names(comparison_data), function(species_id) {
     species_folder <- config$species[[species_id]]$folder_name
-    file.path(root_folder, species_folder, "results", "qualitycontrol", paste0(species_id,"_reads_processing_result.tsv"))
+    file.path(root_folder, species_folder, "results", "qualitycontrol", "processed_reads", paste0(species_id,"_reads_processing_result.tsv"))
   })
 
   species_names <- sapply(names(comparison_data), function(species_id) {
