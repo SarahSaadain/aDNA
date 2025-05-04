@@ -27,6 +27,17 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
   for(i in 1:nrow(df)) {
     # Subset the row
     row_data <- df[i, ]
+
+    # Create file name and path for each chart
+    file_name <- paste0(row_data$Filename, "_endogenous_reads_pie_chart.png") # Changed to use Filename
+    file_path <- file.path(target_folder, file_name)
+
+    if (!file.exists(file_path)) {  # Check if the file already exists
+      print(paste("Generating plot for:", row_data$Filename))
+    } else {
+      print(paste("File already exists, skipping plot generation for:", row_data$Filename))
+      next  # Skip to the next iteration if the file exists
+    }
     
     # Create a long format for the row (pie chart data)
     row_long <- data.frame(
@@ -55,10 +66,6 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
         axis.ticks.y = element_blank(),  # Remove y-axis ticks
         axis.text.x = element_blank()    # Remove x-axis labels if needed
       )
-    
-    # Create file name and path for each chart
-    file_name <- paste0(row_data$Filename, "_endogenous_reads_pie_chart.png") # Changed to use Filename
-    file_path <- file.path(target_folder, file_name)
     
     # Save the plot
     ggsave(file_path, plot = p, width = 6, height = 6, dpi = 300)

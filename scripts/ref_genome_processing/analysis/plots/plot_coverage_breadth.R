@@ -43,11 +43,21 @@ plot_coverage_breadth <- function(species, filepath, target_folder) {
    # Extract the filename without extension
   filename <- file_path_sans_ext(basename(filepath))
 
-  plot_coverage_breadth_violoin_var <- plot_coverage_breadth_violoin(df, species)
-  save_plot(plot_coverage_breadth_violoin_var, target_folder, paste0(filename, "_breadth_violoin.png"))
-  
-  plot_coverage_breadth_bins_var <- plot_coverage_breadth_bins(df)
-  save_plot(plot_coverage_breadth_bins_var, target_folder, paste0(filename, "_breadth_bins.png"))
+  if (!file.exists(file.path(target_folder, paste0(filename, "_breadth_violoin.png")))) {  
+    plot_coverage_breadth_violoin_var <- plot_coverage_breadth_violoin(df, species)
+    save_plot(plot_coverage_breadth_violoin_var, target_folder, paste0(filename, "_breadth_violoin.png"))
+    cat("Generating and saving plot: ", paste0(filename, "_breadth_violoin.png"), "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", paste0(filename, "_breadth_violoin.png"), "\n")
+  }
+
+  if (!file.exists(file.path(target_folder, paste0(filename, "_breadth_bins.png")))) {  
+    plot_coverage_breadth_bins_var <- plot_coverage_breadth_bins(df)
+    save_plot(plot_coverage_breadth_bins_var, target_folder, paste0(filename, "_breadth_bins.png"))
+   cat("Generating and saving plot: ", paste0(filename, "_breadth_bins.png"), "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", paste0(filename, "_breadth_bins.png"), "\n")
+  }
   
 }
 
