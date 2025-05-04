@@ -55,7 +55,6 @@ def is_fasta_file(file_name: str) -> bool:
 def is_fasta_gz_file(file_name: str) -> bool:
     return file_name.endswith("fna.gz") or file_name.endswith("fa.gz") or file_name.endswith("fasta.gz") 
 
-
 def call_r_script(script_path: str, *args):
     if not os.path.exists(script_path):
         raise FileNotFoundError(f"R script not found: {script_path}")
@@ -66,7 +65,7 @@ def call_r_script(script_path: str, *args):
 
     try:
         subprocess.run(command, check=True)
-        print_info(f"Successfully executed {command}")
+        print_info(f"Successfully executed {script_path}")
     except subprocess.CalledProcessError as e:
         print_error(f"Error executing {script_path}: {e}")
 
