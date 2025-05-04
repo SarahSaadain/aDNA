@@ -37,6 +37,15 @@ plot_read_length_distribution <- function(species, source_file, output_folder) {
 
     message("Generating plot for file: ", file_name)
 
+    # Generate output filename
+    output_file <- file.path(output_folder, paste0(file_name, ".png"))
+
+    # Check if the file already exists
+    if (file.exists(output_file)) {
+      message("File already exists, skipping plot generation for: ", file_name)
+      next  # Skip to the next iteration if the file exists
+    }
+
     df_subset <- df_long %>% filter(reads_file == file_name)  # Filter data for this file
     
     p <- ggplot(df_subset, aes(x = read_length, y = Count, color = Processing_Step, group = Processing_Step)) +
@@ -55,14 +64,21 @@ plot_read_length_distribution <- function(species, source_file, output_folder) {
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels to avoid overlap
       )
-    # Generate output filename
-    output_file <- file.path(output_folder, paste0(file_name, ".png"))
     
     # Save the plot
     ggsave(output_file, plot = p, width = 8, height = 6, dpi = 300)
     
     # Print message
     message("Plot saved to: ", output_file)
+  }
+
+  # Generate output filename for the combined plot (same as input file, replacing .tsv with .png)
+  combined_output_file <- file.path(output_folder, paste0(file_path_sans_ext(basename(source_file)), ".png"))
+
+  # Check if the combined plot file already exists
+  if (file.exists(combined_output_file)) {
+    message("Combined plot file already exists, skipping plot generation")
+    return()  # Skip to the next iteration if the file exists
   }
 
   # Aggregate (sum up) counts for the combined plot across all files
@@ -88,9 +104,7 @@ plot_read_length_distribution <- function(species, source_file, output_folder) {
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels to avoid overlap
       )
-  # Generate output filename for the combined plot (same as input file, replacing .tsv with .png)
-  combined_output_file <- file.path(output_folder, paste0(file_path_sans_ext(basename(source_file)), ".png"))
-
+  
   # Save the combined plot
   ggsave(combined_output_file, plot = p_combined, width = 10, height = 8, dpi = 300)
 
