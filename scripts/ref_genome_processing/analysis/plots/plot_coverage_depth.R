@@ -111,6 +111,21 @@ plot_max_depth_coverage <- function(depth, lengthScaffoldRange) {
 }
 
 plot_coverage_depth <- function(species, depth_breath_analysis_file_path, target_folder){
+
+  # Define constants for file names
+  PLOT_DEPTH_COVERAGE_ALL <- "plot_DepthCoverageOfAllScaffolds.png"
+  PLOT_DEPTH_COVERAGE_SUPER_SMALL <- "plot_DepthCoverageOfSuperSmallScaffolds.png"
+  PLOT_DEPTH_COVERAGE_SMALL <- "plot_DepthCoverageOfSmallScaffolds.png"
+  PLOT_DEPTH_COVERAGE_MEDIUM <- "plot_DepthCoverageOfMediumScaffolds.png"
+  PLOT_DEPTH_COVERAGE_LARGE <- "plot_DepthCoverageOfLargeScaffolds.png"
+
+  PLOT_MAX_DEPTH_COVERAGE_ALL <- "plot_MaxDepthCoverageOfAllScaffolds.png"
+  PLOT_MAX_DEPTH_COVERAGE_SUPER_SMALL <- "plot_MaxDepthCoverageOfSuperSmallScaffolds.png"
+  PLOT_MAX_DEPTH_COVERAGE_SMALL <- "plot_MaxDepthCoverageOfSmallScaffolds.png"
+  PLOT_MAX_DEPTH_COVERAGE_MEDIUM <- "plot_MaxDepthCoverageOfMediumScaffolds.png"
+  PLOT_MAX_DEPTH_COVERAGE_LARGE <- "plot_MaxDepthCoverageOfLargeScaffolds.png"
+
+  PLOT_DEPTH_COVERAGE_VIOLIN = "plot_depthCoverage_violin.png"
   
   print("Executing plot_coverage_depth")
   
@@ -126,32 +141,95 @@ plot_coverage_depth <- function(species, depth_breath_analysis_file_path, target
   
   max_length_of_scaffold <- max(df_depth$total_bases, na.rm = TRUE)
 
-  plot_DepthCoverageOfAllScaffolds <- plot_depth_coverage(df_depth, c(0, max_length_of_scaffold))
-  plot_DepthCoverageOfSuperSmallScaffolds <- plot_depth_coverage(df_depth, c(0, 1000) )
-  plot_DepthCoverageOfSmallScaffolds <- plot_depth_coverage(df_depth, c(1001, 10000))
-  plot_DepthCoverageOfMediumScaffolds <- plot_depth_coverage(df_depth, c(10001, 100000))
-  plot_DepthCoverageOfLargeScaffolds <- plot_depth_coverage(df_depth, c(100001, max_length_of_scaffold))
+  # Check and generate/save plot for depth coverage
+  if (!file.exists(file.path(target_folder, PLOT_DEPTH_COVERAGE_ALL))) {
+    plot_DepthCoverageOfAllScaffolds <- plot_depth_coverage(df_depth, c(0, max_length_of_scaffold))
+    save_plot(plot_DepthCoverageOfAllScaffolds, target_folder, PLOT_DEPTH_COVERAGE_ALL)
+    cat("Generating and saving plot: ", PLOT_DEPTH_COVERAGE_ALL, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_DEPTH_COVERAGE_ALL, "\n")
+  }
 
-  save_plot(plot_DepthCoverageOfAllScaffolds, target_folder, "plot_DepthCoverageOfAllScaffolds.png")
-  save_plot(plot_DepthCoverageOfSuperSmallScaffolds, target_folder, "plot_DepthCoverageOfSuperSmallScaffolds.png")
-  save_plot(plot_DepthCoverageOfSmallScaffolds, target_folder, "plot_DepthCoverageOfSmallScaffolds.png")
-  save_plot(plot_DepthCoverageOfMediumScaffolds, target_folder, "plot_DepthCoverageOfMediumScaffolds.png")
-  save_plot(plot_DepthCoverageOfLargeScaffolds, target_folder, "plot_DepthCoverageOfLargeScaffolds.png")  
+  if (!file.exists(file.path(target_folder, PLOT_DEPTH_COVERAGE_SUPER_SMALL))) {
+    plot_DepthCoverageOfSuperSmallScaffolds <- plot_depth_coverage(df_depth, c(0, 1000))
+    save_plot(plot_DepthCoverageOfSuperSmallScaffolds, target_folder, PLOT_DEPTH_COVERAGE_SUPER_SMALL)
+    cat("Generating and saving plot: ", PLOT_DEPTH_COVERAGE_SUPER_SMALL, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_DEPTH_COVERAGE_SUPER_SMALL, "\n")
+  }
 
-  plot_MaxDepthCoverageOfAllScaffolds <- plot_max_depth_coverage(df_depth, c(0, max_length_of_scaffold))
-  plot_MaxDepthCoverageOfSuperSmallScaffolds <- plot_max_depth_coverage(df_depth, c(0, 1000) )
-  plot_MaxDepthCoverageOfSmallScaffolds <- plot_max_depth_coverage(df_depth, c(1001, 10000))
-  plot_MaxDepthCoverageOfMediumScaffolds <- plot_max_depth_coverage(df_depth, c(10001, 100000))
-  plot_MaxDepthCoverageOfLargeScaffolds <- plot_max_depth_coverage(df_depth, c(100001, max_length_of_scaffold))
+  if (!file.exists(file.path(target_folder, PLOT_DEPTH_COVERAGE_SMALL))) {
+    plot_DepthCoverageOfSmallScaffolds <- plot_depth_coverage(df_depth, c(1001, 10000))
+    save_plot(plot_DepthCoverageOfSmallScaffolds, target_folder, PLOT_DEPTH_COVERAGE_SMALL)
+    cat("Generating and saving plot: ", PLOT_DEPTH_COVERAGE_SMALL, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_DEPTH_COVERAGE_SMALL, "\n")
+  }
 
-  save_plot(plot_MaxDepthCoverageOfAllScaffolds, target_folder, "plot_MaxDepthCoverageOfAllScaffolds.png")
-  save_plot(plot_MaxDepthCoverageOfSuperSmallScaffolds, target_folder, "plot_MaxDepthCoverageOfSuperSmallScaffolds.png")
-  save_plot(plot_MaxDepthCoverageOfSmallScaffolds, target_folder, "plot_MaxDepthCoverageOfSmallScaffolds.png")
-  save_plot(plot_MaxDepthCoverageOfMediumScaffolds, target_folder, "plot_MaxDepthCoverageOfMediumScaffolds.png")
-  save_plot(plot_MaxDepthCoverageOfLargeScaffolds, target_folder, "plot_MaxDepthCoverageOfLargeScaffolds.png")
+  if (!file.exists(file.path(target_folder, PLOT_DEPTH_COVERAGE_MEDIUM))) {
+    plot_DepthCoverageOfMediumScaffolds <- plot_depth_coverage(df_depth, c(10001, 100000))
+    save_plot(plot_DepthCoverageOfMediumScaffolds, target_folder, PLOT_DEPTH_COVERAGE_MEDIUM)
+    cat("Generating and saving plot: ", PLOT_DEPTH_COVERAGE_MEDIUM, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_DEPTH_COVERAGE_MEDIUM, "\n")
+  }
 
-  plot_depth_violin <- plot_depth_coverage_violon(df_depth, species)
-  save_plot(plot_depth_violin, target_folder, "plot_depthCoverage_violin.png")
+  if (!file.exists(file.path(target_folder, PLOT_DEPTH_COVERAGE_LARGE))) {
+    plot_DepthCoverageOfLargeScaffolds <- plot_depth_coverage(df_depth, c(100001, max_length_of_scaffold))
+    save_plot(plot_DepthCoverageOfLargeScaffolds, target_folder, PLOT_DEPTH_COVERAGE_LARGE)
+    cat("Generating and saving plot: ", PLOT_DEPTH_COVERAGE_LARGE, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_DEPTH_COVERAGE_LARGE, "\n")
+  }
+
+  # Check and generate/save plot for max depth coverage
+  if (!file.exists(file.path(target_folder, PLOT_MAX_DEPTH_COVERAGE_ALL))) {
+    plot_MaxDepthCoverageOfAllScaffolds <- plot_max_depth_coverage(df_depth, c(0, max_length_of_scaffold))
+    save_plot(plot_MaxDepthCoverageOfAllScaffolds, target_folder, PLOT_MAX_DEPTH_COVERAGE_ALL)
+    cat("Generating and saving plot: ", PLOT_MAX_DEPTH_COVERAGE_ALL, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_MAX_DEPTH_COVERAGE_ALL, "\n")
+  }
+
+  if (!file.exists(file.path(target_folder, PLOT_MAX_DEPTH_COVERAGE_SUPER_SMALL))) {
+    plot_MaxDepthCoverageOfSuperSmallScaffolds <- plot_max_depth_coverage(df_depth, c(0, 1000))
+    save_plot(plot_MaxDepthCoverageOfSuperSmallScaffolds, target_folder, PLOT_MAX_DEPTH_COVERAGE_SUPER_SMALL)
+    cat("Generating and saving plot: ", PLOT_MAX_DEPTH_COVERAGE_SUPER_SMALL, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_MAX_DEPTH_COVERAGE_SUPER_SMALL, "\n")
+  }
+
+  if (!file.exists(file.path(target_folder, PLOT_MAX_DEPTH_COVERAGE_SMALL))) {
+    plot_MaxDepthCoverageOfSmallScaffolds <- plot_max_depth_coverage(df_depth, c(1001, 10000))
+    save_plot(plot_MaxDepthCoverageOfSmallScaffolds, target_folder, PLOT_MAX_DEPTH_COVERAGE_SMALL)
+    cat("Generating and saving plot: ", PLOT_MAX_DEPTH_COVERAGE_SMALL, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_MAX_DEPTH_COVERAGE_SMALL, "\n")
+  }
+
+  if (!file.exists(file.path(target_folder, PLOT_MAX_DEPTH_COVERAGE_MEDIUM))) {
+    plot_MaxDepthCoverageOfMediumScaffolds <- plot_max_depth_coverage(df_depth, c(10001, 100000))
+    save_plot(plot_MaxDepthCoverageOfMediumScaffolds, target_folder, PLOT_MAX_DEPTH_COVERAGE_MEDIUM)
+    cat("Generating and saving plot: ", PLOT_MAX_DEPTH_COVERAGE_MEDIUM, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_MAX_DEPTH_COVERAGE_MEDIUM, "\n")
+  }
+
+  if (!file.exists(file.path(target_folder, PLOT_MAX_DEPTH_COVERAGE_LARGE))) {
+    plot_MaxDepthCoverageOfLargeScaffolds <- plot_max_depth_coverage(df_depth, c(100001, max_length_of_scaffold))
+    save_plot(plot_MaxDepthCoverageOfLargeScaffolds, target_folder, PLOT_MAX_DEPTH_COVERAGE_LARGE)
+    cat("Generating and saving plot: ", PLOT_MAX_DEPTH_COVERAGE_LARGE, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_MAX_DEPTH_COVERAGE_LARGE, "\n")
+  }
+
+  if (!file.exists(file.path(target_folder, PLOT_DEPTH_COVERAGE_VIOLIN))) {
+    plot_depth_violin <- plot_depth_coverage_violon(df_depth, species)
+    save_plot(plot_depth_violin, target_folder, PLOT_DEPTH_COVERAGE_VIOLIN)
+    cat("Generating and saving plot: ", PLOT_DEPTH_COVERAGE_VIOLIN, "\n")
+  } else {
+    cat("File already exists, skipping plot generation: ", PLOT_DEPTH_COVERAGE_VIOLIN, "\n")
+  }
   
 }
 
