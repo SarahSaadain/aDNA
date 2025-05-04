@@ -11,7 +11,7 @@ find . -type f \( -name "*_R1_*.fastq.gz" -o -name "*_R2_*.fastq.gz" \) ! -path 
 
 To move all .fastq.gz files from all subfolders into the current directory, you can use the following command:
 ```bash
-find . -type f -name "*.fastq.gz" -exec mv {} . \;
+find . -type f -name "*R1_001.fastq.gz" -exec mv {} . \;
 ```
 
 compare md5sum for 22VCLWLT3_6_R18381_20250131.tar.gz  
