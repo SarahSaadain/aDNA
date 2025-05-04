@@ -1,7 +1,7 @@
 import os
 from common_aDNA_scripts import *
 
-def plot_comparison_reads_processing_results(species: list, reference_genomes: dict):
+def plot_comparison_reads_processing_results():
     scripts_base_folder = os.path.join(FOLDER_ADDITIONAL_ANALYSIS, FOLDER_SPECIES_COMPARISON)
 
     print_info(f"Plotting reads before and after comparison")
