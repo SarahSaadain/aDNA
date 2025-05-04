@@ -68,7 +68,7 @@ def execute_seqkit_stats_count_reads(input_file: str, thread:int = THREADS_DEFAU
         return -1
     
 def get_file_name_reads_processing(species: str) -> str:
-    return f"{species}_reads_processing_result{FILE_ENDING_TSV}"
+    return f"{species}{FILE_ENDING_READS_PROCESSING_RESULT_TSV}"
 
 def determine_reads_processing_result(species: str):
 

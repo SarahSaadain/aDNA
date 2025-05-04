@@ -23,7 +23,7 @@ def get_read_length_distribution(fastq_file: str) -> Counter:
     return read_lengths
     
 def get_file_name_read_length_distribution(species: str) -> str:
-    return f"{species}_read_length_distribution{FILE_ENDING_TSV}"
+    return f"{species}{FILE_ENDING_READ_LENGTH_DISTRIBUTION_TSV}"
 
 def determine_read_length_distribution(species: str):
 
