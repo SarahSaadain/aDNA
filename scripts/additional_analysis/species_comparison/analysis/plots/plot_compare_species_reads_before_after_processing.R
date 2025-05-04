@@ -5,7 +5,7 @@ library(scales)
 library(yaml) # Load the yaml library
 
 process_and_plot_before_after <- function(analysis_files, output_folder, species_names, comparison_name) {
-  before_after_data <- list()
+  list_of_analysis_dataframes <- list()
   
   for (i in 1:length(analysis_files)) {
     filepath <- analysis_files[i]
@@ -18,13 +18,13 @@ process_and_plot_before_after <- function(analysis_files, output_folder, species
       )
       df$species_id <- names(species_names)[i] #get the species ID
       df$species <- species_names[[i]]  # Get species long name from the provided list
-      before_after_data[[df$species_id[1]]] <- df # use species id to store
+      list_of_analysis_dataframes[[df$species_id[1]]] <- df # use species id to store
     } else {
       warning(paste("File not found:", filepath))
     }
   }
   
-  df_before_after <- bind_rows(before_after_data)
+  df_before_after <- bind_rows(list_of_analysis_dataframes)
 
   #check if the species column exists
   if (!("species" %in% colnames(df_before_after))){
@@ -100,60 +100,89 @@ if (length(args) < 3) {
   stop("Usage: Rscript script_name.R <output_folder> <config_file> <root_folder>")
 }
 
-root_folder <- args[1]
-config_file <- args[2] #  argument for the config file
-output_folder <- args[3]
+adna_project_folder_path <- args[1]
+adna_config_file <- args[2] #  argument for the config file
+output_folder_path_for_plots <- args[3]
 
 # Create the output directory if it doesn't exist
-if (!dir.exists(output_folder)) {
-  dir.create(output_folder, recursive = TRUE)
+if (!dir.exists(output_folder_path_for_plots)) {
+  dir.create(output_folder_path_for_plots, recursive = TRUE)
 }
 
 # Check if the root folder exists
-if (!dir.exists(root_folder)) {
-  stop(paste("Root folder does not exist:", root_folder))
+if (!dir.exists(adna_project_folder_path)) {
+  stop(paste("Root folder does not exist:", adna_project_folder_path))
 }
 
 # Check if the config file exists
-if (!file.exists(config_file)) {
-  stop(paste("Config file does not exist:", config_file))
+if (!file.exists(adna_config_file)) {
+  stop(paste("Config file does not exist:", adna_config_file))
 }
 
 # Read the config file
-config <- yaml.load_file(config_file) # Load the config file
+config <- yaml.load_file(adna_config_file) # Load the config file
 
 # Check if any relevant configuration is present
 if (is.null(config$compare_species) || length(config$compare_species) == 0) {
   stop("No comparisons found in the config file.")
 }
 
-# Iterate through the comparisons in the config file.
+# Loop over each species comparison defined in the config file.
+# Each comparison involves a group of species to be analyzed together.
 for (comparison_name in names(config$compare_species)) {
+  
+  # Get the list of species for the current comparison.
   comparison_data <- config$compare_species[[comparison_name]]
   
-  # Construct full paths to analysis files and extract species names and long names.
+  # For each species in this comparison, construct the full path to its processing result file.
   analysis_files <- sapply(names(comparison_data), function(species_id) {
+    
+    # Get the folder name where the species' data is stored (defined in config).
     species_folder <- config$species[[species_id]]$folder_name
-    file.path(root_folder, species_folder, "results", "qualitycontrol", "processed_reads", paste0(species_id,"_reads_processing_result.tsv"))
+    
+    # Build the full path to the reads processing result TSV file.
+    # Format: root_folder/species_folder/results/qualitycontrol/processed_reads/{species_id}_reads_processing_result.tsv
+    file.path(
+      adna_project_folder_path,
+      species_folder,
+      "results",
+      "qualitycontrol",
+      "processed_reads",
+      paste0(species_id, "_reads_processing_result.tsv")
+    )
   })
 
+  # Get the full (long) names of the species from the config file
+  # to use for plots, labels, or printed output.
   species_names <- sapply(names(comparison_data), function(species_id) {
     config$species[[species_id]]$name
   })
+
+  # Name each entry in the species_names vector with its corresponding species ID.
+  # This preserves the relationship between species_id and readable name.
   names(species_names) <- names(comparison_data)
   
-  # Check if analysis_files is empty
+  # If no analysis files were found for this comparison (e.g., misconfiguration),
+  # print a warning and skip to the next comparison in the loop.
   if (length(analysis_files) == 0) {
     warning(paste("No analysis files found for comparison:", comparison_name))
-    next # Skip to the next comparison
+    next
   }
 
-    # Information about the species analyzed to console
+  # Print summary information to the console for transparency/debugging.
   cat("Species analyzed for comparison:", comparison_name, "\n")
   cat("Species IDs:", names(species_names), "\n")
   cat("Species long names:", species_names, "\n")
   cat("Analysis files:", analysis_files, "\n")
 
-  process_and_plot_before_after(analysis_files, output_folder, species_names, comparison_name)
+  # Call a custom function to process the TSV files and generate a "before/after" plot.
+  # This function is assumed to handle file reading, data processing, and visualization.
+  process_and_plot_before_after(
+    analysis_files,   # Vector of file paths for this comparison
+    output_folder_path_for_plots,    # Destination folder for saving the plot
+    species_names,    # Named vector of species long names
+    comparison_name   # Name of the current comparison, for labeling
+  )
 }
+
 

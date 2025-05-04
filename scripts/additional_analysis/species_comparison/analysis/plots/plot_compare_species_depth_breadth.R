@@ -5,7 +5,7 @@ library(stringr)
 library(yaml) # Load the yaml library
 
 process_and_plot_depth_breadth <- function(analysis_files, output_folder, species_names, comparison_name) {
-  depth_breadth_data <- list()
+  list_of_analysis_dataframes <- list()
   
   for (i in 1:length(analysis_files)) {
     filepath <- analysis_files[i]
@@ -13,13 +13,13 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
       df <- read.table(filepath, sep =",", header = TRUE)
       df$species_id <- names(species_names)[i] #get the species ID
       df$species <- species_names[[i]]  # Get species long name from the provided list
-      depth_breadth_data[[df$species_id[1]]] <- df # use species id to store
+      list_of_analysis_dataframes[[df$species_id[1]]] <- df # use species id to store
     } else {
       warning(paste("File not found:", filepath))
     }
   }
   
-  all_data <- bind_rows(depth_breadth_data)
+  all_data <- bind_rows(list_of_analysis_dataframes)
   
   #check if the species column exists
   if (!("species" %in% colnames(all_data))){
@@ -98,56 +98,82 @@ if (length(args) < 3) {
   stop("Usage: Rscript script_name.R <output_folder> <config_file> <root_folder>")
 }
 
-root_folder <- args[1]
-config_file <- args[2] #  argument for the config file
-output_folder <- args[3]
+adna_project_folder_path <- args[1]
+adna_project_config_file <- args[2] #  argument for the config file
+output_folder_path_for_plots <- args[3]
 
 # Create the output directory if it doesn't exist
-if (!dir.exists(output_folder)) {
-  dir.create(output_folder, recursive = TRUE)
+if (!dir.exists(output_folder_path_for_plots)) {
+  dir.create(output_folder_path_for_plots, recursive = TRUE)
 }
 
-# Check if the root folder exists
-if (!dir.exists(root_folder)) {
-  stop(paste("Root folder does not exist:", root_folder))
+# Check if the aDNA project folder exists
+if (!dir.exists(adna_project_folder_path)) {
+  stop(paste("aDNA project folder does not exist:", adna_project_folder_path))
 }
 
-# Check if the config file exists
-if (!file.exists(config_file)) {
-  stop(paste("Config file does not exist:", config_file))
+# Check if the aDNA project config file exists
+if (!file.exists(adna_project_config_file)) {
+  stop(paste("aDNA project config file does not exist:", adna_project_config_file))
 }
 
 # Read the config file
-config <- yaml.load_file(config_file) # Load the config file
+config <- yaml.load_file(adna_project_config_file) # Load the config file
 
 # Check if any relevant configuration is present
 if (is.null(config$compare_species) || length(config$compare_species) == 0) {
   stop("No comparisons found in the config file.")
 }
 
-# Iterate through the comparisons in the config file.
+# Iterate through each comparison defined in the config file's 'compare_species' section.
+# Each comparison represents a set of species to be analyzed together.
 for (comparison_name in names(config$compare_species)) {
+  
+  # Retrieve the list of species involved in this specific comparison.
   comparison_data <- config$compare_species[[comparison_name]]
   
-  # Construct full paths to analysis files and extract species names and long names.
+  # Construct the full file paths to each species' coverage analysis file.
+  # This will be used for loading data later in the script.
   analysis_files <- sapply(names(comparison_data), function(species_id) {
+    
+    # Get the folder name for this species from the config.
     species_folder <- config$species[[species_id]]$folder_name
+    
+    # Extract the base name (filename without extension) of the reference genome file.
     ref_genome_name <- tools::file_path_sans_ext(basename(comparison_data[[species_id]]$reference_genome))
-    file.path(root_folder, species_folder, "results", ref_genome_name, "coverage_depth_breadth", paste0(species_id,"_combined.fastq_",ref_genome_name, "_extended_coverage_analysis.csv"))
+    
+    # Construct the full path to the extended coverage analysis file.
+    # Format: root_folder/species_folder/results/ref_genome_name/coverage_depth_breadth/{species_id}_combined.fastq_{ref_genome_name}_extended_coverage_analysis.csv
+    file.path(
+      adna_project_folder_path,
+      species_folder,
+      "results",
+      ref_genome_name,
+      "coverage_depth_breadth",
+      paste0(
+        species_id, "_combined.fastq_", ref_genome_name, "_extended_coverage_analysis.csv"
+      )
+    )
   })
 
+  # Extract user-friendly species names for display or labeling purposes.
+  # This maps species IDs to their readable names from the config.
   species_names <- sapply(names(comparison_data), function(species_id) {
     config$species[[species_id]]$name
   })
+  
+  # Name each entry in species_names with its corresponding species ID
+  # so we can later refer to them more easily.
   names(species_names) <- names(comparison_data)
   
-  # Check if analysis_files is empty
+  # Check if the list of analysis files is empty.
+  # If so, issue a warning and skip this comparison.
   if (length(analysis_files) == 0) {
     warning(paste("No analysis files found for comparison:", comparison_name))
-    next # Skip to the next comparison
+    next  # Continue to the next comparison in the loop
   }
 
-    # Information about the species analyzed to console
+  # Information about the species analyzed to console
   cat("Species analyzed for comparison:", comparison_name, "\n")
   cat("Species IDs:", names(species_names), "\n")
   cat("Species long names:", species_names, "\n")
@@ -156,5 +182,10 @@ for (comparison_name in names(config$compare_species)) {
     comparison_data[[species_id]]$reference_genome
   }), "\n")
   
-  process_and_plot_depth_breadth(analysis_files, output_folder, species_names, comparison_name)
+  process_and_plot_depth_breadth(
+    analysis_files,   # Vector of file paths for this comparison
+    output_folder_path_for_plots,    # Destination folder for saving the plot
+    species_names,    # Named vector of species long names
+    comparison_name   # Name of the current comparison, for labeling
+  )
 }

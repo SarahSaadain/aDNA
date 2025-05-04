@@ -10,7 +10,7 @@ library(yaml) # Load the yaml library
 
 process_and_plot_endogenous_reads <- function(analysis_files, output_folder, species_names, comparison_name) {
   # Initialize an empty list to store data frames
-  endogenous_data <- list()
+  list_of_analysis_dataframes <- list()
   
   # Iterate over each analysis file
   for (i in 1:length(analysis_files)) {
@@ -41,7 +41,7 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
       df$species_id <- names(species_names)[i]  # Get species ID
       df$species <- species_names[[i]] #get species long name
       
-      endogenous_data[[df$species_id[1]]] <- df
+      list_of_analysis_dataframes[[df$species_id[1]]] <- df
       
     } else {
       # Print a warning if the file does not exist
@@ -50,7 +50,7 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
   }
   
   # Combine all data frames into one data frame
-  df_combined <- bind_rows(endogenous_data)
+  df_combined <- bind_rows(list_of_analysis_dataframes)
   
   # Create a new column combining species and sample name for x-axis labels.  Use species long name.
   df_combined$label <- paste(df_combined$species, df_combined$sample, sep = "_")
@@ -106,55 +106,77 @@ if (length(args) < 3) {
   stop("Usage: Rscript script_name.R <root_folder> <config_file> <output_folder>")
 }
 
-root_folder <- args[1]
-config_file <- args[2]
-output_folder <- args[3]
+adna_project_folder_path <- args[1]
+adna_config_file <- args[2]
+output_folder_path_for_plots <- args[3]
 
 # Create the output directory if it doesn't exist
-if (!dir.exists(output_folder)) {
-  dir.create(output_folder, recursive = TRUE)
+if (!dir.exists(output_folder_path_for_plots)) {
+  dir.create(output_folder_path_for_plots, recursive = TRUE)
 }
 
 # Check if the root folder exists
-if (!dir.exists(root_folder)) {
-  stop(paste("Root folder does not exist:", root_folder))
+if (!dir.exists(adna_project_folder_path)) {
+  stop(paste("Root folder does not exist:", adna_project_folder_path))
 }
 
 # Check if the config file exists
-if (!file.exists(config_file)) {
-  stop(paste("Config file does not exist:", config_file))
+if (!file.exists(adna_config_file)) {
+  stop(paste("Config file does not exist:", adna_config_file))
 }
 
 # Read the config file
-config <- yaml.load_file(config_file) # Load the config file
+config <- yaml.load_file(adna_config_file) # Load the config file
 
 # Check if any relevant configuration is present
 if (is.null(config$compare_species) || length(config$compare_species) == 0) {
   stop("No comparisons found in the config file.")
 }
 
-# Iterate through the comparisons
+# Loop over each species comparison defined in the config's 'compare_species' section.
+# Each entry defines a group of species to compare for endogenous reads.
 for (comparison_name in names(config$compare_species)) {
+  
+  # Retrieve the species data for this comparison.
+  # Each item includes the species ID and its associated reference genome.
   comparison_data <- config$compare_species[[comparison_name]]
   
-  # Construct full paths to analysis files and extract species names.
+  # For each species in the comparison, construct the path to its endogenous reads file.
   analysis_files <- sapply(names(comparison_data), function(species_name) {
+    
+    # Get the name of the folder corresponding to the current species.
     species_folder <- config$species[[species_name]]$folder_name
+    
+    # Get the reference genome file name (without its extension).
+    # This is used to help construct the file path.
     ref_genome_name <- tools::file_path_sans_ext(basename(comparison_data[[species_name]]$reference_genome))
-    file.path(root_folder, species_folder, "results", ref_genome_name, "endogenous_reads", paste0(species_name, "_combined_endogenous_reads.csv"))
+    
+    # Build the full file path to the endogenous reads CSV file for this species.
+    # Format: root_folder/species_folder/results/ref_genome_name/endogenous_reads/{species_name}_combined_endogenous_reads.csv
+    file.path(
+      adna_project_folder_path,
+      species_folder,
+      "results",
+      ref_genome_name,
+      "endogenous_reads",
+      paste0(species_name, "_combined_endogenous_reads.csv")
+    )
   })
 
-  # Extract species names
+  # Get the readable (long) names of each species involved in the comparison,
+  # for display in plots, legends, or reports.
   species_names <- sapply(names(comparison_data), function(species_id) {
     config$species[[species_id]]$name
   })
 
+  # Assign species IDs as names of the species_names vector,
+  # maintaining a mapping between IDs and readable names.
   names(species_names) <- names(comparison_data)
   
-  # Check if analysis_files is empty
+  # If no analysis files were generated (empty list), issue a warning and skip this comparison.
   if (length(analysis_files) == 0) {
     warning(paste("No analysis files found for comparison:", comparison_name))
-    next
+    next  # Proceed to the next comparison
   }
 
   # Information about the species analyzed to console
@@ -167,5 +189,10 @@ for (comparison_name in names(config$compare_species)) {
   }), "\n")
   
   # Call the function
-  process_and_plot_endogenous_reads(analysis_files, output_folder, species_names, comparison_name)
+  process_and_plot_endogenous_reads(
+    analysis_files,   # Vector of file paths for this comparison
+    output_folder_path_for_plots,    # Destination folder for saving the plot
+    species_names,    # Named vector of species long names
+    comparison_name   # Name of the current comparison, for labeling
+  )
 }
