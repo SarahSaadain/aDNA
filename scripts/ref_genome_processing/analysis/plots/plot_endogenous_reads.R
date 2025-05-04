@@ -23,19 +23,22 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
       percent_non_endogenous = (Non_Endogenous / TotalReads) * 100  # Calculate percentage
     )
   
+  # Extract the sample name by removing everything from the first dot (.) onward in the 'Filename' column
+  df$Individual <- sub("\\..*", "", df$Filename)
+  
   # Loop over each row of the dataframe
   for(i in 1:nrow(df)) {
     # Subset the row
     row_data <- df[i, ]
 
     # Create file name and path for each chart
-    file_name <- paste0(row_data$Filename, "_endogenous_reads_pie_chart.png") # Changed to use Filename
+    file_name <- paste0(row_data$Individual, "_endogenous_reads_pie_chart.png") # Changed to use Filename
     file_path <- file.path(target_folder, file_name)
 
     if (!file.exists(file_path)) {  # Check if the file already exists
-      print(paste("Generating plot for:", row_data$Filename))
+      print(paste("Generating plot for:", row_data$Individual))
     } else {
-      print(paste("File already exists, skipping plot generation for:", row_data$Filename))
+      print(paste("File already exists, skipping plot generation for:", row_data$Individual))
       next  # Skip to the next iteration if the file exists
     }
     
@@ -47,7 +50,7 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
     )
     
     # Create the pie chart
-    p <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
+    endogenous_plot_pie_file <- ggplot(row_long, aes(x = "", y = count, fill = read_type)) +
       geom_bar(stat = "identity", width = 1) +
       coord_polar(theta = "y") +  # Create the pie chart by converting to polar coordinates
       geom_text(aes(label = paste0(round(percent, 1), "%")), 
@@ -68,8 +71,36 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
       )
     
     # Save the plot
-    ggsave(file_path, plot = p, width = 6, height = 6, dpi = 300)
+    ggsave(file_path, plot = endogenous_plot_pie_file, width = 6, height = 6, dpi = 300)
   }
+
+  # Create file name and path for each chart
+  file_name <- paste0(species, "_endogenous_reads_bar_chart.png") # Changed to use Filename
+  file_path <- file.path(target_folder, file_name)
+
+  if (!file.exists(file_path)) {  # Check if the file already exists
+    print(paste("Generating endogenous reads bar chart for:", species))
+  } else {
+    print("Plot for endogenous reads bar chart already exists, skipping plot generation")
+    return()  # Skip to the next iteration if the file exists
+  }
+
+  # Create the plot
+  endogenous_plot_bar <- ggplot(df, aes(x = Individual, y = percent_endogenous, fill = Individual)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    theme_classic(base_size = 16) +
+    labs(x = "File", y = "Percentage of Endogenous Reads", title = paste("Endogenous Reads")) +
+    theme(axis.text.x = element_text(size = 14, angle = 45, vjust = 1, hjust = 1),
+          axis.text.y = element_text(size = 16),
+          axis.title.x = element_text(size = 18, face = "bold"),
+          axis.title.y = element_text(size = 18, face = "bold"),
+          plot.title = element_text(size = 22, face = "bold", hjust = 0.5),
+          legend.position = "none",
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "white", colour = "black"))
+
+  ggsave(file_path, plot = endogenous_plot_bar, width = 6, height = 6, dpi = 300)
 }
 
 # FOR TESTING

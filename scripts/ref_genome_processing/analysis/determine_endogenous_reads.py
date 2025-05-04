@@ -37,7 +37,7 @@ def determine_endogenous_reads_for_bam_file(bam_file: str, processed_folder: str
     """Calculates endogenous reads for a single BAM file and saves to a separate file."""
     bam_filename = get_filename_from_path_without_extension(bam_file)
 
-    output_filename = f"{bam_filename}_endogenous_reads{FILE_ENDING_CSV}"
+    output_filename = f"{bam_filename}{FILE_ENDING_ENDOGENOUS_READS_CSV}"
     target_file_path = os.path.join(processed_folder, output_filename)
 
     if os.path.exists(target_file_path):
@@ -68,7 +68,7 @@ def determine_endogenous_reads_for_bam_file(bam_file: str, processed_folder: str
         
         print_debug(f"Wrote results for {bam_filename} to {target_file_path}")
     except IOError as e:
-         print_error(f"Failed to write result file for {bam_filename} at {target_file_path}: {e}")
+        print_error(f"Failed to write result file for {bam_filename} at {target_file_path}: {e}")
 
 
 def combine_endogenous_reads_files(species: str, ref_genome_id: str):
