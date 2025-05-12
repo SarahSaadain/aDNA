@@ -3,9 +3,9 @@
 from enum import Enum
 
 class ConfigSettings(Enum):
-    PROCESSING: 'processing'
-    SPECIES: 'species'
-    TOOLS: 'tools'
+    PROCESSING = 'processing'
+    SPECIES = 'species'
+    TOOLS = 'tools'
 
 # Define Enums for pipeline stages
 class PipelineStages(Enum):
