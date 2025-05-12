@@ -47,7 +47,7 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
       
     } else {
       # Print a warning if the file does not exist
-      warning(paste("File not found:", file_path))
+      stop(paste("File not found:", file_path))
     }
   }
   
@@ -161,7 +161,7 @@ for (comparison_name in names(config$compare_species)) {
       "results",
       ref_genome_name,
       "endogenous_reads",
-      paste0(species_name, "_combined_endogenous_reads.csv")
+      paste0(species_name, "_endogenous_reads.csv")
     )
   })
 

@@ -10,7 +10,7 @@ process_and_plot_before_after <- function(analysis_files, output_folder, species
   for (i in 1:length(analysis_files)) {
     filepath <- analysis_files[i]
 
-    print(paste("Processing file:", file_path))
+    print(paste("Processing file:", filepath))
 
     if (file.exists(filepath)) {
       df <- read.table(
@@ -23,7 +23,7 @@ process_and_plot_before_after <- function(analysis_files, output_folder, species
       df$species <- species_names[[i]]  # Get species long name from the provided list
       list_of_analysis_dataframes[[df$species_id[1]]] <- df # use species id to store
     } else {
-      warning(paste("File not found:", filepath))
+      stop(paste("File not found:", filepath))
     }
   }
   
