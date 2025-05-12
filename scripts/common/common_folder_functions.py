@@ -203,6 +203,16 @@ def get_folder_path_species_results_qc(species: str) -> str:
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_results_qc_centrifuge(species: str) -> str:
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_CENTRIFUGE)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_kraken(species: str) -> str:
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_KRAKEN)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_results_qc_fastqc(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_FASTQC)
     check_folder_exists_or_create(path)

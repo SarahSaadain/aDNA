@@ -1,7 +1,6 @@
 from common_aDNA_scripts import *
 
 #load individual scripts to run within the pipeline
-import scripts.try_and_error.prepare_species_for_processing as prepare_species_for_processing
 import raw_reads_processing.quality_checking.execute_fastqc as execute_fastqc
 import raw_reads_processing.quality_checking.execute_multiqc as execute_multiqc
 import raw_reads_processing.execute_fastp_adapter_remove_and_merge as execute_fastp_adapter_remove_and_merge
@@ -11,6 +10,8 @@ import raw_reads_processing.quality_checking.generate_quality_check_report as ge
 import raw_reads_processing.analysis.determine_reads_processing_result as determine_reads_processing_result
 import raw_reads_processing.analysis.determine_read_length_distribution as determine_read_length_distribution
 import raw_reads_processing.analysis.generate_plots_raw_reads_processing as generate_plots_raw_reads_processing
+import raw_reads_processing.analysis.contamination.check_contamination_centrifuge as check_contamination_centrifuge
+import raw_reads_processing.analysis.contamination.check_contamination_kraken as check_contamination_kraken
 
 import ref_genome_processing.prepare_ref_genome_for_mapping as prepare_ref_genome_for_mapping
 import ref_genome_processing.prepare_species_for_map_to_ref_genome as prepare_species_for_map_to_ref_genome
@@ -115,6 +116,12 @@ def run_pipeline_raw_reads_processing():
     # 1. reads processing results before and after
     # 2. sequence length distribution
     generate_plots_raw_reads_processing.all_species_generate_plots()
+
+    # determine contamination using centrifuge
+    check_contamination_centrifuge.all_species_run_centrifuge()
+
+    # determine contamination using kraken
+    check_contamination_kraken.all_species_run_Kraken()
 
 def run_pipeline_post_processing():
 

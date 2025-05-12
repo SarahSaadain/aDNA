@@ -23,6 +23,7 @@ class RawReadsProcessingSteps(Enum):
     DETERMINE_READS_PROCESSING_RESULT = 'determine_reads_processing_result'
     DETERMINE_READ_LENGTH_DISTRIBUTION = 'determine_read_length_distribution'
     GENERATE_RAW_READS_PLOTS = 'generate_raw_reads_plots'
+    CONTAMINATION_CHECK = 'contamination_check'
 
 # Define Enums for QC steps specifically under raw_reads_processing.qc
 class RawReadsQualityControlSteps(Enum):
@@ -60,7 +61,11 @@ class AdapterRemovalSettings(Enum):
     ADAPTERS = 'adapters'
     ADAPTERS_R1 = 'r1'
     ADAPTERS_R2 = 'r2'
-    
+
+class ContaminationCheckSettings(Enum):
+    CENTRIFUGE_DB = 'centrifuge_db'    
+    KRAKEN_DB = 'kraken_db'
+
 class QualityControlSettings(Enum):
     THREADS = 'threads'
 

@@ -85,6 +85,7 @@ def main():
         "scripts/common/common_folder_functions.py",
         "scripts/common/common_helper_functions.py",
         "scripts/common/common_logging.py",
+        "scripts/common/common_config_enumerations.py",
     
         "scripts/raw_reads_processing/quality_checking/execute_multiqc.py",
         "scripts/raw_reads_processing/quality_checking/execute_fastqc.py",
@@ -98,6 +99,8 @@ def main():
         "scripts/raw_reads_processing/analysis/determine_read_length_distribution.py",
         "scripts/raw_reads_processing/analysis/plots/plot_comparison_reads_before_after_processing.R",
         "scripts/raw_reads_processing/analysis/plots/plot_sequence_length_distribution.R",
+        "scripts/raw_reads_processing/analysis/contamination/check_contamination_centrifuge.py",
+        "scripts/raw_reads_processing/analysis/contamination/check_contamination_kraken.py",
 
         "scripts/ref_genome_processing/map_aDNA_to_refgenome.py",
         "scripts/ref_genome_processing/convert_mapped_sam2bam.py",
@@ -117,6 +120,7 @@ def main():
         "scripts/additional_analysis/species_comparison/analysis/plots/plot_compare_species_endogenous_reads.R",
         "scripts/additional_analysis/species_comparison/analysis/plots/plot_compare_species_reads_before_after_processing.R",
 
+        "scripts/additional_analysis/mtdna_analysis/pipeline_mtdna_analysis.py",
         "scripts/additional_analysis/mtdna_analysis/determine_mtdna_step1_map_to_ref_genome.py",
         "scripts/additional_analysis/mtdna_analysis/determine_mtdna_step2_determine_regions.py",
         "scripts/additional_analysis/mtdna_analysis/determine_mtdna_step3_create_and_map_consensus_sequence.py",
