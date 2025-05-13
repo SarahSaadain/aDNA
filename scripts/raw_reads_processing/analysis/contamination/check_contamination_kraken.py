@@ -17,8 +17,12 @@ def run_kraken_on_file(species: str, fastq_file_path: str,  Kraken_report_tsv: s
 
 
     # Ensure Kraken2 database path is set and exists
-    if not Kraken_db or not os.path.exists(Kraken_db):
-        print_error("Kraken2 database path is not set or does not exist. Please check your pipeline configuration.")
+    if not Kraken_db:
+        print_error("Kraken2 database path is not set. Please check your pipeline configuration.")
+        return
+    
+    if not os.path.exists(Kraken_db):
+        print_error(f"Kraken2 database path does not exist: {Kraken_db}")
         return
 
     # Construct the kraken2 command

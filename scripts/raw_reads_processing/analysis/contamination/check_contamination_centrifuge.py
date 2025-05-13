@@ -8,16 +8,15 @@ def run_centrifuge_on_file(species: str, fastq_file_path: str, centrifuge_output
    
     print_info(f"Running Centrifuge on file: {os.path.basename(fastq_file_path)}")
 
-    # Check if output files already exist
-    if os.path.exists(centrifuge_output_txt) and os.path.exists(centrifuge_report_tsv):
-        print_info(f"Output files for {os.path.basename(fastq_file_path)} already exist. Skipping.")
-        return
-    
     # get the Centrifuge database path from the config
     centrifuge_db = get_processing_settings(RawReadsProcessingSteps.CONTAMINATION_CHECK).get(ContaminationCheckSettings.CENTRIFUGE_DB.value)
 
-    if not centrifuge_db or not os.path.exists(centrifuge_db):
-        print_error("Centrifuge database path is not set or does not exist. Please check your configuration.")
+    if not centrifuge_db:
+        print_error("Centrifuge database path is not set. Please check your configuration.")
+        return
+
+    if not os.path.exists(centrifuge_db):
+        print_error(f"Centrifuge database path does not exist: {centrifuge_db}")
         return
 
     # Construct the centrifuge command
@@ -96,6 +95,11 @@ def run_centrifuge_per_species(species: str):
         # Define output file paths based on the input filename
         centrifuge_output_txt = os.path.join(output_folder, f"{filename_without_ext}{FILE_ENDING_CENTRIFUGE_OUTPUT_TXT}")
         centrifuge_report_tsv = os.path.join(output_folder, f"{filename_without_ext}{FILE_ENDING_CENTRIFUGE_REPORT_TSV}")
+
+         # Check if output files already exist
+        if os.path.exists(centrifuge_output_txt) and os.path.exists(centrifuge_report_tsv):
+            print_info(f"Output files for {os.path.basename(fastq_file_path)} already exist. Skipping.")
+            return
 
         run_centrifuge_on_file(species, fastq_file, centrifuge_output_txt , centrifuge_report_tsv)
 
