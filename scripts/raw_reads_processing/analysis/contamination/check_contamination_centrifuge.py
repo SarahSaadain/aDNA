@@ -20,10 +20,6 @@ def run_centrifuge_on_file(species: str, fastq_file_path: str, centrifuge_output
         print_error("Centrifuge database path is not set. Please check your configuration.")
         return
 
-    if not os.path.exists(centrifuge_db):
-        print_error(f"Centrifuge database path does not exist: {centrifuge_db}")
-        return
-
     # Construct the centrifuge command
     centrifuge_command = [
         PROGRAM_PATH_CENTRIFUGE,
