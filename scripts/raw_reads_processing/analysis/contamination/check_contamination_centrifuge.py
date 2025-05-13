@@ -6,7 +6,12 @@ from common_aDNA_scripts import *
 
 def run_centrifuge_on_file(species: str, fastq_file_path: str, centrifuge_output_txt: str, centrifuge_report_tsv: str, threads: int = THREADS_DEFAULT):
    
-    print_info(f"Running Centrifuge on file: {os.path.basename(fastq_file_path)}")
+    print_info(f"Running Centrifuge on file: {get_filename_from_path(fastq_file_path)}")
+
+             # Check if output files already exist
+    if os.path.exists(centrifuge_output_txt) and os.path.exists(centrifuge_report_tsv):
+        print_info(f"Output files for {get_filename_from_path(fastq_file_path)} already exist. Skipping.")
+        return
 
     # get the Centrifuge database path from the config
     centrifuge_db = get_processing_settings(RawReadsProcessingSteps.CONTAMINATION_CHECK).get(ContaminationCheckSettings.CENTRIFUGE_DB.value)
@@ -49,6 +54,46 @@ def run_centrifuge_on_file(species: str, fastq_file_path: str, centrifuge_output
     except Exception as e:
         print_error(f"An unexpected error occurred while running Centrifuge on {get_filename_from_path(fastq_file_path)}: {e}")
 
+def analyze_centrifuge_output(output_file_path: str, taxon_counts_output_path: str):
+    """
+    Analyzes a Centrifuge output file to count unique taxonomic IDs (where abundance > 0)
+    and writes the sorted counts to an output file.
+
+    Args:
+        output_file_path: The full path to the Centrifuge standard output file (.centrifuge_output.txt).
+        taxon_counts_output_path: The full path for the taxon counts output file.
+    """
+    print_info(f"Analyzing Centrifuge output for taxon counts: {get_filename_from_path(output_file_path)}")
+
+    # Check if output file already exists
+    if os.path.exists(taxon_counts_output_path):
+        print_info(f"Taxon counts output file {get_filename_from_path(taxon_counts_output_path)} already exists. Skipping analysis.")
+        return
+
+    # Construct the shell command pipeline
+    # awk '$3 != 0 {print $3}': Filters lines where the 3rd column (abundance) is not 0 and prints the 3rd column (taxon ID)
+    # sort: Sorts the taxon IDs
+    # uniq -c: Counts occurrences of each unique taxon ID
+    # sort -nr: Sorts the counts in reverse numerical order
+    analysis_command = f"awk '$3 != 0 {{print $3}}' {output_file_path} | sort | uniq -c | sort -nr > {taxon_counts_output_path}"
+
+    print_debug(f"Analysis command: {analysis_command}")
+
+    # Execute the command
+    try:
+        # Use shell=True because we are using a pipeline with pipes (|) and redirection (>)
+        subprocess.run(analysis_command, shell=True, check=True, capture_output=True, text=True)
+        print_success(f"Taxon counts analysis complete. Results written to {get_filename_from_path(taxon_counts_output_path)}")
+        # Optionally print stdout/stderr for debugging
+        # print_debug("Analysis stdout:\n" + result.stdout)
+        # print_debug("Analysis stderr:\n" + result.stderr)
+    except subprocess.CalledProcessError as e:
+        print_error(f"Taxon counts analysis failed for {get_filename_from_path(output_file_path)} with error: {e.returncode}")
+        print_error("Analysis stdout:\n" + e.stdout)
+        print_error("Analysis stderr:\n" + e.stderr)
+    except Exception as e:
+        print_error(f"An unexpected error occurred during taxon counts analysis of {get_filename_from_path(output_file_path)}: {e}")
+
 
 def run_centrifuge_per_species(species: str):
     print_info(f"Processing species: {species}")
@@ -90,18 +135,18 @@ def run_centrifuge_per_species(species: str):
     for fastq_file in fastq_files_filtered:
 
         filename_without_ext = get_filename_from_path_without_extension(fastq_file)
-        output_folder = get_folder_path_species_results_qc_centrifuge(species)
+        processed_folder = get_folder_path_species_processed_qc_kraken(species)
+        results_folder = get_folder_path_species_results_qc_kraken(species)
 
         # Define output file paths based on the input filename
-        centrifuge_output_txt = os.path.join(output_folder, f"{filename_without_ext}{FILE_ENDING_CENTRIFUGE_OUTPUT_TXT}")
-        centrifuge_report_tsv = os.path.join(output_folder, f"{filename_without_ext}{FILE_ENDING_CENTRIFUGE_REPORT_TSV}")
+        centrifuge_output_txt = os.path.join(processed_folder, f"{filename_without_ext}{FILE_ENDING_CENTRIFUGE_OUTPUT_TXT}")
+        centrifuge_report_tsv = os.path.join(processed_folder, f"{filename_without_ext}{FILE_ENDING_CENTRIFUGE_REPORT_TSV}")
 
-         # Check if output files already exist
-        if os.path.exists(centrifuge_output_txt) and os.path.exists(centrifuge_report_tsv):
-            print_info(f"Output files for {os.path.basename(fastq_file_path)} already exist. Skipping.")
-            return
+        taxon_counts_output_txt = os.path.join(results_folder, f"{filename_without_ext}{FILE_ENDING_CENTRIFUGE_TAXON_COUNTS_TXT}") # Define analysis output path
 
         run_centrifuge_on_file(species, fastq_file, centrifuge_output_txt , centrifuge_report_tsv)
+
+        analyze_centrifuge_output(centrifuge_output_txt, taxon_counts_output_txt)
 
     print_info(f"Finished processing species: {species}")
 

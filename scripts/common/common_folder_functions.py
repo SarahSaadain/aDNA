@@ -148,6 +148,21 @@ def get_folder_path_species_processed_duplicates_removed(species: str) -> str:
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_processed_qc(species: str) -> str:
+    path = os.path.join(get_folder_path_species_processed(species), FOLDER_QUALITYCONTROL)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_processed_qc_centrifuge(species: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_qc(species), FOLDER_CENTRIFUGE)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_processed_qc_kraken(species: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_qc(species), FOLDER_KRAKEN)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_processed_prepared_for_ref_genome(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed(species), FOLDER_PREPARED_FOR_REF_GENOME)
     check_folder_exists_or_create(path)

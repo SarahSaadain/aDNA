@@ -15,7 +15,6 @@ def run_kraken_on_file(species: str, fastq_file_path: str,  Kraken_report_tsv: s
     # get the Kraken database path from the config
     Kraken_db = get_processing_settings(RawReadsProcessingSteps.CONTAMINATION_CHECK).get(ContaminationCheckSettings.KRAKEN_DB.value)
 
-
     # Ensure Kraken2 database path is set and exists
     if not Kraken_db:
         print_error("Kraken2 database path is not set. Please check your pipeline configuration.")
@@ -54,6 +53,40 @@ def run_kraken_on_file(species: str, fastq_file_path: str,  Kraken_report_tsv: s
          print_error("Kraken2 command not found. Make sure kraken2 is installed and in your PATH.")
     except Exception as e:
         print_error(f"An unexpected error occurred while running Kraken2 on {get_filename_from_path(fastq_file_path)}: {e}")
+
+def analyze_kraken2_report(report_file_path: str, output_file_path: str):
+
+    print_info(f"Analyzing Kraken2 report: {get_filename_from_path(report_file_path)}")
+
+    # Check if output file already exists
+    if os.path.exists(output_file_path):
+        print_info(f"Analysis output file {get_filename_from_path(output_file_path)} already exists. Skipping analysis.")
+        return
+
+    # Construct the shell command pipeline
+    # awk '$1 == "C" {print $3}': Filters lines starting with 'C' and prints the 3rd column (species name)
+    # sort: Sorts the species names alphabetically
+    # uniq -c: Counts occurrences of each unique species name
+    # sort -nr: Sorts the counts in reverse numerical order
+    # head -5: Takes the top 5 entries
+    analysis_command = f"awk '$1 == \"C\" {{print $3}}' {report_file_path} | sort | uniq -c | sort -nr | head -5 > {output_file_path}"
+
+    print_debug(f"Analysis command: {analysis_command}")
+
+    # Execute the command
+    try:
+        # Use shell=True because we are using a pipeline with pipes (|) and redirection (>)
+        subprocess.run(analysis_command, shell=True, check=True, capture_output=True, text=True)
+        print_success(f"Analysis complete. Top 5 species written to {get_filename_from_path(output_file_path)}")
+        # Optionally print stdout/stderr for debugging
+        # print_debug("Analysis stdout:\n" + result.stdout)
+        # print_debug("Analysis stderr:\n" + result.stderr)
+    except subprocess.CalledProcessError as e:
+        print_error(f"Analysis failed for {get_filename_from_path(report_file_path)} with error: {e.returncode}")
+        print_error("Analysis stdout:\n" + e.stdout)
+        print_error("Analysis stderr:\n" + e.stderr)
+    except Exception as e:
+        print_error(f"An unexpected error occurred during analysis of {get_filename_from_path(report_file_path)}: {e}")
 
 def run_Kraken_per_species(species: str):
     print_info(f"Processing species: {species}")
@@ -95,12 +128,16 @@ def run_Kraken_per_species(species: str):
     for fastq_file in fastq_files_filtered:
 
         filename_without_ext = get_filename_from_path_without_extension(fastq_file)
-        output_folder = get_folder_path_species_results_qc_kraken(species)
+        processed_folder = get_folder_path_species_processed_qc_kraken(species)
+        results_folder = get_folder_path_species_results_qc_kraken(species)
 
         # Define output file paths based on the input filename
-        Kraken_report_tsv = os.path.join(output_folder, f"{filename_without_ext}{FILE_ENDING_KRAKEN_REPORT_TSV}")
+        kraken_report_tsv = os.path.join(processed_folder, f"{filename_without_ext}{FILE_ENDING_KRAKEN_REPORT_TSV}")
+        analysis_output_txt = os.path.join(results_folder, f"{filename_without_ext}{FILE_ENDING_KRAKEN_TOP5_ANALYSIS_TSV}") # Define analysis output path
 
-        run_kraken_on_file(species, fastq_file, Kraken_report_tsv)
+        run_kraken_on_file(species, fastq_file, kraken_report_tsv)
+
+        analyze_kraken2_report(kraken_report_tsv, analysis_output_txt)
 
     print_info(f"Finished processing species: {species}")
 
