@@ -51,14 +51,7 @@ def run_centrifuge_on_file(species: str, fastq_file_path: str, centrifuge_output
         print_error(f"An unexpected error occurred while running Centrifuge on {get_filename_from_path(fastq_file_path)}: {e}")
 
 def analyze_centrifuge_output(output_file_path: str, taxon_counts_output_path: str):
-    """
-    Analyzes a Centrifuge output file to count unique taxonomic IDs (where abundance > 0)
-    and writes the sorted counts to an output file.
 
-    Args:
-        output_file_path: The full path to the Centrifuge standard output file (.centrifuge_output.txt).
-        taxon_counts_output_path: The full path for the taxon counts output file.
-    """
     print_info(f"Analyzing Centrifuge output for taxon counts: {get_filename_from_path(output_file_path)}")
 
     # Check if output file already exists
@@ -131,8 +124,8 @@ def run_centrifuge_per_species(species: str):
     for fastq_file in fastq_files_filtered:
 
         filename_without_ext = get_filename_from_path_without_extension(fastq_file)
-        processed_folder = get_folder_path_species_processed_qc_kraken(species)
-        results_folder = get_folder_path_species_results_qc_kraken(species)
+        processed_folder = get_folder_path_species_processed_qc_centrifuge(species)
+        results_folder = get_folder_path_species_results_qc_centrifuge(species)
 
         # Define output file paths based on the input filename
         centrifuge_output_txt = os.path.join(processed_folder, f"{filename_without_ext}{FILE_ENDING_CENTRIFUGE_OUTPUT_TXT}")
