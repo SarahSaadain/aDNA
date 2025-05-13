@@ -61,7 +61,7 @@ def mtdna_get_regions_for_species(species):
 
             if os.path.exists(result_file_path):
                 print_info(f"Result file {result_file_path} already exists for species {species}. Skipping.")
-                return
+                continue
             
             execute_samtools_get_read_regions(bam_file, result_file_path)
 
