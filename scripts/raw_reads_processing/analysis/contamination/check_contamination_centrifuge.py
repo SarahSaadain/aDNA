@@ -20,6 +20,8 @@ def run_centrifuge_on_file(species: str, fastq_file_path: str, centrifuge_output
         print_error("Centrifuge database path is not set. Please check your configuration.")
         return
 
+    # https://ccb.jhu.edu/software/centrifuge/manual.shtml#usage
+
     # Construct the centrifuge command
     centrifuge_command = [
         PROGRAM_PATH_CENTRIFUGE,
@@ -27,8 +29,7 @@ def run_centrifuge_on_file(species: str, fastq_file_path: str, centrifuge_output
         "-U", fastq_file_path,
         "-S", centrifuge_output_txt,
         "--report-file", centrifuge_report_tsv,
-        "-p", str(threads), # Number of threads
-        "--verbose",
+        "--threads", str(threads), # Number of threads        
         "--seed", "999"
     ]
 
@@ -36,11 +37,11 @@ def run_centrifuge_on_file(species: str, fastq_file_path: str, centrifuge_output
 
     # Execute the command
     try:
-        subprocess.run(centrifuge_command, check=True, capture_output=True, text=True)
+        result = subprocess.run(centrifuge_command, check=True, capture_output=True, text=True)
         print_success(f"Centrifuge analysis complete for {get_filename_from_path(fastq_file_path)}")
         # Optionally print stdout/stderr for debugging
-        # print_debug("Centrifuge stdout:\n" + result.stdout)
-        # print_debug("Centrifuge stderr:\n" + result.stderr)
+        print_debug("Centrifuge stdout:\n" + result.stdout)
+        print_debug("Centrifuge stderr:\n" + result.stderr)
     except subprocess.CalledProcessError as e:
         print_error(f"Centrifuge failed for {get_filename_from_path(fastq_file_path)} with error: {e}")
         print_error("Centrifuge stdout:\n" + e.stdout)

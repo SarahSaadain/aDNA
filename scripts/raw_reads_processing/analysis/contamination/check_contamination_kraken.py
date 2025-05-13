@@ -43,8 +43,8 @@ def run_kraken_on_file(species: str, fastq_file_path: str,  Kraken_report_tsv: s
         result = subprocess.run(kraken2_command, check=True, capture_output=True, text=True)
         print_success(f"Kraken2 analysis complete for {get_filename_from_path(fastq_file_path)}")
         # Optionally print stdout/stderr for debugging
-        # print_debug("Kraken2 stdout:\n" + result.stdout)
-        # print_debug("Kraken2 stderr:\n" + result.stderr)
+        print_debug("Kraken2 stdout:\n" + result.stdout)
+        print_debug("Kraken2 stderr:\n" + result.stderr)
     except subprocess.CalledProcessError as e:
         print_error(f"Kraken2 failed for {get_filename_from_path(fastq_file_path)} with error: {e.returncode}")
         print_error("Kraken2 stdout:\n" + e.stdout)
