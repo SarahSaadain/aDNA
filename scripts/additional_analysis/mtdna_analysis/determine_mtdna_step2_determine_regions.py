@@ -16,7 +16,7 @@ def execute_samtools_get_read_regions(bam_file: str, output_file: str, threads: 
     # are passed to bedtools for BED conversion
     command = (
         f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -h -@ {threads} -F 0x100 {bam_file} | "
-        f"{PROGRAM_PATH_BEDTOOLS} bamtobed -i - > {output_file}"
+        f"{PROGRAM_PATH_BEDTOOLS} {PROGRAM_PATH_BAMTOBED} -i > {output_file}"
     )
     print_debug(f"Executing command: {command}")
     

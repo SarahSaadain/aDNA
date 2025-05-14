@@ -70,6 +70,7 @@ PROGRAM_PATH_FASTP = config[ConfigSettings.TOOLS.value]['fastp']
 PROGRAM_PATH_MULTIQC = config[ConfigSettings.TOOLS.value]['multiqc']
 PROGRAM_PATH_FASTQC = config[ConfigSettings.TOOLS.value]['fastqc']
 PROGRAM_PATH_BEDTOOLS = config[ConfigSettings.TOOLS.value]['bedtools']
+PROGRAM_PATH_BAMTOBED = "bamtobed"
 PROGRAM_PATH_BWA = config[ConfigSettings.TOOLS.value]['bwa']
 PROGRAM_PATH_BWA_MEM = "mem"
 PROGRAM_PATH_BWA_INDEX = "index"
