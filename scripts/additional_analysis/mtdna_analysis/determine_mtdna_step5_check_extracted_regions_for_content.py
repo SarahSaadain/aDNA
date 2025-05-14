@@ -17,6 +17,8 @@ def check_extracted_region_for_species(species):
         return
 
     for ref_genome_tuple in ref_genome_list:
+
+        print_info(f"Checking extracted region for reference genome {ref_genome_tuple[0]} for species {species}")
         
         # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
         ref_genome_id = ref_genome_tuple[0]
@@ -29,10 +31,10 @@ def check_extracted_region_for_species(species):
         extracted_region_files = get_files_in_folder_matching_pattern(extracted_region_folder, f"*{FILE_ENDING_FASTA}")
         
         if len(extracted_region_files) == 0:
-            print_warning(f"No extracted region files found for species {species}. Skipping.")
+            print_warning(f"No extracted region files found for reference genome {ref_genome_id} for species {species}. Skipping.")
             continue
         
-        print_debug(f"Found {len(extracted_region_files)} extracted region files for species {species}.")
+        print_debug(f"Found {len(extracted_region_files)} extracted region files for reference genome {ref_genome_id} for species {species}.")
         print_debug(f"Extracted region files: {extracted_region_files}")
         
         output_folder = get_folder_path_species_results_refgenome_mtdna_regions(species, ref_genome_id)
@@ -76,12 +78,12 @@ def check_extracted_region_for_species(species):
     print_info(f"Consensus sequence of {species} created and mapped successfully.")
 
 def all_species_check_extracted_region():
-    print_execution("Mapping aDNA to reference genome for all species")
+    print_execution("Check extracted regions for all species")
 
     for species in FOLDER_SPECIES: 
         check_extracted_region_for_species(species)
 
-    print_info("Mapping aDNA to reference genome for all species complete")
+    print_info("All species extracted regions checked successfully.")
 
 def main():
     all_species_check_extracted_region()
