@@ -57,35 +57,6 @@ except FileNotFoundError:
     exit(1) #Or handle more gracefully
 
 
-PATH_ADNA_PROJECT = config['path_adna_project']
-
-# config
-THREADS_DEFAULT = config['threads_default']
-
-# species folders
-FOLDER_SPECIES = list(config['species'].keys())
-
-# program related constants
-PROGRAM_PATH_FASTP = config[ConfigSettings.TOOLS.value]['fastp']
-PROGRAM_PATH_MULTIQC = config[ConfigSettings.TOOLS.value]['multiqc']
-PROGRAM_PATH_FASTQC = config[ConfigSettings.TOOLS.value]['fastqc']
-PROGRAM_PATH_BEDTOOLS = config[ConfigSettings.TOOLS.value]['bedtools']
-PROGRAM_PATH_BAMTOBED = "bamtobed"
-PROGRAM_PATH_BWA = config[ConfigSettings.TOOLS.value]['bwa']
-PROGRAM_PATH_BWA_MEM = "mem"
-PROGRAM_PATH_BWA_INDEX = "index"
-PROGRAM_PATH_SAMTOOLS = config[ConfigSettings.TOOLS.value]['samtools']
-PROGRAM_PATH_SAMTOOLS_FAIDX =  "faidx"
-PROGRAM_PATH_SAMTOOLS_VIEW =  "view"
-PROGRAM_PATH_SAMTOOLS_SORT = "sort"
-PROGRAM_PATH_SAMTOOLS_INDEX = "index"
-PROGRAM_PATH_SAMTOOLS_DEPTH = "depth"
-PROGRAM_PATH_ANGSD = config[ConfigSettings.TOOLS.value]['angsd']
-PROGRAM_PATH_SEQKIT = config[ConfigSettings.TOOLS.value]['seqkit']
-PROGRAM_PATH_SEQKIT_STATS = "stats"
-PROGRAM_PATH_CENTRIFUGE = config[ConfigSettings.TOOLS.value]['centrifuge']
-PROGRAM_PATH_KRAKEN = config[ConfigSettings.TOOLS.value]['kraken']
-
 def get_config_value(*keys, default=None):
     current_value = config # Access the module-level config
     for key in keys:
@@ -122,4 +93,35 @@ def get_processing_settings(process_key: Enum, species: str = None):
 
     # 6. Ensure the result is a dictionary
     return combined_settings if isinstance(combined_settings, dict) else {}
+
+
+PATH_ADNA_PROJECT = config['path_adna_project']
+
+# config
+THREADS_DEFAULT = get_config_value('threads_default', default=5)
+
+# species folders
+FOLDER_SPECIES = list(config['species'].keys())
+
+# program related constants
+PROGRAM_PATH_FASTP = get_config_value(ConfigSettings.TOOLS.value, 'fastp', default='fastp')
+PROGRAM_PATH_MULTIQC = get_config_value(ConfigSettings.TOOLS.value, 'multiqc', default='multiqc')
+PROGRAM_PATH_FASTQC = get_config_value(ConfigSettings.TOOLS.value, 'fastqc', default='fastqc')
+PROGRAM_PATH_BEDTOOLS = get_config_value(ConfigSettings.TOOLS.value, 'bedtools', default='bedtools')
+PROGRAM_PATH_BAMTOBED = "bamtobed"
+PROGRAM_PATH_BWA = get_config_value(ConfigSettings.TOOLS.value, 'bwa', default='bwa')
+PROGRAM_PATH_BWA_MEM = "mem"
+PROGRAM_PATH_BWA_INDEX = "index"
+PROGRAM_PATH_SAMTOOLS = get_config_value(ConfigSettings.TOOLS.value, 'samtools', default='samtools')
+PROGRAM_PATH_SAMTOOLS_FAIDX =  "faidx"
+PROGRAM_PATH_SAMTOOLS_VIEW =  "view"
+PROGRAM_PATH_SAMTOOLS_SORT = "sort"
+PROGRAM_PATH_SAMTOOLS_INDEX = "index"
+PROGRAM_PATH_SAMTOOLS_DEPTH = "depth"
+PROGRAM_PATH_ANGSD = get_config_value(ConfigSettings.TOOLS.value, 'angsd', default='angsd')
+PROGRAM_PATH_SEQKIT = get_config_value(ConfigSettings.TOOLS.value, 'seqkit', default='seqkit')
+PROGRAM_PATH_SEQKIT_STATS = "stats"
+PROGRAM_PATH_CENTRIFUGE = get_config_value(ConfigSettings.TOOLS.value, 'centrifuge', default='centrifuge')
+PROGRAM_PATH_KRAKEN = get_config_value(ConfigSettings.TOOLS.value, 'kraken', default='kraken2')
+
 
