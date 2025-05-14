@@ -86,7 +86,7 @@ def extract_mtdna_region_for_species(species: str):
 
         if len(fasta_files) == 0:
             print_warning(f"No consensus sequence files found for species {species}. Skipping.")
-            return
+            continue
         
         print_debug(f"Found {len(fasta_files)} consensus sequence files for species {species}.")
         print_debug(f"Consensus sequence files: {fasta_files}")
@@ -96,7 +96,7 @@ def extract_mtdna_region_for_species(species: str):
         
         if len(bed_files) == 0:
             print_warning(f"No BED files found for species {species}. Skipping.")
-            return
+            continue
         
         print_debug(f"Found {len(bed_files)} BED files for species {species}.")
         print_debug(f"BED files: {bed_files}")

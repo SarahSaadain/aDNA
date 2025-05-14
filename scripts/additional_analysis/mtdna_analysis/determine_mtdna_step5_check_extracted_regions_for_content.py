@@ -20,9 +20,7 @@ def check_extracted_region_for_species(species):
         
         # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
         ref_genome_id = ref_genome_tuple[0]
-        ref_genome_path = ref_genome_tuple[1]
-
-    
+        #ref_genome_path = ref_genome_tuple[1]
 
         # Get the folder containing the extracted region sequences
         extracted_region_folder = get_folder_path_species_processed_refgenome_mtdna_extracted_sequence(species, ref_genome_id)
@@ -32,7 +30,7 @@ def check_extracted_region_for_species(species):
         
         if len(extracted_region_files) == 0:
             print_warning(f"No extracted region files found for species {species}. Skipping.")
-            return
+            continue
         
         print_debug(f"Found {len(extracted_region_files)} extracted region files for species {species}.")
         print_debug(f"Extracted region files: {extracted_region_files}")
@@ -43,7 +41,7 @@ def check_extracted_region_for_species(species):
 
         if os.path.exists(output_file):
             print_info(f"Output file {output_file} already exists. Skipping analysis.")
-            return
+            continue
         
         results = []
 

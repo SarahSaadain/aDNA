@@ -48,7 +48,7 @@ def mtdna_get_regions_for_species(species):
 
         if len(bam_files) == 0:
             print_warning(f"No BAM files found for species {species}. Skipping.")
-            return
+            continue
         
         print_debug(f"Found {len(bam_files)} BAM files for species {species}.")
         print_debug(f"BAM files: {bam_files}")
