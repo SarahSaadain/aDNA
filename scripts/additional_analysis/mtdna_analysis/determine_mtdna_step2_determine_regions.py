@@ -12,8 +12,10 @@ def execute_samtools_get_read_regions(bam_file: str, output_file: str, threads: 
         print_warning(f"Output file {output_file} already exists. Skipping.")
         return
     
+    # Exclude secondary alignments (SAM flag 0x100) to ensure only primary alignments 
+    # are passed to bedtools for BED conversion
     command = (
-        f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -h -@ {threads} {bam_file} | "
+        f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -h -@ {threads} -F 0x100 {bam_file} | "
         f"{PROGRAM_PATH_BEDTOOLS} bamtobed -i - > {output_file}"
     )
     print_debug(f"Executing command: {command}")
