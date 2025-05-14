@@ -67,7 +67,6 @@ FOLDER_SPECIES = list(config['species'].keys())
 
 # program related constants
 PROGRAM_PATH_FASTP = config[ConfigSettings.TOOLS.value]['fastp']
-PROGRAM_PATH_SGA = config[ConfigSettings.TOOLS.value]['sga']
 PROGRAM_PATH_MULTIQC = config[ConfigSettings.TOOLS.value]['multiqc']
 PROGRAM_PATH_FASTQC = config[ConfigSettings.TOOLS.value]['fastqc']
 PROGRAM_PATH_BEDTOOLS = config[ConfigSettings.TOOLS.value]['bedtools']
