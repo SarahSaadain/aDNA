@@ -1,5 +1,7 @@
 import os
 import subprocess
+
+from multiprocessing import Pool, cpu_count
 from common_aDNA_scripts import *
 import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
 
@@ -7,75 +9,95 @@ from ref_genome_processing.map_aDNA_to_refgenome import execute_bwa_map_aDNA_to_
 
 def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir: str):
 
-    print_info(f"Executing angsd to create consensus sequence for {input_file}")
+    pid = os.getpid() # Get current process ID for logging
+    print_info(f"[PID {pid}] Executing angsd to create consensus sequence for {input_file}")
 
     if not os.path.exists(input_file):
         raise Exception(f"Input file {input_file} does not exist!")
     
     if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+        raise Exception(f"Output directory {output_dir} does not exist!")
 
     base_name = get_filename_from_path_without_extension(input_file)
 
-    # create consensus fasta
-    #NOTE: maybe change later so it is not fasta.fa.gz but just fa.gz -> remove .fasta from below
+    # Construct the output file path for the consensus FASTA sequence.
     out_file_path = os.path.join(output_dir, f"{base_name}_consensus{FILE_ENDING_FASTA}")
     
-    if os.path.exists(out_file_path+FILE_ENDING_FA_GZ):
-        print_info(f"Consensus sequence {out_file_path} already exists. Skipping.")
+    # Check if the gzipped consensus sequence already exists to avoid re-processing.
+    if os.path.exists(out_file_path + FILE_ENDING_FA_GZ):
+        print_info(f"[PID {pid}] Consensus sequence for {base_name} already exists. Skipping.")
         return
 
-    print_info(f"Creating consensus sequence of {input_file}...")
+    print_info(f"[PID {pid}] Creating consensus sequence of {input_file}...")
 
     try:
         command_angsd = [PROGRAM_PATH_ANGSD, "-out", out_file_path, "-i", input_file, "-doFasta", "2", "-doCounts", "1"]
-        print_debug(f"Executing command: {' '.join(command_angsd)}")
+        print_debug(f"[PID {pid}] Executing command: {' '.join(command_angsd)}")
 
-        subprocess.run(command_angsd, check=True)
-        print_success(f"Consensus sequence of {input_file} created successfully.")
+        subprocess.run(command_angsd, check=True, capture_output=True, text=True) # Added capture_output and text
+        print_success(f"[PID {pid}] Consensus sequence of {input_file} created successfully.")
 
-        # index consensus sequence
-        print_info(f"Indexing consensus sequence {out_file_path}...")
+        # Index the newly created gzipped consensus sequence using Samtools faidx.
+        print_info(f"[PID {pid}] Indexing consensus sequence {out_file_path + FILE_ENDING_FA_GZ}...")
 
         try:
             command_samtools = [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_FAIDX, "-i", out_file_path+FILE_ENDING_FA_GZ]
-            print_debug(f"Executing command: {command_samtools}")
+            print_debug(f"[PID {pid}] Executing command: {' '.join(command_samtools)}")
 
-            subprocess.run(command_samtools, check=True)
-            print_success(f"Consensus sequence {out_file_path} indexed successfully.")
+            subprocess.run(command_samtools, check=True, capture_output=True, text=True) # Added capture_output and text
+            print_success(f"[PID {pid}] Consensus sequence {out_file_path + FILE_ENDING_FA_GZ} indexed successfully.")
         except Exception as e:
-            print_error(f"Failed to index consensus sequence {out_file_path}: {e}")
+            print_error(f"[PID {pid}] Failed to index consensus sequence {out_file_path}: {e}")
 
         # map consensus sequence to reference genome
 
     except Exception as e:
-        print_error(f"Failed to create consensus sequence of {input_file}: {e}")
+        print_error(f"[PID {pid}] Failed to create consensus sequence of {input_file}: {e}")
 
 def create_consensus_sequence_for_species(species: str, ref_genome_id: str):
-    print_info(f"Creating consensus sequence for species {species} ...")
 
+    print_info(f"Creating consensus sequence for species {species} and ref genome {ref_genome_id}...")
+
+    # Get the folder containing mapped aDNA reads for the given species and reference genome.
     aDNA_reads_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
 
-    #get mapped reads
+    # Get a list of all sorted BAM files (mapped reads) in the specified folder.
     list_of_mapped_aDNA_files = get_files_in_folder_matching_pattern(aDNA_reads_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
+    # If no mapped reads are found, log a warning and exit the function.
     if len(list_of_mapped_aDNA_files) == 0:
-        print_warning(f"No mapped reads found for species {species}. Skipping.")
+        print_warning(f"No mapped reads found for species {species} with ref genome {ref_genome_id}. Skipping consensus sequence creation.")
         return
     
-    print_debug(f"Found {len(list_of_mapped_aDNA_files)} mapped reads for species {species}.")
+    print_debug(f"Found {len(list_of_mapped_aDNA_files)} mapped reads for species {species} with ref genome {ref_genome_id}.")
     print_debug(f"Mapped reads: {list_of_mapped_aDNA_files}")
 
+    # Determine the output folder for consensus sequences.
     output_folder_consensus_seq = get_folder_path_species_processed_refgenome_mtdna_consensus_sequences(species, ref_genome_id)
 
-    for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files:
+    # Determine the number of processes to use for parallel execution.
+    # It takes the minimum of a predefined default (THREADS_DEFAULT) and the
+    # actual number of CPU cores available on the system, ensuring efficient
+    # resource utilization without overloading the system.
+    num_processes = min(THREADS_DEFAULT, cpu_count())
+    print_debug(f"Using {num_processes} processes for parallel execution.")
 
-        print_info(f"Creating consensus sequence for {mapped_aDNA_read_file_path} ...")
+    # Initialize a multiprocessing Pool. This creates a pool of worker processes
+    # that can execute tasks concurrently. The 'processes' argument specifies
+    # the maximum number of worker processes to use.
+    with Pool(processes=num_processes) as pool:
+        # Prepare the arguments for each call to the _process_single_mapped_aDNA_file helper function.
+        # Each tuple (mapped_aDNA_read_file_path, species, ref_genome_id) represents
+        # one set of arguments for a single task.
+        args_for_pool = [(mapped_aDNA_read_file_path, output_folder_consensus_seq) for mapped_aDNA_read_file_path in list_of_mapped_aDNA_files]
 
-        execute_angsd_create_and_map_consensus_sequence(mapped_aDNA_read_file_path, output_folder_consensus_seq)
+        # Use pool.starmap to apply the _process_single_mapped_aDNA_file function to each
+        # set of arguments in args_for_pool. starmap is suitable when the target
+        # function expects multiple arguments, which are provided as a tuple.
+        # This call blocks until all tasks in the pool have completed.
+        pool.starmap(execute_angsd_create_and_map_consensus_sequence, args_for_pool)
 
-    print_info(f"Creating consensus sequence for species {species} complete")
-
+    print_info(f"Consensus sequence creation for species {species} and ref genome {ref_genome_id} complete.")
 
 def map_consensus_sequence_for_species(species: str, ref_genome_tuple: tuple):
     print_info(f"Mapping aDNA consensus sequence to reference genome for species {species} ...")
