@@ -53,6 +53,11 @@ def check_extracted_region_for_species(species):
 
             filename = get_filename_from_path(file_path)
 
+            # check if the file is empty
+            if os.path.getsize(file_path) == 0:
+                print_warning(f"File {file_path} is empty. Skipping.")
+                continue
+
             with open(file_path, "r") as file:
                 record = next(SeqIO.parse(file, "fasta"))  # Since each file has one read
                 sequence = str(record.seq)
