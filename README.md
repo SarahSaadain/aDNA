@@ -134,6 +134,8 @@ Note: the filed `species_id` can be used optionally to specify a specific specie
     *   `angsd`: Path to ANGSD.
     *   `seqkit`: Path to SeqKit.
 
+Note: If the tools are not provided, default values are used and it is expected that the tool can be called via the command line directly.
+
 ## Folder Structure
 
 ### Species Folders
