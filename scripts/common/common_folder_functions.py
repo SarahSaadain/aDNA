@@ -153,6 +153,16 @@ def get_folder_path_species_processed_qc(species: str) -> str:
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_processed_qc_reads_processing(species: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_qc(species), FOLDER_PROCESSED_READS)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_processed_qc_read_length_distribution(species: str) -> str:
+    path = os.path.join(get_folder_path_species_processed_qc(species), FOLDER_READ_LENGTH_DISTRIBUTION)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_processed_qc_centrifuge(species: str) -> str:
     path = os.path.join(get_folder_path_species_processed_qc(species), FOLDER_CENTRIFUGE)
     check_folder_exists_or_create(path)
