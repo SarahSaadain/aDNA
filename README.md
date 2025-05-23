@@ -105,8 +105,10 @@ tools:
 *   `compare_species`
     * `comparison ID/Name`:  First comparison. Unique Name used for file names
         * `species ID 1`: first species 
+            * `species_id`: Optional species id. If not provided, the config species ID will be used instead
             * `reference_genome`: Name of reference genome fo comparison. e.g.: "refgenome.fna"
         * `species ID 2`: second species 
+            * `species_id`: Optional species id. If not provided, the config species ID will be used instead
             * `reference_genome`: Name of reference genome fo comparison. e.g.: "refgenome.fna"
         * `species ID ...`: ...
             * `reference_genome`: ...
@@ -115,6 +117,8 @@ tools:
     * `comparison ID/Name`:  Second comparison. Unique Name used for file names
         * `species ID 1`: first species 
         * ...
+
+Note: the filed `species_id` can be used optionally to specify a specific species. This is usefull if you want to compare the same species with different reference genomes. If you want to compare different species, then this value can be skipped if the species ID is provided as the parent config node.
 
 ### Paths to External Tools
 
