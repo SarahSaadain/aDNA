@@ -30,10 +30,6 @@ def execute_samtools_detpth(input_file: str, coverage_output_file: str):
         print_error(f"Failed to execute samtools depth: {e}")
 
 def analyze_coverage_file(coverage_file, depth_breath_output_folder):
-    """
-    Processes a SAMtools depth TSV file and generates per-scaffold coverage metrics,
-    using memory-efficient chunked reading. Progress is printed at key milestones.
-    """
 
     # The `analyze_coverage_file()` function was originally processing the entire coverage file 
     # in-memory at once. However, this approach posed significant memory limitations when working 
