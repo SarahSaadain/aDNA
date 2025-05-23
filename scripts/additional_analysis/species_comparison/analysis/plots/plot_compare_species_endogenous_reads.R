@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+q#!/usr/bin/env Rscript
 
 library(dplyr)
 library(ggplot2)
@@ -143,37 +143,68 @@ for (comparison_name in names(config$compare_species)) {
   # Each item includes the species ID and its associated reference genome.
   comparison_data <- config$compare_species[[comparison_name]]
   
-  # For each species in the comparison, construct the path to its endogenous reads file.
-  analysis_files <- sapply(names(comparison_data), function(species_name) {
+  # Initialize empty lists to store the file paths and species names.
+  # Using lists first allows for flexible construction before converting to named vectors.
+  analysis_files_list <- list()
+  species_names_list <- list()
+  
+  # Iterate through each entry within the current comparison.
+  for (comparison_entry_key in names(comparison_data)) {
+    current_entry_details <- comparison_data[[comparison_entry_key]]
     
-    # Get the name of the folder corresponding to the current species.
-    species_folder <- config$species[[species_name]]$folder_name
+    # Determine the actual species_id to be used for looking up details in config$species.
+    # It first checks if 'species_id' is explicitly provided within the current entry's details.
+    # If not, it defaults to using the 'comparison_entry_key' itself as the species_id.
+    actual_species_id <- if (!is.null(current_entry_details$species_id) && current_entry_details$species_id != "") {
+      current_entry_details$species_id
+    } else {
+      comparison_entry_key
+    }
     
-    # Get the reference genome file name (without its extension).
-    # This is used to help construct the file path.
-    ref_genome_name <- tools::file_path_sans_ext(basename(comparison_data[[species_name]]$reference_genome))
+    # Get the folder name for the determined 'actual_species_id' from the main config$species section.
+    species_folder <- config$species[[actual_species_id]]$folder_name
+    
+    # Extract the base name (filename without extension) of the reference genome file
+    # specified for the current comparison entry.
+    ref_genome_name <- tools::file_path_sans_ext(basename(current_entry_details$reference_genome))
     
     # Build the full file path to the endogenous reads CSV file for this species.
-    # Format: root_folder/species_folder/results/ref_genome_name/endogenous_reads/{species_name}_combined_endogenous_reads.csv
-    file.path(
+    # The 'species_id' used in the filename part of the path is the 'actual_species_id'.
+    file_path <- file.path(
       adna_project_folder_path,
       species_folder,
       "results",
       ref_genome_name,
       "endogenous_reads",
-      paste0(species_name, "_endogenous_reads.csv")
+      paste0(actual_species_id, "_endogenous_reads.csv")
     )
-  })
-
-  # Get the readable (long) names of each species involved in the comparison,
-  # for display in plots, legends, or reports.
-  species_names <- sapply(names(comparison_data), function(species_id) {
-    config$species[[species_id]]$name
-  })
-
-  # Assign species IDs as names of the species_names vector,
-  # maintaining a mapping between IDs and readable names.
-  names(species_names) <- names(comparison_data)
+    # Store the constructed file path in the list, using the original 'comparison_entry_key'
+    # as the name. This key is what defines the relationship within the comparison.
+    analysis_files_list[[comparison_entry_key]] <- file_path
+    
+    # Get the user-friendly species name from the main config$species section.
+    # This name will be used as a base for generating a unique plot label.
+    display_name_from_config <- config$species[[actual_species_id]]$name
+    if (is.null(display_name_from_config) || display_name_from_config == "") {
+      display_name_from_config <- actual_species_id # Fallback if no display name is found
+    }
+    
+    # Determine the label for plotting (value in species_names_list).
+    # This logic aims to create a unique and informative label to prevent "duplicated factor level" errors.
+    if (!is.null(current_entry_details$species_id) && current_entry_details$species_id != "") {
+        # If species_id was explicitly given, concatenate comparison_entry_key with the display name.
+        # This makes the label unique if multiple entries refer to the same actual_species_id.
+        species_names_list[[comparison_entry_key]] <- paste0(comparison_entry_key, " ", display_name_from_config)
+    } else {
+        # If species_id was NOT explicitly given, use the display_name_from_config directly.
+        species_names_list[[comparison_entry_key]] <- display_name_from_config
+    }
+  }
+  
+  # Convert the lists of file paths and species names into named vectors.
+  # This makes them suitable for functions that expect named vectors (e.g., for plotting).
+  analysis_files <- unlist(analysis_files_list)
+  species_names <- unlist(species_names_list)
   
   # If no analysis files were generated (empty list), issue a warning and skip this comparison.
   if (length(analysis_files) == 0) {
@@ -183,11 +214,14 @@ for (comparison_name in names(config$compare_species)) {
 
   # Information about the species analyzed to console
   cat("Species analyzed for comparison:", comparison_name, "\n")
-  cat("Species IDs:", names(species_names), "\n")
-  cat("Species long names:", species_names, "\n")
+  # Note: names(species_names) will correspond to the 'comparison_entry_key'
+  cat("Comparison Entry Keys:", names(species_names), "\n")
+  cat("Species Display Names:", species_names, "\n")
   cat("Analysis files:", analysis_files, "\n")
-  cat("Reference genomes:", sapply(names(comparison_data), function(species_id) {
-    comparison_data[[species_id]]$reference_genome
+  # Log the reference genomes used for each entry in the comparison.
+  # This uses the original 'comparison_entry_key' to access the 'reference_genome' from 'comparison_data'.
+  cat("Reference genomes:", sapply(names(comparison_data), function(comparison_entry_key) {
+    comparison_data[[comparison_entry_key]]$reference_genome
   }), "\n")
   
   # Call the function

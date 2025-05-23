@@ -133,53 +133,93 @@ if (is.null(config$compare_species) || length(config$compare_species) == 0) {
 # Loop over each species comparison defined in the config file.
 # Each comparison involves a group of species to be analyzed together.
 for (comparison_name in names(config$compare_species)) {
-  
-  # Get the list of species for the current comparison.
+  # Extract the data for the current comparison.
+  # This 'comparison_data' (referred to as '_data' in the original code)
   comparison_data <- config$compare_species[[comparison_name]]
   
-  # For each species in this comparison, construct the full path to its processing result file.
-  analysis_files <- sapply(names(comparison_data), function(species_id) {
+  # Initialize empty lists to store the file paths and species names.
+  # Using lists first allows for flexible construction before converting to named vectors.
+  analysis_files_list <- list()
+  species_names_list <- list()
+  
+  # Iterate through each entry within the current comparison.
+  for (comparison_entry_key in names(comparison_data)) {
+    current_entry_details <- comparison_data[[comparison_entry_key]]
     
-    # Get the folder name where the species' data is stored (defined in config).
-    species_folder <- config$species[[species_id]]$folder_name
+    # Determine the actual species_id based on the new rule:
+    # If 'species_id' is explicitly provided in the current entry and is not empty, use it.
+    # Otherwise, default to using the 'comparison_entry_key' itself as the species_id.
+    actual_species_id <- if (!is.null(current_entry_details$species_id) && current_entry_details$species_id != "") {
+      current_entry_details$species_id
+    } else {
+      comparison_entry_key
+    }
     
-    # Build the full path to the reads processing result TSV file.
-    # Format: root_folder/species_folder/results/qualitycontrol/processed_reads/{species_id}_reads_processing_result.tsv
-    file.path(
+    # Retrieve the folder name for the determined 'actual_species_id' from the main config.
+    species_folder <- config$species[[actual_species_id]]$folder_name
+    
+    # Extract the base name (filename without extension) of the reference genome file
+    # for the current comparison entry.
+    ref_genome_name <- tools::file_path_sans_ext(basename(current_entry_details$reference_genome))
+    
+    # Construct the full file path to the extended coverage analysis file for this entry.
+    # The 'species_id' used in the filename is the 'actual_species_id' determined above.
+    file_path <- file.path(
       adna_project_folder_path,
       species_folder,
       "results",
       "qualitycontrol",
       "processed_reads",
-      paste0(species_id, "_reads_processing_result.tsv")
+      paste0(actual_species_id, "_reads_processing_result.tsv")
     )
-  })
-
-  # Get the full (long) names of the species from the config file
-  # to use for plots, labels, or printed output.
-  species_names <- sapply(names(comparison_data), function(species_id) {
-    config$species[[species_id]]$name
-  })
-
-  # Name each entry in the species_names vector with its corresponding species ID.
-  # This preserves the relationship between species_id and readable name.
-  names(species_names) <- names(comparison_data)
+    # Store the constructed file path, using the original 'comparison_entry_key'
+    # as the name for easy reference later.
+    analysis_files_list[[comparison_entry_key]] <- file_path
+    
+    # Get the user-friendly species name from the main config$species section.
+    # This name will be used as a base for generating a unique plot label.
+    display_name_from_config <- config$species[[actual_species_id]]$name
+    if (is.null(display_name_from_config) || display_name_from_config == "") {
+      display_name_from_config <- actual_species_id # Fallback if no display name is found
+    }
+    
+    # Determine the label for plotting (value in species_names_list).
+    # This logic aims to create a unique and informative label to prevent "duplicated factor level" errors.
+    if (!is.null(current_entry_details$species_id) && current_entry_details$species_id != "") {
+        # If species_id was explicitly given, concatenate comparison_entry_key with the display name.
+        # This makes the label unique if multiple entries refer to the same actual_species_id.
+        species_names_list[[comparison_entry_key]] <- paste0(comparison_entry_key, " ", display_name_from_config)
+    } else {
+        # If species_id was NOT explicitly given, use the display_name_from_config directly.
+        species_names_list[[comparison_entry_key]] <- display_name_from_config
+    }
+    
+    }
   
-  # If no analysis files were found for this comparison (e.g., misconfiguration),
-  # print a warning and skip to the next comparison in the loop.
+  # Convert the lists of file paths and species names into named vectors.
+  # This makes them suitable for functions that expect named vectors.
+  analysis_files <- unlist(analysis_files_list)
+  species_names <- unlist(species_names_list)
+  
+  # Check if the list of analysis files is empty after processing all entries.
+  # If so, issue a warning and skip to the next comparison.
   if (length(analysis_files) == 0) {
     warning(paste("No analysis files found for comparison:", comparison_name))
-    next
+    next  # Continue to the next comparison in the loop
   }
 
-  # Print summary information to the console for transparency/debugging.
+  # Log information about the species analyzed to the console for debugging/monitoring.
   cat("Species analyzed for comparison:", comparison_name, "\n")
-  cat("Species IDs:", names(species_names), "\n")
-  cat("Species long names:", species_names, "\n")
+  cat("Species IDs (as used in config lookup):", names(species_names), "\n") # These are the keys from the comparison data
+  cat("Species long names (for display):", species_names, "\n")
   cat("Analysis files:", analysis_files, "\n")
-
-  # Call a custom function to process the TSV files and generate a "before/after" plot.
-  # This function is assumed to handle file reading, data processing, and visualization.
+  
+  # Log the reference genomes used for each entry in the comparison.
+  # This uses the original 'comparison_entry_key' to access the 'reference_genome' from 'comparison_data'.
+  cat("Reference genomes:", sapply(names(comparison_data), function(comparison_entry_key) {
+    comparison_data[[comparison_entry_key]]$reference_genome
+  }), "\n")
+  
   process_and_plot_before_after(
     analysis_files,   # Vector of file paths for this comparison
     output_folder_path_for_plots,    # Destination folder for saving the plot
@@ -187,7 +227,7 @@ for (comparison_name in names(config$compare_species)) {
     comparison_name   # Name of the current comparison, for labeling
   )
 
-  print(paste("Before/after plot saved for comparison:", comparison_name))
+  print(paste("Depth and breadth plot saved for comparison:", comparison_name))
 }
 
 
