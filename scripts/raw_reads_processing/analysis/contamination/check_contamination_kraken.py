@@ -179,7 +179,7 @@ def combine_kraken2_top5_analysis(species: str):
     print_info(f"Saved combined Kraken2 report to: {output_path}")
 
     # combine by individuum
-    individuum_combined = df.groupby(['individuum', 'protocol']).sum(numeric_only=True).reset_index()
+    individuum_combined = df.groupby(['individuum']).sum(numeric_only=True).reset_index()
     individuum_combined_output_path = os.path.join(results_folder, f"{species}{FILE_ENDING_KRAKEN_BY_INDIVIDUAL_COMBINED_ANALYSIS_CSV}")
     individuum_combined.to_csv(individuum_combined_output_path, index=False)
     print_info(f"Saved combined Kraken2 report to: {individuum_combined_output_path}")
