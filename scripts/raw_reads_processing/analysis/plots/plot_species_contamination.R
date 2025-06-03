@@ -122,7 +122,7 @@ plot_kraken2_contamination_summary <- function(species, source_file, target_fold
   }
 
   # Generate plot
-  plot_kraken2_boxplot_by_species(df, species, target_folder)
+  plot_kraken2_barplots(df, species, target_folder)
 }
 
 #------------------------------------------
