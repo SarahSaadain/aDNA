@@ -151,7 +151,17 @@ def combine_kraken2_top5_analysis(species: str):
     # Create a list of rows for the final DataFrame
     rows = []
     for filename, species_counts in all_counts.items():
-        row = {'filename': filename}  # Start with filename
+        
+        parts = filename.split('_')
+        individuum = parts[0]   # e.g., "Bger3"
+        protocol = parts[1]     # e.g., "D"
+
+        row = {
+            'filename': filename,
+            'individuum': individuum,
+            'protocol': protocol
+        }
+
         for species_id in sorted_species_ids:
             # Fill in count if it exists, otherwise put 0
             row[species_id] = species_counts.get(species_id, 0)
@@ -160,15 +170,25 @@ def combine_kraken2_top5_analysis(species: str):
     # Convert list of rows into a DataFrame
     df = pd.DataFrame(rows)
 
-    # Ensure columns are ordered with filename first, then species in sorted order
-    df = df[['filename'] + sorted_species_ids]
+    # Ensure correct column order: filename, individuum, protocol, then species IDs
+    df = df[['filename', 'individuum', 'protocol'] + sorted_species_ids]
 
     # Save the DataFrame as a CSV file
-    output_path = os.path.join(results_folder, f"{species}_{FILE_ENDING_KRAKEN_COMBINED_ANALYSIS_CSV}")
+    output_path = os.path.join(results_folder, f"{species}{FILE_ENDING_KRAKEN_ALL_READS_COMBINED_ANALYSIS_CSV}")
     df.to_csv(output_path, index=False)
+    print_info(f"Saved combined Kraken2 report to: {output_path}")
 
-    print_headline(f"Saved combined Kraken2 report to: {output_path}")
+    # combine by individuum
+    individuum_combined = df.groupby(['individuum', 'protocol']).sum(numeric_only=True).reset_index()
+    individuum_combined_output_path = os.path.join(results_folder, f"{species}{FILE_ENDING_KRAKEN_BY_INDIVIDUAL_COMBINED_ANALYSIS_CSV}")
+    individuum_combined.to_csv(individuum_combined_output_path, index=False)
+    print_info(f"Saved combined Kraken2 report to: {individuum_combined_output_path}")
 
+    # combine by protocol
+    protocol_combined = df.groupby(['protocol']).sum(numeric_only=True).reset_index()
+    protocol_combined_output_path = os.path.join(results_folder, f"{species}{FILE_ENDING_KRAKEN_BY_PROTOCOL_COMBINED_ANALYSIS_CSV}")
+    protocol_combined.to_csv(protocol_combined_output_path, index=False)
+    print_info(f"Saved combined Kraken2 report to: {protocol_combined_output_path}")
     
 
 def run_Kraken_per_species(species: str):
