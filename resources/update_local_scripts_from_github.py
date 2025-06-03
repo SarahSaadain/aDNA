@@ -92,7 +92,6 @@ def main():
         "scripts/raw_reads_processing/polish_fastp_quality_filter.py",
         "scripts/raw_reads_processing/polish_fastp_deduplication.py",
         "scripts/raw_reads_processing/execute_fastp_adapter_remove_and_merge.py",
-        "scripts/raw_reads_processing/prepare_species_for_processing.py",
         "scripts/raw_reads_processing/quality_checking/generate_quality_check_report.py",
         "scripts/raw_reads_processing/analysis/generate_plots_raw_reads_processing.py",
         "scripts/raw_reads_processing/analysis/determine_reads_processing_result.py",
