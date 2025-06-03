@@ -24,6 +24,8 @@ def plot_depth_analysis(species: str, reference_genome_id: str):
 
     r_script = get_r_script(R_SCRIPT_PLOT_DEPTH, FOLDER_REF_GENOME_PROCESSING)
 
+    print_info(f"R script for plotting depth analysis per sample")
+
     for analysis_file in analysis_files:
 
         sample = get_filename_from_path(analysis_file).replace(FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV, "")
@@ -33,6 +35,14 @@ def plot_depth_analysis(species: str, reference_genome_id: str):
         print_info(f"Plotting depth analysis for file {analysis_file} to {output_folder_path}")
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
+
+    
+    # plot individuals together
+    r_script_individuals = get_r_script(R_SCRIPT_PLOT_DEPTH_COMPARE_INDIVIDUALS, FOLDER_REF_GENOME_PROCESSING)
+    output_folder_path_individuals = get_folder_path_species_results_refgenome_plots_depth(species, reference_genome_id)
+
+    print_info(f"Plotting depth analysis for all individuals together to {output_folder_path_individuals}")
+    call_r_script(r_script_individuals, species, analysis_folder, output_folder_path_individuals)
 
     print_info(f"Finished plotting depth analysis for species {species} and reference genome {reference_genome_id}")
 
@@ -55,6 +65,8 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
 
     r_script = get_r_script(R_SCRIPT_PLOT_BREADTH, FOLDER_REF_GENOME_PROCESSING)
 
+    print_info(f"R script for plotting breadth analysis per sample")
+
     for analysis_file in analysis_files:
 
         sample = get_filename_from_path(analysis_file).replace(FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV, "")
@@ -64,6 +76,12 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
         print_info(f"Plotting breadth analysis for file {analysis_file} to {output_folder_path}")
 
         call_r_script(r_script, species, analysis_file, output_folder_path)
+
+    # plot individuals together
+    r_script_individuals = get_r_script(R_SCRIPT_PLOT_BREADTH_COMPARE_INDIVIDUALS, FOLDER_REF_GENOME_PROCESSING)
+    output_folder_path_individuals = get_folder_path_species_results_refgenome_plots_breadth(species, reference_genome_id)
+    print_info(f"Plotting breadth analysis for all individuals together to {output_folder_path_individuals}")
+    call_r_script(r_script_individuals, species, analysis_folder, output_folder_path_individuals)
 
     print_info(f"Finished plotting breadth analysis for species {species} and reference genome {reference_genome_id}")
 
@@ -83,7 +101,6 @@ def plot_endogenous_reads(species: str, reference_genome_id: str):
     
     print_debug(f"Found {len(analysis_files)} depth analysis files for species {species} and reference genome {reference_genome_id}.")
     print_debug(f"Depth analysis files: {analysis_files}")
-
 
     r_script = get_r_script(R_SCRIPT_PLOT_ENDOGENOUS_READS, FOLDER_REF_GENOME_PROCESSING)
 

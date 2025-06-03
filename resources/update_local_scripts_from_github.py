@@ -113,6 +113,8 @@ def main():
         "scripts/ref_genome_processing/analysis/generate_plots_ref_genome_processing.py",
         "scripts/ref_genome_processing/analysis/plots/plot_coverage_breadth.R",
         "scripts/ref_genome_processing/analysis/plots/plot_coverage_depth.R",
+        "scripts/ref_genome_processing/analysis/plots/plot_coverage_breadth_compare_individuals.R",
+        "scripts/ref_genome_processing/analysis/plots/plot_coverage_depth_compare_individuals.R",
         "scripts/ref_genome_processing/analysis/plots/plot_endogenous_reads.R",
 
         "scripts/additional_analysis/species_comparison/analysis/generate_plots_species_compare.py",
