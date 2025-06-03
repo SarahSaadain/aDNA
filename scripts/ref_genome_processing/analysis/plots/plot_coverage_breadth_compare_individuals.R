@@ -2,64 +2,66 @@ library(ggplot2)
 library(dplyr)
 library(tools)
 
-plot_coverage_breadth_violin <- function(df_breadth, individual) {
-  df_breadth$individual <- individual
-
-  plot_breadth <- ggplot(df_breadth, aes(x = factor(individual), y = percent_covered)) +
+plot_coverage_breadth_violin <- function(df_combined) {
+  ggplot(df_combined, aes(x = factor(individual), y = percent_covered)) +
     geom_violin(scale = "width") +
     theme_bw() +
     ylab("Percent Covered") +
     xlab("Individual") +
-    ggtitle("Distribution of Percent Covered") +
-    theme(axis.text.x = element_text(size = 18, angle = 45, vjust = 1, hjust = 1),
-          legend.text = element_text(size = 18),
-          axis.text.y = element_text(size = 18),
-          axis.title.x = element_text(size = 20, face = "bold"),
-          axis.title.y = element_text(size = 20, face = "bold"),
-          plot.title = element_text(size = 24, face = "bold", hjust = 0.5),
+    ggtitle("Distribution of Percent Covered per Individual") +
+    theme(axis.text.x = element_text(size = 14, angle = 45, vjust = 1, hjust = 1),
+          axis.text.y = element_text(size = 14),
+          axis.title.x = element_text(size = 16, face = "bold"),
+          axis.title.y = element_text(size = 16, face = "bold"),
+          plot.title = element_text(size = 18, face = "bold", hjust = 0.5),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.background = element_rect(fill = "white", colour = "black"),
           legend.position = "none")
-
-  return(plot_breadth)
-}
-
-plot_coverage_breadth <- function(species, filepath, target_folder) {
-  PLOT_BREADTH_VIOLIN <- cat(species, "_", "plot_breadth_violin_individual_compare.png")
-
-  df <- read.table(filepath, sep = ",", header = TRUE)
-
-  filename <- basename(file_path_sans_ext(filepath))
-  individual <- strsplit(filename, "_")[[1]][1]
-
-  if (!dir.exists(target_folder)) {
-    dir.create(target_folder, recursive = TRUE)
-    print(paste("Created directory:", target_folder))
-  }
-
-  if (!file.exists(file.path(target_folder, PLOT_BREADTH_VIOLIN))) {
-    plot_violin <- plot_coverage_breadth_violin(df, individual)
-    save_plot(plot_violin, target_folder, PLOT_BREADTH_VIOLIN)
-    cat("Generating and saving plot:", PLOT_BREADTH_VIOLIN, "\n")
-  } else {
-    cat("File already exists, skipping plot generation:", PLOT_BREADTH_VIOLIN, "\n")
-  }
 }
 
 save_plot <- function(plot, target_folder, file_name) {
-  print(paste("Plotting", file_name, "to target folder:", target_folder))
-  ggsave(file.path(target_folder, file_name), plot = plot, width = 10, height = 6)
+  if (!dir.exists(target_folder)) {
+    dir.create(target_folder, recursive = TRUE)
+    cat("Created directory:", target_folder, "\n")
+  }
+  ggsave(file.path(target_folder, file_name), plot = plot, width = 12, height = 6)
 }
 
+plot_coverage_breadth <- function(species, input_folder, target_folder) {
+  files <- list.files(input_folder, pattern = "\\.csv$|\\.tsv$", full.names = TRUE)
+
+  if (length(files) == 0) {
+    stop("No CSV/TSV files found in the specified input folder.")
+  }
+
+  # Read and combine all data, adding individual name from filename
+  df_list <- lapply(files, function(file) {
+    df <- read.table(file, sep = ",", header = TRUE)
+    individual <- strsplit(basename(file_path_sans_ext(file)), "_")[[1]][1]
+    df$individual <- individual
+    return(df)
+  })
+
+  df_combined <- bind_rows(df_list)
+
+  # Create violin plot for all individuals
+  plot <- plot_coverage_breadth_violin(df_combined)
+  plot_name <- paste0(species, "_plot_breadth_violin_all.png")
+
+  save_plot(plot, target_folder, plot_name)
+  cat("Saved combined violin plot to:", file.path(target_folder, plot_name), "\n")
+}
+
+# Command-line arguments
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) < 3) {
-  stop("Usage: Rscript script_name.R <species> <filepath> <target_folder>")
+  stop("Usage: Rscript script_name.R <species> <input_folder> <target_folder>")
 }
 
 species <- args[1]
-filepath <- args[2]
+input_folder <- args[2]
 target_folder <- args[3]
 
-plot_coverage_breadth(species, filepath, target_folder)
+plot_coverage_breadth(species, input_folder, target_folder)

@@ -67,8 +67,10 @@ if (!dir.exists(output_folder)) {
   cat("Created output directory:", output_folder, "\n")
 }
 
+plot_name = paste0(species, "_violin_plot_avg_depth_individual_compare.png")
+
 # Define output plot file path
-output_plot_path <- file.path(output_folder, cat(species, "_", "violin_plot_avg_depth_individual_compare.png"))
+output_plot_path <- file.path(output_folder, plot_name)
 
 # Save plot
 ggsave(output_plot_path, plot = violin_plot, width = 12, height = 6)
