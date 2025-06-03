@@ -111,17 +111,18 @@ def run_pipeline_raw_reads_processing():
     # determine read length distribution
     determine_read_length_distribution.all_species_determine_read_length_distribution()
 
-    # generate plots for all species to visualize results
-    # these contain 
-    # 1. reads processing results before and after
-    # 2. sequence length distribution
-    generate_plots_raw_reads_processing.all_species_generate_plots()
-
     # determine contamination using centrifuge
     check_contamination_centrifuge.all_species_run_centrifuge()
 
     # determine contamination using kraken
     check_contamination_kraken.all_species_run_Kraken()
+
+     # generate plots for all species to visualize results
+    # these contain 
+    # 1. reads processing results before and after
+    # 2. sequence length distribution
+    # 3. contamination analysis
+    generate_plots_raw_reads_processing.all_species_generate_plots()
 
 def run_pipeline_post_processing():
 
