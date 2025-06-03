@@ -9,54 +9,99 @@ library(scales)
 #------------------------------------------
 # Function: Plot species counts as boxplots
 #------------------------------------------
-plot_kraken2_boxplot_by_species <- function(df, species, target_folder) {
-  file_name <- paste0(species, "_kraken2_contamination_by_individual.png")
-  file_path <- file.path(target_folder, file_name)
+plot_kraken2_barplots <- function(df, species_label, target_folder) {
+  base_name <- paste0(species_label, "_kraken2_contamination")
+  grouped_path <- file.path(target_folder, paste0(base_name, "_grouped_by_species.png"))
+  stacked_path <- file.path(target_folder, paste0(base_name, "_stacked_by_individuum.png"))
 
-  # Skip plotting if the file already exists
-  if (file.exists(file_path)) {
-    message("Skipping Kraken2 boxplot: already exists at ", file_path)
-    return()
+  id_col <- "individuum"
+  if (!id_col %in% colnames(df)) {
+    stop("Column 'individuum' not found in input file.")
   }
 
-  # Convert wide format to long format
+  # Convert wide to long format
   df_long <- df %>%
     pivot_longer(
-      cols = -individuum,             # All columns except 'individuum'
-      names_to = "species_id",        # New column for species ID
-      values_to = "count"             # Count values
+      cols = -all_of(id_col),
+      names_to = "species_id",
+      values_to = "count"
     ) %>%
-    mutate(species_id = as.factor(species_id))
-
-  # Sort species by overall abundance (optional)
-  species_order <- df_long %>%
-    group_by(species_id) %>%
-    summarise(total = sum(count)) %>%
-    arrange(desc(total)) %>%
-    pull(species_id)
-
-  df_long$species_id <- factor(df_long$species_id, levels = species_order)
-
-  # Create boxplot
-  p <- ggplot(df_long, aes(x = species_id, y = count)) +
-    geom_boxplot(fill = "steelblue", color = "black") +
-    scale_y_continuous(labels = comma) +
-    labs(
-      title = paste("Kraken2 Species Count per Individuum -", species),
-      x = "Species ID",
-      y = "Read Count"
-    ) +
-    theme_bw() +
-    theme(
-      panel.grid.major = element_line(color = "grey90"),
-      panel.grid.minor = element_blank(),
-      axis.text.x = element_text(angle = 45, hjust = 1)
+    mutate(
+      species_id = as.factor(species_id),
+      count = replace_na(count, 0)
     )
 
-  # Save plot
-  ggsave(file_path, plot = p, width = 10, height = 6, dpi = 300)
-  message("Saved Kraken2 boxplot to: ", file_path)
+  #------------------------------------------
+  # Grouped Bar Plot: Species on x-axis
+  #------------------------------------------
+  if (!file.exists(grouped_path)) {
+    species_order <- df_long %>%
+      group_by(species_id) %>%
+      summarise(total = sum(count), .groups = "drop") %>%
+      arrange(desc(total)) %>%
+      pull(species_id)
+
+    df_long$species_id <- factor(df_long$species_id, levels = species_order)
+
+    p_grouped <- ggplot(df_long, aes(x = species_id, y = count, fill = individuum)) +
+      geom_bar(stat = "identity", position = position_dodge()) +
+      scale_y_continuous(labels = comma) +
+      labs(
+        title = paste("Grouped Kraken2 Read Counts by Species -", species_label),
+        x = "Species ID",
+        y = "Read Count",
+        fill = "Individuum"
+      ) +
+      theme_bw() +
+      theme(
+        panel.grid.major = element_line(color = "grey90"),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "right"
+      )
+
+    ggsave(grouped_path, plot = p_grouped, width = 12, height = 6, dpi = 300)
+    message("Saved grouped barplot to: ", grouped_path)
+  } else {
+    message("Skipping grouped barplot (already exists): ", grouped_path)
+  }
+
+  #------------------------------------------
+  # Stacked Barplot: Individual on x-axis
+  #------------------------------------------
+  if (!file.exists(stacked_path)) {
+    individuum_order <- df_long %>%
+      group_by(individuum) %>%
+      summarise(total = sum(count), .groups = "drop") %>%
+      arrange(desc(total)) %>%
+      pull(individuum)
+
+    df_long$individuum <- factor(df_long$individuum, levels = individuum_order)
+
+    p_stacked <- ggplot(df_long, aes(x = individuum, y = count, fill = species_id)) +
+      geom_bar(stat = "identity") +
+      scale_y_continuous(labels = comma) +
+      labs(
+        title = paste("Stacked Kraken2 Read Counts per Individuum -", species_label),
+        x = "Individuum",
+        y = "Read Count",
+        fill = "Species ID"
+      ) +
+      theme_bw() +
+      theme(
+        panel.grid.major = element_line(color = "grey90"),
+        panel.grid.minor = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "right"
+      )
+
+    ggsave(stacked_path, plot = p_stacked, width = 12, height = 6, dpi = 300)
+    message("Saved stacked barplot to: ", stacked_path)
+  } else {
+    message("Skipping stacked barplot (already exists): ", stacked_path)
+  }
 }
+
 
 #------------------------------------------
 # Master Function: Load data and call plot
