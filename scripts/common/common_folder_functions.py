@@ -343,6 +343,11 @@ def get_folder_path_species_results_plots_read_length_distribution(species: str)
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_results_plots_contamination(species: str) -> str:    
+    path = os.path.join(get_folder_path_species_results_plots(species), FOLDER_CONTAMINATION)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_results_refgenome_special_sequences(species: str, reference_genome_id: str) -> str:
     path = os.path.join(get_folder_path_species_results_refgenome(species, reference_genome_id), FOLDER_SPECIAL_SEQUENCES, reference_genome_id)
     check_folder_exists_or_create(path) 

@@ -99,6 +99,7 @@ def main():
         "scripts/raw_reads_processing/analysis/determine_read_length_distribution.py",
         "scripts/raw_reads_processing/analysis/plots/plot_comparison_reads_before_after_processing.R",
         "scripts/raw_reads_processing/analysis/plots/plot_sequence_length_distribution.R",
+        "scripts/raw_reads_processing/analysis/plots/plot_species_contamination.R",
         "scripts/raw_reads_processing/analysis/contamination/check_contamination_centrifuge.py",
         "scripts/raw_reads_processing/analysis/contamination/check_contamination_kraken.py",
 

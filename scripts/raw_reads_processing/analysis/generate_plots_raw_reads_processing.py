@@ -55,6 +55,29 @@ def plot_read_length_distribution(species: str):
 
     print_info(f"Finished plotting read length distribution for species {species}")
 
+def  plot_contamination(species):
+    print_info(f"Plotting contamination analysis for species {species}")
+
+    # Get the path to the contamination analysis file.
+    kraken_contamination_by_invdividual = os.path.join(
+        get_folder_path_species_results_qc_kraken(species),
+        f"{species}{FILE_ENDING_KRAKEN_BY_INDIVIDUAL_COMBINED_ANALYSIS_CSV}"
+    )
+
+    # Check if the input file exists before trying to use it.
+    if not os.path.exists(kraken_contamination_by_invdividual):
+        print_warning(f"Input file not found: {kraken_contamination_by_invdividual}")
+        return  # Skip plotting if file doesn't exist
+
+    # Define where the output plot should be saved.
+    output_folder_path = get_folder_path_species_results_plots_contamination(species)
+
+    # Retrieve the R script for plotting contamination analysis.
+    r_script = get_r_script(R_SCRIPT_PLOT_CONTAMINATION_KRAKEN, FOLDER_RAW_READS_PROCESSING)
+
+    # Run the R script with species name, input TSV path, and output folder.
+    call_r_script(r_script, species, kraken_contamination_by_invdividual, output_folder_path)
+
 # Master function to run all plotting routines for a single species.
 def species_generate_plots(species: str):
     print_info(f"Generating plots for species {species}")
@@ -64,6 +87,9 @@ def species_generate_plots(species: str):
 
     # Plot sequence length distribution.
     plot_read_length_distribution(species)
+
+    # Plot contamination analysis.
+    plot_contamination(species)
 
     print_info(f"Finished generating plots for species {species}")
 

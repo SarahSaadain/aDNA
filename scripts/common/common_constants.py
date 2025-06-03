@@ -43,6 +43,7 @@ FOLDER_SPECIAL_SEQUENCES = "special_sequences"
 FOLDER_ENDOGENOUS_READS = "endogenous_reads"
 FOLDER_PROCESSED_READS = "processed_reads"
 FOLDER_READ_LENGTH_DISTRIBUTION = "read_length_distribution"
+FOLDER_CONTAMINATION = "contamination"
 FOLDER_CENTRIFUGE = "centrifuge"
 FOLDER_KRAKEN = "kraken"
 
@@ -114,3 +115,4 @@ R_SCRIPT_PLOT_SEQUENCE_LENGTH_DISTRIBUTION = "plot_sequence_length_distribution.
 R_SCRIPT_PLOT_COMPARE_SPECIES_READS_BEFORE_AFTER_PROCESSING = "plot_compare_species_reads_before_after_processing.R"
 R_SCRIPT_PLOT_COMPARE_SPECIES_DEPTH_BREADTH = "plot_compare_species_depth_breadth.R"
 R_SCRIPT_PLOT_COMPARE_SPECIES_ENDOGENOUS_READS = "plot_compare_species_endogenous_reads.R"
+R_SCRIPT_PLOT_CONTAMINATION_KRAKEN = "plot_species_contamination.R"
