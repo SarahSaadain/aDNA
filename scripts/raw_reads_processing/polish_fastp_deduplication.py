@@ -13,8 +13,8 @@ def execute_fastp_deduplication(input_file_path:str, output_file_path:str, threa
         return
     
     filepath_reads_failed = output_file_path.replace(FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ, "_failed.fastq.gz")
-    filepath_json_report = output_file_path.replace(FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ, "_report.json")
-    filepath_html_report = output_file_path.replace(FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ, "_report.html")
+    filepath_json_report = output_file_path.replace(FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ, FILE_ENDING_FASTP_JSON_REPORT)
+    filepath_html_report = output_file_path.replace(FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ, FILE_ENDING_FASTP_HTML_REPORT)
 
     #https://github.com/OpenGene/fastp/blob/59cc2f67414e74e99d42774e227b192a3d9bb63a/README.md#all-options
     command_fastp = [
