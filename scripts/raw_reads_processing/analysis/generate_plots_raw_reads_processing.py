@@ -69,6 +69,11 @@ def  plot_contamination(species):
         print_warning(f"Input file not found: {kraken_contamination_by_invdividual}")
         return  # Skip plotting if file doesn't exist
 
+    # check if file is empty
+    if os.path.getsize(kraken_contamination_by_invdividual) == 0:
+        print_warning(f"Input file is empty: {kraken_contamination_by_invdividual}")
+        return
+
     # Define where the output plot should be saved.
     output_folder_path = get_folder_path_species_results_plots_contamination(species)
 
