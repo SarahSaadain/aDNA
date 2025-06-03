@@ -1,7 +1,10 @@
 import os
 import subprocess
+import pandas as pd
+from collections import defaultdict
 
 from common_aDNA_scripts import *
+
 
 def run_kraken_on_file(species: str, fastq_file_path: str,  Kraken_report_tsv: str, threads: int = THREADS_DEFAULT):
    
@@ -54,7 +57,7 @@ def run_kraken_on_file(species: str, fastq_file_path: str,  Kraken_report_tsv: s
     except Exception as e:
         print_error(f"An unexpected error occurred while running Kraken2 on {get_filename_from_path(fastq_file_path)}: {e}")
 
-def analyze_kraken2_report(report_file_path: str, output_file_path: str):
+def create_kraken_top5_analysis(report_file_path: str, output_file_path: str):
 
     print_info(f"Analyzing Kraken2 report: {get_filename_from_path(report_file_path)}")
 
@@ -87,6 +90,86 @@ def analyze_kraken2_report(report_file_path: str, output_file_path: str):
         print_error("Analysis stderr:\n" + e.stderr)
     except Exception as e:
         print_error(f"An unexpected error occurred during analysis of {get_filename_from_path(report_file_path)}: {e}")
+
+def combine_kraken2_top5_analysis(species: str):
+    # Print which species is being analyzed
+    print(f"Combining Kraken2 top 5 analysis for species: {species}")
+    
+    # Get the folder where the Kraken2 result files are stored
+    results_folder = get_folder_path_species_results_qc_kraken(species)
+
+    # Get a list of all files in the folder that match the Kraken2 TSV pattern
+    kraken_reports = get_files_in_folder_matching_pattern(
+        results_folder,
+        f"*{FILE_ENDING_KRAKEN_TOP5_ANALYSIS_TSV}"
+    )
+
+    # If no Kraken2 reports are found, print a warning and return
+    if not kraken_reports:
+        print_warning(f"No Kraken2 top 5 analysis found for species {species} in {results_folder}. Skipping analysis.")
+        return
+    
+    print_debug(f"Found {len(kraken_reports)} Kraken2 top 5 analysis for species {species}")
+    print_debug(f"Files found: {[get_filename_from_path(f) for f in kraken_reports]}")
+
+    # Dictionary to store the count of each species per file
+    all_counts = defaultdict(dict)  # Format: {filename: {species_id: count}}
+
+    # Dictionary to store total count of each species across all files
+    # This will be used to sort species by total count
+    species_total_counts = defaultdict(int)  # Format: {species_id: total_count}
+
+    # Loop through each Kraken2 file
+    for filepath in kraken_reports:
+        filename = get_filename_from_path(filepath)  # Get the filename from the full path
+
+        # Open and read the file line by line
+        with open(filepath, 'r') as f:
+            for line in f:
+                parts = line.strip().split()
+                if len(parts) != 2:
+                    continue  # Skip lines that don’t have exactly two values
+                count, species_id = map(int, parts)  # Convert both values to integers
+
+                # Store count for the species in the current file
+                all_counts[filename][species_id] = count
+
+                # Add count to total across all files
+                species_total_counts[species_id] += count
+
+    # If no species were found, print a warning and return
+    if not species_total_counts:
+        print_warning(f"No contaminants found in Kraken2 top 5 analysis for species {species}. Skipping analysis.")
+        return
+    
+    print_debug(f"Total species found: {len(species_total_counts)}")
+    print_debug(f"Species total counts: {species_total_counts}")
+
+    # Sort species IDs based on their total count (descending)
+    sorted_species_ids = sorted(species_total_counts, key=species_total_counts.get, reverse=True)
+
+    # Create a list of rows for the final DataFrame
+    rows = []
+    for filename, species_counts in all_counts.items():
+        row = {'filename': filename}  # Start with filename
+        for species_id in sorted_species_ids:
+            # Fill in count if it exists, otherwise put 0
+            row[species_id] = species_counts.get(species_id, 0)
+        rows.append(row)  # Add row to the list
+
+    # Convert list of rows into a DataFrame
+    df = pd.DataFrame(rows)
+
+    # Ensure columns are ordered with filename first, then species in sorted order
+    df = df[['filename'] + sorted_species_ids]
+
+    # Save the DataFrame as a CSV file
+    output_path = os.path.join(results_folder, f"{species}_{FILE_ENDING_KRAKEN_COMBINED_ANALYSIS_CSV}")
+    df.to_csv(output_path, index=False)
+
+    print_headline(f"Saved combined Kraken2 report to: {output_path}")
+
+    
 
 def run_Kraken_per_species(species: str):
     print_info(f"Processing species: {species}")
@@ -137,7 +220,9 @@ def run_Kraken_per_species(species: str):
 
         run_kraken_on_file(species, fastq_file, kraken_report_tsv)
 
-        analyze_kraken2_report(kraken_report_tsv, analysis_output_txt)
+        create_kraken_top5_analysis(kraken_report_tsv, analysis_output_txt)
+
+    combine_kraken2_top5_analysis(species)
 
     print_info(f"Finished processing species: {species}")
 
