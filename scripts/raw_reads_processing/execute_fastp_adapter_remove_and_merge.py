@@ -17,12 +17,12 @@ def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str
         print_info(f"Output file {output_file_path} already exists! Skipping!")
         return
     
-    filepath_merge_failed_passed_r1 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_passed_r1.fastq.gz")
-    filepath_merge_failed_passed_r2 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_passed_r2.fastq.gz")
-    filepath_merge_failed_not_passed_r1 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_not_passed_r1.fastq.gz")
-    filepath_merge_failed_not_passed_r2 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_merge_failed_not_passed_r2.fastq.gz")
-    filepath_merge_json_report = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_report.json")
-    filepath_merge_html_report = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_report.html")
+    filepath_merge_failed_passed_r1 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, FILE_ENDING_MERGE_FAILED_PASSED_R1_FASTQ_GZ)
+    filepath_merge_failed_passed_r2 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, FILE_ENDING_MERGE_FAILED_PASSED_R2_FASTQ_GZ)
+    filepath_merge_failed_not_passed_r1 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, FILE_ENDING_MERGE_FAILED_NOT_PASSED_R1_FASTQ_GZ)
+    filepath_merge_failed_not_passed_r2 = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, FILE_ENDING_MERGE_FAILED_NOT_PASSED_R2_FASTQ_GZ)
+    filepath_merge_json_report = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, FILE_ENDING_FASTP_JSON_REPORT)
+    filepath_merge_html_report = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, FILE_ENDING_FASTP_HTML_REPORT)
 
     #https://github.com/OpenGene/fastp/blob/59cc2f67414e74e99d42774e227b192a3d9bb63a/README.md#all-options
     command_fastp = [
