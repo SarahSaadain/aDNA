@@ -204,13 +204,13 @@ Bger3_S_340272_S44_R1_set2_lane8.fastq.gz
 python resources/rename.py Bger/resources/rename_step1_runID_to_individual.csv Bger/raw/reads/ --test
 ```
 
-## Folder to lane
+### Folder to lane
 
 ```bash
 python resources/rename.py Bger/resources/rename_step2_folder_to_lane.csv Bger/raw/reads/ --test
 ```
 
-# Remove 001 in name
+### Remove 001 in name
 
 ```bash
 python resources/rename.py Bger/resources/rename_step3_remove_001.csv Bger/raw/reads/ --test
