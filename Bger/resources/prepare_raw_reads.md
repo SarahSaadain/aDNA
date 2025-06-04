@@ -35,7 +35,7 @@ How to get a list of all relevant `fastq.gz` files. This also includes sub folde
 find . -type f -name "*_R*.fastq.gz"
 ```
 
-The original data also contains some undetermined reads. to exclude them add ` ! -iname "*undetermined*"``
+The original data also contains some undetermined reads. to exclude them add `! -iname "*undetermined*"`
 
 ```bash
 find . -type f -name "*_R*.fastq.gz" ! -iname "*undetermined*"
@@ -54,7 +54,7 @@ find . -type f -name "*_R*.fastq.gz" ! -iname "*undetermined*" | wc -l
 ### Script
 
 #### Dry Run
-Run this script from Bger/raw/reads. It will consider the sets (set_1, set_2) in the original folder.
+Run this script from Bger/raw/reads. It will consider the sets (set1, set2) in the original folder.
 This "dry run" script will not perform any changes, it will only show the user how the moving and renaming would be executed
 
 ```bash
@@ -65,7 +65,7 @@ count=0
 echo "Simulated file moves (only R1/R2, with full path context):"
 echo "-----------------------------------------------------------"
 
-for set_dir in original/set_*; do
+for set_dir in original/set*; do
     if [[ -d "$set_dir" ]]; then
         set_name=$(basename "$set_dir")
         for run_dir in "$set_dir"/*; do
@@ -102,7 +102,7 @@ count=0
 
 echo "Moving R1/R2 fastq.gz files and renaming..."
 
-for set_dir in original/set_*; do
+for set_dir in original/set*; do
     if [[ -d "$set_dir" ]]; then
         set_name=$(basename "$set_dir")
         for run_dir in "$set_dir"/*; do
