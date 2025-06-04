@@ -129,9 +129,10 @@ def main():
         "scripts/additional_analysis/mtdna_analysis/determine_mtdna_step4_extract_coi_regions.py",
         "scripts/additional_analysis/mtdna_analysis/determine_mtdna_step5_check_extracted_regions_for_content.py",
 
-        #"Bger/scripts/prepare_for_processing.py",
-        #"Bger/resources/mapping_folder_to_lane.csv",
-        #"Bger/resources/mapping_runID_to_name.csv",
+        "Bger/resources/rename_step1_runID_to_individual.csv",
+        "Bger/resources/rename_step2_folder_to_lane.csv",
+        "Bger/resources/rename_step3_run.csv",
+        "Bger/resources/rename_step4_remove_001.csv",
         "Bger/raw/mtdna/marker_coi.fasta",
 
         "trial_Mmus/raw/mtdna/marker_12S_rRNA.fasta",
@@ -160,8 +161,6 @@ def main():
 
         "resources/rename.py",
         "resources/rename.csv"
-
-
 
     ]
 
