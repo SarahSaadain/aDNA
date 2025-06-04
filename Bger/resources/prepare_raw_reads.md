@@ -144,7 +144,7 @@ Each `sequence_id` folder contains `.fastq.gz` files (paired-end reads: R1 and R
 ## Objective
 - Move all `R1` and `R2` `.fastq.gz` files from their nested folders to the current working directory.
 - Rename files to ensure unique filenames by appending:
-  - The `set_#` folder name
+  - The `set#` folder name
   - The sequencing run folder name
   - The `sequence_id` folder name
 - Only move files matching `*_R1_*.fastq.gz` and `*_R2_*.fastq.gz` (exclude `I1` and `I2` index files).
@@ -168,12 +168,7 @@ Renamed and moved to current directory as:
    * Source file path
    * New filename it would move to
    * Total count of files matching the criteria
-
-3. Once verified, modify the script to perform actual moves.
-
-### Notes
-* The script ignores index read files (`I1`/`I2`).
-* Make sure to run the script from the root directory containing `set_1`, `set_2`, etc.
+3. Once verified, rund the other script to perform actual moves.
 
 ## Step 2 - Renaming the read files for the pipeline
 
