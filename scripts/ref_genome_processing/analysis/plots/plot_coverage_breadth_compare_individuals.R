@@ -35,13 +35,26 @@ plot_coverage_breadth <- function(species, input_folder, target_folder) {
     stop("No CSV/TSV files found in the specified input folder.")
   }
 
-  # Read and combine all data, adding individual name from filename
   df_list <- lapply(files, function(file) {
     df <- read.table(file, sep = ",", header = TRUE)
-    individual <- strsplit(basename(file_path_sans_ext(file)), "_")[[1]][1]
-    df$individual <- individual
+    
+    if (nrow(df) == 0) {
+      warning(paste("Skipped empty file:", file))
+      return(NULL)
+    }
+
+    individual_name <- strsplit(basename(file_path_sans_ext(file)), "_")[[1]][1]
+    df$individual <- individual_name
     return(df)
   })
+
+# Remove any NULLs from the list
+df_list <- Filter(Negate(is.null), df_list)
+
+# Stop if no valid data was read
+if (length(df_list) == 0) {
+  stop("No valid non-empty CSV/TSV files found.")
+}
 
   df_combined <- bind_rows(df_list)
 
