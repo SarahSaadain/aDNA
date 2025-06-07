@@ -55,19 +55,33 @@ def is_fasta_file(file_name: str) -> bool:
 def is_fasta_gz_file(file_name: str) -> bool:
     return file_name.endswith("fna.gz") or file_name.endswith("fa.gz") or file_name.endswith("fasta.gz") 
 
+
+
 def call_r_script(script_path: str, *args):
     if not os.path.exists(script_path):
         raise FileNotFoundError(f"R script not found: {script_path}")
 
     command = ["Rscript", script_path] + list(args)
-
     print_debug(f"Executing command: {' '.join(command)}")
 
-    try:
-        subprocess.run(command, check=True)
-        print_info(f"Successfully executed {script_path}")
-    except subprocess.CalledProcessError as e:
-        print_error(f"Error executing {script_path}: {e}")
+    result = subprocess.run(
+        command,
+        capture_output=True,
+        text=True
+    )
+
+    # Combine stdout and stderr
+    combined_output = result.stdout + result.stderr
+
+    # Print line-by-line
+    for line in combined_output.splitlines():
+        print_info(f"R script output: {line}") 
+
+    if result.returncode != 0:
+        print_error(f"R script failed with exit code {result.returncode}")
+        return
+
+    print_info(f"R script executed successfully: {script_path}")
 
 def get_adapter_sequence(species: str) -> tuple[str,str]:
     """
