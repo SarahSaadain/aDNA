@@ -143,6 +143,13 @@ def run_centrifuge_per_species(species: str):
 def all_species_run_centrifuge():
     print_execution("Starting Centrifuge analysis for all species on individual deduplicated FASTQ files.")
 
+    # get the Centrifuge database path from the config
+    centrifuge_db = get_processing_settings(RawReadsProcessingSteps.CONTAMINATION_CHECK).get(ContaminationCheckSettings.CENTRIFUGE_DB.value)
+
+    if not centrifuge_db:
+        print_error("Centrifuge database path is not set. Please check your configuration.")
+        return
+
     for species in FOLDER_SPECIES:
         run_centrifuge_per_species(species)
 

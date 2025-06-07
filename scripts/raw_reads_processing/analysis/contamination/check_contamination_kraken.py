@@ -249,6 +249,14 @@ def run_Kraken_per_species(species: str):
 def all_species_run_Kraken():
     print_execution("Starting Kraken analysis for all species on individual deduplicated FASTQ files.")
 
+     # get the Kraken database path from the config
+    Kraken_db = get_processing_settings(RawReadsProcessingSteps.CONTAMINATION_CHECK).get(ContaminationCheckSettings.KRAKEN_DB.value)
+
+    # Ensure Kraken2 database path is set and exists
+    if not Kraken_db:
+        print_error("Kraken2 database path is not set. Please check your pipeline configuration.")
+        return
+
     for species in FOLDER_SPECIES:
         run_Kraken_per_species(species)
 
