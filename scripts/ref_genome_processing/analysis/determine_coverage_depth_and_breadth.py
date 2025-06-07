@@ -292,7 +292,7 @@ def combine_analysis_files(species: str, reference_genome_id: str):
     Calculates overall metrics per BAM file from the per-scaffold analysis results.
     """
     print_info(f"Combining extended analysis files for species: {species}")
-    individual_files_folder = get_folder_path_species_processed_refgenome_coverage(species, reference_genome_id)
+    individual_files_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
     analysis_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
     
     combined_file_path = os.path.join(analysis_folder, f"{species}{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV}") # Using CSV for combined output
