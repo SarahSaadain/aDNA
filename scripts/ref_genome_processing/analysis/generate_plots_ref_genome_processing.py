@@ -40,9 +40,10 @@ def plot_depth_analysis(species: str, reference_genome_id: str):
     # plot individuals together
     r_script_individuals = get_r_script(R_SCRIPT_PLOT_DEPTH_COMPARE_INDIVIDUALS, FOLDER_REF_GENOME_PROCESSING)
     output_folder_path_individuals = get_folder_path_species_results_refgenome_plots_depth(species, reference_genome_id)
+    combined_results_file = os.path.join(analysis_folder, f"{species}{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_DETAILED_CSV}")
 
-    print_info(f"Plotting depth analysis for all individuals together to {output_folder_path_individuals}")
-    call_r_script(r_script_individuals, species, analysis_folder, output_folder_path_individuals)
+    print_info(f"Plotting depth analysis for all individuals in {combined_results_file} together to {output_folder_path_individuals}")
+    call_r_script(r_script_individuals, species, combined_results_file, output_folder_path_individuals)
 
     print_info(f"Finished plotting depth analysis for species {species} and reference genome {reference_genome_id}")
 
@@ -80,8 +81,11 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
     # plot individuals together
     r_script_individuals = get_r_script(R_SCRIPT_PLOT_BREADTH_COMPARE_INDIVIDUALS, FOLDER_REF_GENOME_PROCESSING)
     output_folder_path_individuals = get_folder_path_species_results_refgenome_plots_breadth(species, reference_genome_id)
-    print_info(f"Plotting breadth analysis for all individuals together to {output_folder_path_individuals}")
-    call_r_script(r_script_individuals, species, analysis_folder, output_folder_path_individuals)
+
+    combined_results_file = os.path.join(analysis_folder, f"{species}{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_DETAILED_CSV}")
+
+    print_info(f"Plotting breadth analysis for all individuals in {combined_results_file} together to {output_folder_path_individuals}")
+    call_r_script(r_script_individuals, species, combined_results_file, output_folder_path_individuals)
 
     print_info(f"Finished plotting breadth analysis for species {species} and reference genome {reference_genome_id}")
 
