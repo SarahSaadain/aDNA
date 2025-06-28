@@ -15,33 +15,33 @@ logging.basicConfig(  # Basic config ASAP (for fallback)
     handlers=[logging.StreamHandler()]  # Only console for now
 )
 
-# INFO is the default level, so it will log all messages at this level and above (WARNING, ERROR, CRITICAL)
-# if you want to log DEBUG messages, change the level to logging.DEBUG
-def print_command(subprocess_command: list):  # prints subprocess commands
-    logging.info(" ".join(subprocess_command))
+def print_command(subprocess_command: list):  # 🚀 Used for subprocess command execution
+    command = ' '.join(subprocess_command)
+    logging.info(f"🚀  {command}")
 
 def print_info(message: str):
-    logging.info(message)
+    logging.info(f"ℹ️  {message}")
 
 def print_error(message: str):
-    logging.error(message)
+    logging.error(f"❌  {message}")
 
 def print_success(message: str):
-    highlight = "***"
-    logging.info(f"{highlight} SUCCESS: {message} {highlight}")
+    logging.info(f"✅  {message}")
 
 def print_warning(message: str):
-    logging.warning(message)
+    logging.warning(f"⚠️  {message}")
 
 def print_debug(message: str):
-    logging.debug(message)
+    logging.debug(f"🐞  {message}")
 
 def print_execution(message: str):
     print_headline(message)
 
 def print_headline(message: str):
-    """Logs a headline message with separators."""
-    separator = "=" * (len(message) + 4) # Adjust length as needed
+    emoji = "🔧"
+    formatted_message = f"{emoji} {message} {emoji}"
+    separator = "=" * (len(formatted_message) + 4)
+    
     logging.info(separator)
-    logging.info(f"  {message}  ")
+    logging.info(f"| {formatted_message} |")
     logging.info(separator)
