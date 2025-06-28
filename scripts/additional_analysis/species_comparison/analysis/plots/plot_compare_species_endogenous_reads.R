@@ -98,7 +98,7 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
   #print(endogenous_plot)
   
   # Save the plot to the specified output folder
-  ggsave(file.path(output_folder, paste0("plot_endogenous_reads_", comparison_name, ".png")), endogenous_plot, width = 12, height = 8, dpi = 300)
+  ggsave(file.path(output_folder, paste0(comparison_name, "_plot_endogenous_reads.png")), endogenous_plot, width = 12, height = 8, dpi = 300)
 }
 
 # Command line argument handling
