@@ -39,6 +39,11 @@ plot_coverage_breadth <- function(species, filepath, target_folder) {
     sep =",", 
     header = TRUE) # Changed to TRUE to read the header
 
+  # Check if data frame is empty
+  if (nrow(df) == 0) {
+    stop("WARNING: The input file is empty.")
+  }
+
   # Check if the target folder exists; if not, create it
   if (!dir.exists(target_folder)) {
     dir.create(target_folder, recursive = TRUE)
