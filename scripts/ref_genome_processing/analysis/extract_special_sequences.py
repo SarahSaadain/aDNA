@@ -92,6 +92,10 @@ def execute_extract_unmapped_regions(bam_file_path: str, output_folder: str, min
     """Extracts regions of the reference genome with no coverage (depth = 0) from a BAM file."""
     output_filename = os.path.join(output_folder, os.path.basename(bam_file_path).replace(FILE_ENDING_BAM, "_unmapped_regions.txt"))
     
+    if os.path.exists(output_filename):
+        print_info(f"Output file {output_filename} already exists! Skipping!")
+        return
+
     print_info(f"Extracting unmapped regions from {bam_file_path}. Output: {output_filename}")
 
     with pysam.AlignmentFile(bam_file_path, 'rb', threads=threads) as bamfile, open(output_filename, 'w') as txtfile:
