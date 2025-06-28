@@ -1,6 +1,8 @@
 import os
 from common_aDNA_scripts import *
 
+import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
+
 FILE_NAME_PREPARE_SCRIPT = "prepare_for_mapping_to_ref_genome.py"
 
 def merge_all_fastq_files(species: str):
@@ -19,10 +21,9 @@ def merge_all_fastq_files(species: str):
     print_info(f"Found {len(fastq_files)} relevant FASTQ.GZ files")
     print_debug(f"Files found: {fastq_files}")
 
-    output_folder = get_folder_path_species_processed_prepared_for_ref_genome(species)
-    output_file_path = os.path.join(output_folder, f"{species}_combined{FILE_ENDING_FASTQ_GZ}")
+    output_file_path = common_rgp.get_species_combined_read_path(species)
 
-    if os.path.exists(output_file_path):
+    if common_rgp.is_species_combined_reads_file_exists(species):
         print_info(f"Output file {output_file_path} already exists. Skipping.")
         return
     
@@ -60,11 +61,9 @@ def generate_fastq_patterns(file_paths: str) -> dict:
     patterns = {}
     
     for path in file_paths:
-        # Extract the filename
-        filename = get_filename_from_path_without_extension(path)
         
         # Extract the individual
-        individual = filename.split('_')[0]
+        individual = common_rgp.get_individual_from_file(path)
         
         # Store the wildcard pattern
         patterns[individual] = f"{individual}*{FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ}"
@@ -90,10 +89,9 @@ def merge_fastq_by_individual(species: str):
         print_info(f"Found {len(individual_fastq_files_per_pattern)} FASTQ.GZ files for pattern {pattern}")
         print_debug(f"Files found: {individual_fastq_files_per_pattern}")
 
-        output_folder = get_folder_path_species_processed_prepared_for_ref_genome(species)
-        output_file_path = os.path.join(output_folder,f"{individual}{FILE_ENDING_FASTQ_GZ}")
+        output_file_path = common_rgp.get_species_individual_reads_path(species, individual)
 
-        if os.path.exists(output_file_path):
+        if common_rgp.is_species_individual_reads_file_exists(species, individual):
             print_info(f"Output file {output_file_path} already exists. Skipping.")
             continue
 
