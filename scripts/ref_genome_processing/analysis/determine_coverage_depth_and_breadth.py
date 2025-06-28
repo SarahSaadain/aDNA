@@ -287,62 +287,53 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
     print_info(f"Finished performing extended analysis for species {species}")
 
 def combine_analysis_files(species: str, reference_genome_id: str):
-    """
-    Combines the individual extended analysis files for a species into a single summary file.
-    Calculates overall metrics per BAM file from the per-scaffold analysis results.
-    """
-    print_info(f"Combining extended analysis files for species: {species}")
-    individual_files_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
-    analysis_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
     
-    combined_file_path = os.path.join(analysis_folder, f"{species}{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV}") # Using CSV for combined output
+    print_info(f"Combining extended analysis files for species: {species}")
 
-    # Find all individual analysis files
-    individual_analysis_files = get_files_in_folder_matching_pattern(individual_files_folder, f"*{FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV}")
+    # Folder paths
+    individual_files_folder = get_folder_path_species_results_refgenome_coverage(species, reference_genome_id)
+    analysis_folder = individual_files_folder  # same as above
+
+    # Output file paths
+    combined_file_path = os.path.join(analysis_folder, f"{species}{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_CSV}")
+    combined_detailed_file_path = os.path.join(analysis_folder, f"{species}{FILE_ENDING_COMBINED_COVERAGE_ANALYSIS_DETAILED_CSV}")
+
+    # Locate files
+    individual_analysis_files = get_files_in_folder_matching_pattern(
+        individual_files_folder,
+        f"*{FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV}"
+    )
 
     if not individual_analysis_files:
-        print_warning(f"No individual analysis files found to combine for species {species} in {analysis_folder}. Skipping combining step.")
+        print_warning(f"No individual analysis files found to combine for species {species} in {analysis_folder}. Skipping.")
         return
 
     print_debug(f"Found {len(individual_analysis_files)} analysis files to combine for species {species}")
     print_debug(f"Analysis files: {individual_analysis_files}")
 
-    combined_data = []
+    combined_data = []       # For aggregated summary
+    detailed_rows = []       # For raw, detailed per-scaffold data
 
     for analysis_file in individual_analysis_files:
         try:
-            # Read the individual analysis file (per-scaffold summary)
-            # Assuming the analysis file has columns: scaffold, avg_depth, max_depth, covered_bases, total_bases, percent_covered
             df_analysis = pd.read_csv(analysis_file)
 
             if df_analysis.empty:
                 print_warning(f"Analysis file {analysis_file} is empty. Skipping.")
                 continue
 
-            # Calculate overall metrics for this BAM file from the per-scaffold data
-            # Overall average depth: weighted average by total bases per scaffold
-            total_bases_sum = df_analysis['total_bases'].sum()
-            overall_avg_depth = (df_analysis['avg_depth'] * df_analysis['total_bases']).sum() / total_bases_sum if total_bases_sum > 0 else 0
-
-            # Overall max depth: max of max depths across scaffolds
-            overall_max_depth = df_analysis['max_depth'].max() if not df_analysis['max_depth'].empty else 0
-
-            # Overall covered bases: sum of covered bases across scaffolds
-            overall_covered_bases = df_analysis['covered_bases'].sum()
-
-            # Overall total bases: sum of total bases across scaffolds
-            overall_total_bases = total_bases_sum
-
-            # Overall percent covered: total covered bases / total bases * 100
-            overall_percent_covered = (overall_covered_bases / overall_total_bases) * 100 if overall_total_bases > 0 else 0
-
-            # Determine the original BAM filename from the analysis filename
-            # Use the new helper function
+            # Parse BAM filename from analysis filename
             original_bam_base = get_filename_from_path(analysis_file).replace(FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV, "")
             original_bam_filename = original_bam_base + FILE_ENDING_SORTED_BAM
 
+            # --- Aggregated stats ---
+            total_bases_sum = df_analysis['total_bases'].sum()
+            overall_avg_depth = (df_analysis['avg_depth'] * df_analysis['total_bases']).sum() / total_bases_sum if total_bases_sum > 0 else 0
+            overall_max_depth = df_analysis['max_depth'].max()
+            overall_covered_bases = df_analysis['covered_bases'].sum()
+            overall_total_bases = total_bases_sum
+            overall_percent_covered = (overall_covered_bases / overall_total_bases) * 100 if overall_total_bases > 0 else 0
 
-            # Append the overall metrics for this BAM file to the combined data list
             combined_data.append({
                 "Filename": original_bam_filename,
                 "OverallAvgDepth": overall_avg_depth,
@@ -352,6 +343,10 @@ def combine_analysis_files(species: str, reference_genome_id: str):
                 "OverallPercentCovered": overall_percent_covered
             })
 
+            # --- Append raw rows, tagged with filename ---
+            df_analysis['Filename'] = original_bam_filename
+            detailed_rows.append(df_analysis)
+
         except FileNotFoundError:
             print_error(f"Analysis file not found: {analysis_file}. Skipping.")
         except pd.errors.EmptyDataError:
@@ -359,21 +354,28 @@ def combine_analysis_files(species: str, reference_genome_id: str):
         except Exception as e:
             print_error(f"An error occurred processing analysis file {analysis_file}: {e}")
 
-    if not combined_data:
-        print_warning(f"No valid data found in analysis files to create combined summary for species {species}.")
-        return
+    # --- Save aggregated summary ---
+    if combined_data:
+        df_combined = pd.DataFrame(combined_data)
+        try:
+            df_combined.to_csv(combined_file_path, index=False)
+            print_success(f"Successfully created combined coverage analysis file: {combined_file_path}")
+        except Exception as e:
+            print_error(f"Error writing combined file: {e}")
+    else:
+        print_warning(f"No valid aggregated data to write for species {species}.")
 
-    # Create a DataFrame from the combined data
-    df_combined = pd.DataFrame(combined_data)
+    # --- Save detailed per-scaffold data ---
+    if detailed_rows:
+        try:
+            df_detailed_combined = pd.concat(detailed_rows, ignore_index=True)
+            df_detailed_combined.to_csv(combined_detailed_file_path, index=False)
+            print_success(f"Successfully created detailed coverage file: {combined_detailed_file_path}")
+        except Exception as e:
+            print_error(f"Error writing detailed combined file: {e}")
+    else:
+        print_warning(f"No detailed data available to write for species {species}.")
 
-    # Save the combined DataFrame to a new CSV file
-    try:
-        df_combined.to_csv(combined_file_path, index=False)
-        print_success(f"Successfully created combined coverage analysis file: {combined_file_path}")
-    except IOError as e:
-        print_error(f"Failed to write combined coverage analysis file at {combined_file_path}: {e}")
-    except Exception as e:
-        print_error(f"An unexpected error occurred while writing the combined file for {species}: {e}")
 
 def all_species_determine_coverage_depth_and_breath():
     print_execution("Determine coverage depth and breadth for all species")
