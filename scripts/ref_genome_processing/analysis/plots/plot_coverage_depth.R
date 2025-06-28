@@ -131,6 +131,16 @@ plot_coverage_depth <- function(species, depth_breath_analysis_file_path, target
   
   # depth coverage for each scaffold
   df_depth <- read.table(depth_breath_analysis_file_path, sep=",", header=TRUE)
+
+  if (nrow(df_depth) == 0) {
+    stop("WARNING: Input file is empty.")
+  }
+
+    # Check if the target folder exists; if not, create it
+  if (!dir.exists(target_folder)) {
+    dir.create(target_folder, recursive = TRUE)
+    print(paste("Created directory:", target_folder))
+  }
   
   # Calculate the mean depth for each scaffold
   df_depth <- df_depth %>%
