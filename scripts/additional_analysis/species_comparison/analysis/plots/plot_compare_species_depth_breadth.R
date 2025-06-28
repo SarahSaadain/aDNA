@@ -9,14 +9,14 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
   
   for (i in 1:length(analysis_files)) {
     filepath <- analysis_files[i]
-
+    
     print(paste("Processing file:", filepath))
-
+    
     if (file.exists(filepath)) {
       df <- read.table(filepath, sep =",", header = TRUE)
-      df$species_id <- names(species_names)[i] #get the species ID
-      df$species <- species_names[[i]]  # Get species long name from the provided list
-      list_of_analysis_dataframes[[df$species_id[1]]] <- df # use species id to store
+      df$species_id <- names(species_names)[i]
+      df$species <- species_names[[i]]
+      list_of_analysis_dataframes[[df$species_id[1]]] <- df
     } else {
       stop(paste("File not found:", filepath))
     }
@@ -24,28 +24,24 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
   
   all_data <- bind_rows(list_of_analysis_dataframes)
   
-  #check if the species column exists
-  if (!("species" %in% colnames(all_data))){
-    stop("Error: 'species' column not found in the dataframes.  Check the input files.")
+  if (!("species" %in% colnames(all_data))) {
+    stop("Error: 'species' column not found in the dataframes. Check the input files.")
   }
   
-  # Create a factor for the 'species' column, defining the order of the levels.
   if (!is.null(species_names)) {
-    desired_order = unname(species_names) # use the long names for ordering
+    desired_order = unname(species_names)
     all_data$species <- factor(all_data$species, levels = desired_order)
   }
   
-  # Generate a color scale with a maximum of 8 distinct colors
   num_species <- length(unique(all_data$species))
   if (num_species <= 8) {
     species_colors <- c("salmon", "orange", "chartreuse3", "darkgreen", "darkblue", "grey", "darkorchid", "cyan")[1:num_species]
   } else {
-    # If there are more than 8 species, generate a palette of distinct colors
     species_colors <- colorRampPalette(c("salmon", "orange", "chartreuse3", "darkgreen", "darkblue", "grey", "darkorchid", "cyan"))(num_species)
   }
-  names(species_colors) <- levels(all_data$species) # Ensure names match factor levels
+  names(species_colors) <- levels(all_data$species)
   
-  # Plot breadth
+  # Violin plot: Percent Covered
   plot_breadth <- ggplot(all_data, aes(x = factor(species), y = percent_covered, fill = species)) +
     geom_violin(scale = "width") +
     theme_bw() +
@@ -64,10 +60,9 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
           legend.position = "none") +
     scale_fill_manual(values = species_colors)
   
-  #print(plot_breadth)
-  ggsave(file.path(output_folder, paste0("plot_breadth_", comparison_name, ".png")), plot_breadth, width = 12, height = 8, dpi = 300)
+  ggsave(file.path(output_folder, paste0(comparison_name, "_plot_breadth.png")), plot_breadth, width = 12, height = 8, dpi = 300)
   
-  # Plot depth
+  # Violin plot: Average Depth
   plot_depth <- ggplot(all_data, aes(x = factor(species), y = avg_depth, fill = species)) +
     scale_y_continuous(
       trans = "log10",
@@ -91,8 +86,67 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
           legend.position = "none") +
     scale_fill_manual(values = species_colors)
   
-  ggsave(file.path(output_folder, paste0("plot_depth_", comparison_name, ".png")), plot_depth, width = 12, height = 8, dpi = 300)
+  ggsave(file.path(output_folder, paste0(comparison_name, "_plot_depth.png")), plot_depth, width = 12, height = 8, dpi = 300)
+  
+  # ───────────────────────────────────────────────────────────────
+  # Aggregate by species and create a bar plot
+  # ───────────────────────────────────────────────────────────────
+  
+  aggregated_by_species <- all_data %>%
+    group_by(species) %>%
+    summarise(
+      mean_percent_covered = mean(percent_covered, na.rm = TRUE),
+      mean_avg_depth = mean(avg_depth, na.rm = TRUE)
+    ) %>%
+    ungroup()
+  
+  # Bar plot: Mean Percent Covered per Species
+  bar_plot_coverage <- ggplot(aggregated_by_species, aes(x = species, y = mean_percent_covered, fill = species)) +
+    geom_bar(stat = "identity") +
+    theme_bw() +
+    ylab("Mean Percent Covered") +
+    xlab("Species") +
+    ggtitle(paste("Mean Percent Covered per Species -", comparison_name)) +
+    theme(axis.text.x = element_text(size = 16, angle = 45, vjust = 1, hjust = 1),
+          axis.text.y = element_text(size = 14),
+          axis.title.x = element_text(size = 18, face = "bold"),
+          axis.title.y = element_text(size = 18, face = "bold"),
+          plot.title = element_text(size = 22, face = "bold", hjust = 0.5),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "white", colour = "black"),
+          legend.position = "none") +
+    scale_fill_manual(values = species_colors)
+  
+  ggsave(file.path(output_folder, paste0(comparison_name, "_plot_breadth_mean_coverage.png")), bar_plot_coverage, width = 10, height = 6, dpi = 300)
+
+# Bar plot: Mean Avg. Depth (log scale for visibility)
+  bar_plot_depth <- ggplot(aggregated_by_species, aes(x = species, y = mean_avg_depth, fill = species)) +
+    geom_bar(stat = "identity") +
+    theme_bw() +
+    ylab("Mean Avg. Depth") +
+    xlab("Species") +
+    ggtitle(paste("Mean Average Depth per Species -", comparison_name)) +
+    scale_y_continuous(
+      trans = "log10",
+      breaks = scales::trans_breaks("log10", function(x) 10^x),
+      labels = scales::comma
+    ) +
+    theme(axis.text.x = element_text(size = 16, angle = 45, vjust = 1, hjust = 1),
+          axis.text.y = element_text(size = 14),
+          axis.title.x = element_text(size = 18, face = "bold"),
+          axis.title.y = element_text(size = 18, face = "bold"),
+          plot.title = element_text(size = 22, face = "bold", hjust = 0.5),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "white", colour = "black"),
+          legend.position = "none") +
+    scale_fill_manual(values = species_colors)
+  
+  ggsave(file.path(output_folder, paste0(comparison_name, "_plot_depth_mean.png")), bar_plot_depth, width = 10, height = 6, dpi = 300)
 }
+
+
 
 # Command line argument handling
 args <- commandArgs(trailingOnly = TRUE)
