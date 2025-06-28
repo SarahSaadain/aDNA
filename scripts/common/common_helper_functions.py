@@ -55,8 +55,6 @@ def is_fasta_file(file_name: str) -> bool:
 def is_fasta_gz_file(file_name: str) -> bool:
     return file_name.endswith("fna.gz") or file_name.endswith("fa.gz") or file_name.endswith("fasta.gz") 
 
-
-
 def call_r_script(script_path: str, *args):
     if not os.path.exists(script_path):
         raise FileNotFoundError(f"R script not found: {script_path}")
