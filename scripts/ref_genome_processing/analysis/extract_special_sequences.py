@@ -5,7 +5,7 @@ from common_aDNA_scripts import *
 import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
 
 DEPTH_THRESHOLD = 1000
-MINIMUM_SEQUENCE_LENGTH = 100
+MINIMUM_SEQUENCE_LENGTH = 1000
 MAXIMUM_SEQUENCE_LENGTH = 5000
 
 def write_fasta_entry(special_reads_file_content: str, scaffold: str, start: int, end: int, sequence: str, depth_values: list, minimum_sequence_length: int=MINIMUM_SEQUENCE_LENGTH):
@@ -154,7 +154,7 @@ def extract_special_sequences_for_species(species: str, depth_threshold: int = D
 
         for bam_file in bam_files:
             execute_extract_special_sequences(bam_file, target_folder, depth_threshold)
-            #execute_extract_unmapped_regions(bam_file, target_folder, 1000, 10000)
+            execute_extract_unmapped_regions(bam_file, target_folder, 1000, 10000)
     
     print_info(f"Finished extracting special sequences for species {species}")
 
