@@ -91,7 +91,7 @@ process_and_plot_before_after <- function(analysis_files, output_folder, species
           panel.grid.minor = element_blank(),
           panel.background = element_rect(fill = "white", colour = "black"))
   
-  ggsave(file.path(output_folder, paste0("plot_before_after_", paste(comparison_name, collapse = "_"), ".png")), plot_before_after, width = 12, height = 8, dpi = 300)
+  ggsave(file.path(output_folder, paste0(comparison_name, "_plot_before_after.png")), plot_before_after, width = 12, height = 8, dpi = 300)
 }
 
 
