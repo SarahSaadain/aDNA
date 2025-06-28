@@ -5,9 +5,7 @@ import pandas as pd
 
 from multiprocessing import Pool, cpu_count
 
-from raw_reads_processing.execute_fastp_adapter_remove_and_merge import get_adapter_removed_path_for_paired_raw_reads
-from raw_reads_processing.polish_fastp_quality_filter import get_quality_filtered_path_for_adapter_removed_reads
-from raw_reads_processing.polish_fastp_deduplication import get_deduplication_path_for_quality_filtered_reads
+import raw_reads_processing.common_raw_reads_processing_helpers as common_rrp
 
 from common_aDNA_scripts import *
 
@@ -99,19 +97,19 @@ def _process_single_read_file(raw_read_path: str, species: str):
         # Note: get_adapter_removed_path_for_paired_raw_reads expects a list,
         # so we wrap raw_read_path in a list for compatibility with its placeholder.
         print_info(f"[PID {pid}] Processing adapter removed file for {reads_id}")
-        adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, [raw_read_path])
+        adapter_removed_file = common_rrp.get_adapter_removed_path_for_paired_raw_reads(species, [raw_read_path])
         adapter_removed_count = execute_seqkit_stats_count_reads(adapter_removed_file, thread=1)
         print_info(f"[PID {pid}] Adapter removed count: {adapter_removed_count}")
 
         # Determine paths and count reads after quality filtering
         print_info(f"[PID {pid}] Processing quality filtered file for {reads_id}")
-        quality_filtered_file = get_quality_filtered_path_for_adapter_removed_reads(species, adapter_removed_file)
+        quality_filtered_file = common_rrp.get_quality_filtered_path_for_adapter_removed_reads(species, adapter_removed_file)
         quality_filtered_count = execute_seqkit_stats_count_reads(quality_filtered_file, thread=1)
         print_info(f"[PID {pid}] Quality filtered count: {quality_filtered_count}")
 
         # Determine paths and count reads after deduplication
         print_info(f"[PID {pid}] Processing duplicates removed file for {reads_id}")
-        duplicates_removed_file = get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file)
+        duplicates_removed_file = common_rrp.get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file)
         duplicates_removed_count = execute_seqkit_stats_count_reads(duplicates_removed_file, thread=1)
         print_info(f"[PID {pid}] Duplicates removed count: {duplicates_removed_count}")
 

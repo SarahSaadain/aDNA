@@ -1,7 +1,9 @@
 import os
 import subprocess
 
+
 from common_aDNA_scripts import *
+import raw_reads_processing.common_raw_reads_processing_helpers as common_rrp
 
 def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str, input_file_path_r2: str, output_file_path: str, adapter_sequence_r1:str, adapter_sequence_r2:str, threads:int = THREADS_DEFAULT):
 
@@ -149,8 +151,24 @@ def adapter_remove_for_species(species: str):
         print_info("Processing paired-end reads.")
         try:
             for r1, r2 in paired_reads:
-                adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, [r1, r2])
+
+                print_info(f"Processing paired reads: {get_filename_from_path(r1)}, {get_filename_from_path(r2)}")  
+
+                adapter_removed_read_file = common_rrp.get_adapter_removed_path_for_paired_raw_reads(species, [r1, r2])
+                
+                individual = common_rrp.get_individual_from_file(r1)
+
+                is_ref_genome_read_file_exists = common_rrp.is_species_individual_and_combined_reads_file_exists(
+                    species, 
+                    individual
+                )
+
+                if is_ref_genome_read_file_exists:
+                    print_info(f"Individual {individual} already prepared for reference genome processing! Skipping!")
+                    continue
+                
                 execute_fastp_paired_reads_remove_adapters_and_merge(r1, r2, adapter_removed_read_file, adapter_sequence_r1, adapter_sequence_r2)
+       
         except Exception as e:
             print_error(f"Error processing paired-end reads for species {species}: {e}")
             return
@@ -163,17 +181,28 @@ def adapter_remove_for_species(species: str):
         print_info("Processing single-end reads.")
         try:
             for read_file_path in single_reads:
-                adapter_removed_read_file = get_adapter_removed_path_for_paired_raw_reads(species, [read_file_path])
+
+                print_info(f"Processing single read: {get_filename_from_path(read_file_path)}")
+
+                adapter_removed_read_file = common_rrp.get_adapter_removed_path_for_paired_raw_reads(species, [read_file_path])
+                
+                individual = common_rrp.get_individual_from_file(read_file_path)
+
+                is_ref_genome_read_file_exists = common_rrp.is_species_individual_and_combined_reads_file_exists(
+                    species, 
+                    individual
+                )
+
+                if is_ref_genome_read_file_exists:
+                    print_info(f"Individual {individual} already prepared for reference genome processing! Skipping!")
+                    continue
+                
                 execute_fastp_single_reads_remove_adapters(read_file_path, adapter_removed_read_file, adapter_sequence_r1)
         except Exception as e:
             print_error(f"Error processing single-end reads for species {species}: {e}")
             return
     
     print_info(f"Adapter removal for species {species} completed successfully.")
-
-def get_adapter_removed_path_for_paired_raw_reads(species, paired_read_file_path_list: list) -> str:
-    filename_new = os.path.basename(paired_read_file_path_list[0]).replace("_R1_","_").replace("_R2_","_").replace(FILE_ENDING_FASTQ_GZ, FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ )
-    return os.path.join(get_folder_path_species_processed_adapter_removed(species), filename_new)
 
 def main():
 

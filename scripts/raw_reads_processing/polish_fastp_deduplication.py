@@ -1,6 +1,7 @@
 import os
 from common_aDNA_scripts import *
 
+import raw_reads_processing.common_raw_reads_processing_helpers as common_rrp
 
 def execute_fastp_deduplication(input_file_path:str, output_file_path:str, threads:int = THREADS_DEFAULT):
     print_info(f"Filtering {input_file_path} ...")
@@ -56,14 +57,24 @@ def fastp_deduplication_for_species(species: str):
     print_debug(f"Quality filtered reads: {reads_files_list}")
     
     for read_file_path in reads_files_list:
-        output_file_path = get_deduplication_path_for_quality_filtered_reads(species, read_file_path)
+
+        print_info(f"Processing read file: {get_filename_from_path(read_file_path)}")
+        
+        individual = common_rrp.get_individual_from_file(read_file_path)
+
+        is_ref_genome_read_file_exists = common_rrp.is_species_individual_and_combined_reads_file_exists(
+            species, 
+            individual
+        )
+
+        if is_ref_genome_read_file_exists:
+            print_info(f"Individual {individual} already prepared for reference genome processing! Skipping!")
+            continue
+
+        output_file_path = common_rrp.get_deduplication_path_for_quality_filtered_reads(species, read_file_path)
         execute_fastp_deduplication(read_file_path, output_file_path)
 
     print_info(f"fastp deduplication for {species} complete")
-
-def get_deduplication_path_for_quality_filtered_reads(species: str, quality_filtered_file_path: str) -> str:
-    output_file = os.path.basename(quality_filtered_file_path).replace(FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ, FILE_ENDING_DUPLICATES_REMOVED_FASTQ_GZ)
-    return os.path.join(get_folder_path_species_processed_duplicates_removed(species), output_file)
 
 def all_species_fastp_deduplication():
     print_execution("Running fastp deduplication for all species")

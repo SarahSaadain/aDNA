@@ -7,10 +7,7 @@ import gzip
 from collections import Counter
 from Bio import SeqIO
 
-from raw_reads_processing.execute_fastp_adapter_remove_and_merge import get_adapter_removed_path_for_paired_raw_reads
-from raw_reads_processing.polish_fastp_quality_filter import get_quality_filtered_path_for_adapter_removed_reads
-from raw_reads_processing.polish_fastp_deduplication import get_deduplication_path_for_quality_filtered_reads
-
+import raw_reads_processing.common_raw_reads_processing_helpers as common_rrp
 
 from common_aDNA_scripts import *
 
@@ -52,17 +49,17 @@ def _process_single_read_length_file(raw_read_path: str, species: str) -> str | 
         
         # Get read length distribution for adapter-removed reads
         # get_adapter_removed_path_for_paired_raw_reads expects a list, so wrap raw_read_path
-        adapter_removed_file = get_adapter_removed_path_for_paired_raw_reads(species, [raw_read_path])
+        adapter_removed_file = common_rrp.get_adapter_removed_path_for_paired_raw_reads(species, [raw_read_path])
         print_info(f"[PID {pid}] Processing adapter removed file {adapter_removed_file}")
         adapter_removed_distribution = get_read_length_distribution(adapter_removed_file)
 
         # Get read length distribution for quality-filtered reads
-        quality_filtered_file = get_quality_filtered_path_for_adapter_removed_reads(species, adapter_removed_file)
+        quality_filtered_file = common_rrp.get_quality_filtered_path_for_adapter_removed_reads(species, adapter_removed_file)
         print_info(f"[PID {pid}] Processing quality filtered file {quality_filtered_file}")
         quality_filtered_distribution = get_read_length_distribution(quality_filtered_file)
 
         # Get read length distribution for deduplicated reads
-        duplicates_removed_file = get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file)
+        duplicates_removed_file = common_rrp.get_deduplication_path_for_quality_filtered_reads(species, quality_filtered_file)
         print_info(f"[PID {pid}] Processing duplicates removed file {duplicates_removed_file}")
         duplicates_removed_distribution = get_read_length_distribution(duplicates_removed_file)
 
