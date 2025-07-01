@@ -15,6 +15,7 @@
 
 ## MD5 Check
 
+```bash
 nohup sh -c 'md5sum 232V3GLT3_1_R19096_20250626.tar.gz > md5sum_1.txt' &> md5sum_1.log &
 nohup sh -c 'md5sum 232V3GLT3_2_R19096_20250626.tar.gz > md5sum_2.txt' &> md5sum_2.log &
 nohup sh -c 'md5sum 232V3GLT3_3_R19096_20250626.tar.gz > md5sum_3.txt' &> md5sum_3.log &
@@ -23,9 +24,11 @@ nohup sh -c 'md5sum 232V3GLT3_5_R19096_20250626.tar.gz > md5sum_5.txt' &> md5sum
 nohup sh -c 'md5sum 232V3GLT3_6_R19096_20250626.tar.gz > md5sum_6.txt' &> md5sum_6.log &
 nohup sh -c 'md5sum 232V3GLT3_7_R19096_20250626.tar.gz > md5sum_7.txt' &> md5sum_7.log &
 nohup sh -c 'md5sum 232V3GLT3_8_R19096_20250626.tar.gz > md5sum_8.txt' &> md5sum_8.log &
+```
 
 # Unzip
 
+```bash
 nohup tar -xvzf 232V3GLT3_1_R19096_20250626.tar.gz > extract_1.log 2>&1 &
 nohup tar -xvzf 232V3GLT3_2_R19096_20250626.tar.gz > extract_2.log 2>&1 &
 nohup tar -xvzf 232V3GLT3_3_R19096_20250626.tar.gz > extract_3.log 2>&1 &
@@ -34,3 +37,4 @@ nohup tar -xvzf 232V3GLT3_5_R19096_20250626.tar.gz > extract_5.log 2>&1 &
 nohup tar -xvzf 232V3GLT3_6_R19096_20250626.tar.gz > extract_6.log 2>&1 &
 nohup tar -xvzf 232V3GLT3_7_R19096_20250626.tar.gz > extract_7.log 2>&1 &
 nohup tar -xvzf 232V3GLT3_8_R19096_20250626.tar.gz > extract_8.log 2>&1 &
+```

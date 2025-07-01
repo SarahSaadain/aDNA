@@ -14,6 +14,7 @@
 
 ## MD5 Check
 
+```bash
 nohup sh -c 'md5sum 22TLJTLT4_*_R18987_20250612.tar.gz > md5sums.txt' &> md5sum.log &
 
 nohup sh -c 'md5sum 22TLJTLT4_1_R18987_20250612.tar.gz > md5sum_1.txt' &> md5sum_1.log &
@@ -24,6 +25,7 @@ nohup sh -c 'md5sum 22TLJTLT4_5_R18987_20250612.tar.gz > md5sum_5.txt' &> md5sum
 nohup sh -c 'md5sum 22TLJTLT4_6_R18987_20250612.tar.gz > md5sum_6.txt' &> md5sum_6.log &
 nohup sh -c 'md5sum 22TLJTLT4_7_R18987_20250612.tar.gz > md5sum_7.txt' &> md5sum_7.log &
 nohup sh -c 'md5sum 22TLJTLT4_8_R18987_20250612.tar.gz > md5sum_8.txt' &> md5sum_8.log &
+```
 
 Check if running:
 
@@ -31,6 +33,7 @@ ps aux | grep md5sum
 
 # Unzip
 
+```bash
 nohup tar -xvzf 22TLJTLT4_1_R18987_20250612.tar.gz > extract_1.log 2>&1 &
 nohup tar -xvzf 22TLJTLT4_2_R18987_20250612.tar.gz > extract_2.log 2>&1 &
 nohup tar -xvzf 22TLJTLT4_3_R18987_20250612.tar.gz > extract_3.log 2>&1 &
@@ -39,3 +42,4 @@ nohup tar -xvzf 22TLJTLT4_5_R18987_20250612.tar.gz > extract_5.log 2>&1 &
 nohup tar -xvzf 22TLJTLT4_6_R18987_20250612.tar.gz > extract_6.log 2>&1 &
 nohup tar -xvzf 22TLJTLT4_7_R18987_20250612.tar.gz > extract_7.log 2>&1 &
 nohup tar -xvzf 22TLJTLT4_8_R18987_20250612.tar.gz > extract_8.log 2>&1 &
+```
