@@ -110,7 +110,7 @@ def convert_ref_genome_mapped_sam_to_bam_for_species(species):
 def convert_sam_to_bam_for_species(species):
     print_info(f"Converting sam to bam for species {species}")
     convert_ref_genome_mapped_sam_to_bam_for_species(species)
-    print_info(f"Conversion of sam to bam for species {species} completed successfully.")
+    print_success(f"Conversion of sam to bam for species {species} executed.")
 
 def all_species_convert_sam_to_bam():
     print_execution("Convert sam to bam files for all species")
@@ -118,7 +118,7 @@ def all_species_convert_sam_to_bam():
     for species in FOLDER_SPECIES: 
         convert_sam_to_bam_for_species(species)
 
-    print_info("Conversion of sam to bam files for all species completed successfully.")
+    print_success("Conversion of sam to bam files for all species executed.")
 
 def main():
     all_species_convert_sam_to_bam()
