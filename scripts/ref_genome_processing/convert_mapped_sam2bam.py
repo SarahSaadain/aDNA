@@ -2,25 +2,30 @@ import os
 import subprocess
 
 from common_aDNA_scripts import *
-import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
+import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
 
-def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THREADS_DEFAULT, detlete_unsorted_bam: bool=True):
-
-    # Convert SAM to BAM
-    bam_file_base_name = get_filename_from_path_without_extension(sam_file)
-    
-    bam_file = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_BAM}")
-    sorted_bam = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_SORTED_BAM}")
+def execute_convert_sam_to_bam(sam_file: str, bam_file: str, sorted_bam: str, threads: int=THREADS_DEFAULT, delete_sam: bool=True, detlete_unsorted_bam: bool=True):
 
     if not os.path.exists(sorted_bam):
 
         if not os.path.exists(bam_file):
             print_info(f"Converting {sam_file} to BAM...")
 
+            if not os.path.exists(sam_file):
+                print_error(f"Input SAM file {sam_file} does not exist!")
+                return
+
             try:
                 command_sam_to_bam = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_VIEW} -@ {threads} -bS {sam_file} -o {bam_file}"
                 print_debug(f"Executing command: {command_sam_to_bam}")
                 subprocess.run(command_sam_to_bam, shell=True, check=True)
+
+                if delete_sam and os.path.exists(sam_file):
+                    print_info(f"Removing SAM file {sam_file}...")
+                    try:
+                        os.remove(sam_file)
+                    except Exception as e:
+                        print_warning(f"Failed to remove SAM file {sam_file}: {e}")
             except Exception as e:
                 print_error(f"Failed to convert {sam_file} to BAM: {e}")
                 return
@@ -35,7 +40,8 @@ def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THRE
             subprocess.run(command_sort, shell=True, check=True)
 
             print_success(f"Conversion and sorting of {sam_file} completed successfully.")
-             # Optional cleanup of intermediate BAM file if the sorted was created
+            
+            # Optional cleanup of intermediate BAM file if the sorted was created
             if detlete_unsorted_bam and os.path.exists(sorted_bam):
                 print_info(f"Removing unsorted BAM file {bam_file}...")
                 os.remove(bam_file)
@@ -47,7 +53,7 @@ def execute_convert_sam_to_bam(sam_file: str, output_dir: str, threads: int=THRE
         print_info(f"Sort for {bam_file} already exists. Skipping.")
     
     # Index the sorted BAM file
-    indexed_bam = os.path.join(output_dir, f"{bam_file_base_name}{FILE_ENDING_SORTED_BAI}")
+    indexed_bam = sorted_bam.replace(FILE_ENDING_BAM, FILE_ENDING_BAI)
 
     if not os.path.exists(indexed_bam):
         print_info(f"Indexing {sorted_bam}...")
@@ -70,7 +76,7 @@ def convert_ref_genome_mapped_sam_to_bam_for_species(species):
     print_info(f"Converting reference genome mapped sam to bam for species {species}")
 
     try:
-        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+        ref_genome_list = common_rgp.get_reference_genome_file_list_for_species(species)
     except Exception as e:
         print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
@@ -94,7 +100,11 @@ def convert_ref_genome_mapped_sam_to_bam_for_species(species):
         print_debug(f"Mapped SAM files: {sam_files}")
 
         for sam_file in sam_files:
-            execute_convert_sam_to_bam(sam_file, mapped_folder)    
+
+            bam_file = common_rgp.get_bam_file_path_for_sam_file(species, ref_genome_id, sam_file)
+            sorted_bam = common_rgp.get_sorted_bam_file_path_for_bam_file(species, ref_genome_id, bam_file)
+
+            execute_convert_sam_to_bam(sam_file, bam_file, sorted_bam)    
 
 
 def convert_sam_to_bam_for_species(species):

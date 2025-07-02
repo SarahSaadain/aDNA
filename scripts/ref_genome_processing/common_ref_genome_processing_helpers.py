@@ -37,3 +37,54 @@ def get_individual_from_file(file_path: str) -> str:
     parts = filename.split('_')
 
     return parts[0]  # Assuming the second part is the individual name
+
+def get_sam_file_name_for_read_file_and_ref_genome(read_file_path: str, ref_genome_id: str) -> str:
+    read_name = common.get_filename_from_path_without_extension(read_file_path)
+    return f"{read_name}_{ref_genome_id}{common.FILE_ENDING_SAM}"
+
+def get_sam_file_path_for_read_file_and_ref_genome(species: str, read_file_path: str, ref_genome_id: str) -> str:
+    output_folder = common.get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
+    sam_file_name = get_sam_file_name_for_read_file_and_ref_genome(read_file_path, ref_genome_id)
+    return os.path.join(output_folder, sam_file_name)
+
+def get_bam_file_name_for_sam_file(sam_file_path: str) -> str:
+    sam_file_name = common.get_filename_from_path_without_extension(sam_file_path)
+    return f"{sam_file_name}{common.FILE_ENDING_BAM}"
+
+def get_bam_file_path_for_sam_file(species: str, ref_genome_id: str, sam_file_path: str) -> str:
+    output_folder = common.get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
+    bam_file_name = get_bam_file_name_for_sam_file(sam_file_path)
+    return os.path.join(output_folder, bam_file_name)
+
+def get_sorted_bam_file_name_for_bam_file(bam_file_path: str) -> str:
+    bam_file_name = common.get_filename_from_path_without_extension(bam_file_path)
+    return f"{bam_file_name}{common.FILE_ENDING_SORTED_BAM}"
+
+def get_sorted_bam_file_path_for_bam_file(species: str, ref_genome_id: str, bam_file_path: str) -> str:
+    output_folder = common.get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
+    sorted_bam_file_name = get_sorted_bam_file_name_for_bam_file(bam_file_path)
+    return os.path.join(output_folder, sorted_bam_file_name)
+
+def get_reference_genome_file_list_for_species(species: str) -> list[tuple[str, str]]:
+ 
+    # get ref genome
+    ref_genome_folder = common.get_folder_path_species_raw_ref_genome(species)
+
+    # add fna files to reference genome list
+    reference_genome_files = common.get_files_in_folder_matching_pattern(ref_genome_folder, f"*{common.FILE_ENDING_FNA}")
+    # add fasta files to reference genome list
+    reference_genome_files += common.get_files_in_folder_matching_pattern(ref_genome_folder, f"*{common.FILE_ENDING_FASTA}")
+
+    # add fa files to reference genome list
+    reference_genome_files += common.get_files_in_folder_matching_pattern(ref_genome_folder, f"*{common.FILE_ENDING_FA}")
+
+    if len(reference_genome_files) == 0:
+        raise Exception(f"No reference genome found for species {species}.")
+    
+    common.print_debug(f"Found {len(reference_genome_files)} reference genome files for species {species}.")
+    common.print_debug(f"Reference genome files: {reference_genome_files}")
+
+    # return as tuple of (filename without extension, filepath)
+    reference_genome_files_with_filename = [(os.path.splitext(os.path.basename(f))[0], f) for f in reference_genome_files]
+
+    return reference_genome_files_with_filename

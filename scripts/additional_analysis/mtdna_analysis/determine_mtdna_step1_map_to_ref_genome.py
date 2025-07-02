@@ -1,6 +1,6 @@
 import os
 from common_aDNA_scripts import *
-import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
+import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
 
 from ref_genome_processing.convert_mapped_sam2bam import execute_convert_sam_to_bam
 
@@ -42,7 +42,7 @@ def map_mtdna_to_refgenome_for_species(species: str):
     print_debug(f"mtdna reads: {list_of_mtrna_files}")
 
     try:
-        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+        ref_genome_list = common_rgp.get_reference_genome_file_list_for_species(species)
     except Exception as e:
         print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
@@ -56,22 +56,40 @@ def map_mtdna_to_refgenome_for_species(species: str):
         output_folder = get_folder_path_species_processed_refgenome_mtdna_mapped(species, ref_genome_id)
         
 
-        ref_genome_filename = get_filename_from_path_without_extension(ref_genome_path)
-
         for mtrna_read_file_path in list_of_mtrna_files:
 
             print_info(f"Mapping {mtrna_read_file_path} to reference genome {ref_genome_path} ...")
 
-            read_name = get_filename_from_path_without_extension(mtrna_read_file_path)
-            output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_filename}{FILE_ENDING_SAM}")
+            sam_file_name = common_rgp.get_sam_file_name_for_read_file_and_ref_genome(mtrna_read_file_path, ref_genome_id)
+            sam_file_path = os.path.join(output_folder, sam_file_name)
+
+            bam_file_name = common_rgp.get_bam_file_name_for_sam_file(sam_file_path)
+            sorted_bam_file_name = common_rgp.get_sorted_bam_file_name_for_bam_file(bam_file_name)
+
+            bam_file_path = os.path.join(output_folder, bam_file_name)
+            sorted_bam_file_path = os.path.join(output_folder, sorted_bam_file_name)
 
             try:
-                execute_bwa_map_mtDNA_to_refgenome(mtrna_read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
 
-                if not os.path.exists(output_file_path):
+                if os.path.exists(sam_file_path):
+                    print_info(f"Sam file {sam_file_path} already exists. Skipping mapping.")
+                elif os.path.exists(sorted_bam_file_path):
+                    print_info(f"Sorted BAM file {sorted_bam_file_path} already exists. Skipping mapping.")
+                else: 
+                    execute_bwa_map_mtDNA_to_refgenome(mtrna_read_file_path, ref_genome_path, sam_file_path)
+
+                if not os.path.exists(sam_file_path):
+                    print_error(f"Sam file {sam_file_path} was not created. Skipping conversion to BAM.")
                     continue
 
-                execute_convert_sam_to_bam(output_file_path, output_folder, THREADS_DEFAULT)
+                print_info(f"Converting SAM file {sam_file_path} to BAM format ...")
+                bam_file_name = common_rgp.get_bam_file_name_for_sam_file(sam_file_path)
+                sorted_bam_file_name = common_rgp.get_sorted_bam_file_name_for_bam_file(bam_file_name)
+
+                bam_file_path = os.path.join(output_folder, bam_file_name)
+                sorted_bam_file_path = os.path.join(output_folder, sorted_bam_file_name)
+
+                execute_convert_sam_to_bam(sam_file_path, bam_file_path, sorted_bam_file_path)
             except Exception as e:
                 print_error(f"Failed to map {mtrna_read_file_path} to reference genome {ref_genome_path}: {e}")
 

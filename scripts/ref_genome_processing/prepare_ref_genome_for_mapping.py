@@ -1,6 +1,7 @@
 import os
 from common_aDNA_scripts import *
-import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
+
+import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
 
 def main():
     all_species_prepare_ref_genome()
@@ -19,7 +20,7 @@ def species_prepare_ref_genome(species: str):
     print_info(f"Preparing reference genome for {species} for mapping")
 
     try:
-        ref_genome_files = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+        ref_genome_files = common_rgp.get_reference_genome_file_list_for_species(species)
 
         for ref_genome in ref_genome_files:
             # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)

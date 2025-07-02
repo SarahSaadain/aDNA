@@ -1,7 +1,8 @@
 import os
 import subprocess
 from common_aDNA_scripts import *
-import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
+
+import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
 
 def execute_bwa_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, output_file_path:str, threads:int = THREADS_DEFAULT):
     
@@ -41,7 +42,7 @@ def map_aDNA_to_refgenome_for_species(species: str):
     print_debug(f"Read files: {list_of_read_files}")
 
     try:
-        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+        ref_genome_list = common_rgp.get_reference_genome_file_list_for_species(species)
     except Exception as e:
         print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
@@ -52,22 +53,31 @@ def map_aDNA_to_refgenome_for_species(species: str):
         ref_genome_id = ref_genome_tuple[0]
         ref_genome_path = ref_genome_tuple[1]
 
-        print_debug(f"Reference genome file: {ref_genome_path}")
-
-        output_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
-
         print_debug(f"Reference genome file: {ref_genome_id}")
 
         for read_file_path in list_of_read_files:
 
             print_info(f"Mapping {read_file_path} to reference genome {ref_genome_path} ...")
 
-            read_name = get_filename_from_path_without_extension(read_file_path)
-            output_file_path = os.path.join(output_folder, f"{read_name}_{ref_genome_id}.sam")
+            sam_file_path = common_rgp.get_sam_file_path_for_read_file_and_ref_genome(species, read_file_path, ref_genome_id)
 
-            print_debug(f"Output file: {output_file_path}")
+            print_debug(f"Output file: {sam_file_path}")
 
-            execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, output_file_path, THREADS_DEFAULT)
+            if os.path.exists(sam_file_path):
+                print_info(f"Output file {sam_file_path} already exists! Skipping!")
+                return
+            
+            # we only need to map if the sorted bam file does not exist
+            bam_file_path = common_rgp.get_bam_file_path_for_sam_file(species, ref_genome_id, sam_file_path)
+            sorted_bam_file_path = common_rgp.get_sorted_bam_file_path_for_bam_file(species, ref_genome_id, bam_file_path)
+
+            print_debug(f"Sorted BAM file path: {sorted_bam_file_path}")
+
+            if os.path.exists(sorted_bam_file_path):
+                print_info(f"Sorted BAM file {sorted_bam_file_path} already exists! Skipping mapping for {read_file_path}.")
+                continue
+
+            execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, sam_file_path, THREADS_DEFAULT)
 
     print_success(f"Mapping aDNA to reference genome for species {species} complete")
 

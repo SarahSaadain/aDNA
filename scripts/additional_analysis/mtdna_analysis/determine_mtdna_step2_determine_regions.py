@@ -1,6 +1,6 @@
 import os
 from common_aDNA_scripts import *
-import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
+import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
 
 
 def execute_samtools_get_read_regions(bam_file: str, output_file: str, threads: int=THREADS_DEFAULT):
@@ -31,7 +31,7 @@ def mtdna_get_regions_for_species(species):
     print_info(f"Determining mtdna regions for species: {species}")
 
     try:
-        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+        ref_genome_list = common_rgp.get_reference_genome_file_list_for_species(species)
     except Exception as e:
         print_error(f"Failed to get reference genome files for species {species}: {e}")
         return

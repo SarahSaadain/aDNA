@@ -1,7 +1,7 @@
 import os
 from common_aDNA_scripts import *
 
-import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
+import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
 
 def execute_samtools_count_mapped_reads(bam_file: str, threads: int=THREADS_DEFAULT) -> int:
     """Counts the number of mapped reads in a BAM file."""
@@ -155,7 +155,7 @@ def all_species_determine_endogenous_reads():
         print_info(f"Determining endogenous reads for species {species}")
 
         try:
-            ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+            ref_genome_list = common_rgp.get_reference_genome_file_list_for_species(species)
         except Exception as e:
             print_error(f"Failed to get reference genome files for species {species}: {e}")
             continue

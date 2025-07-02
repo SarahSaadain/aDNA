@@ -2,7 +2,7 @@ import pysam
 import os
 from collections import Counter
 from common_aDNA_scripts import *
-import ref_genome_processing.helpers.ref_genome_processing_helper as ref_genome_processing_helper
+import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
 
 DEPTH_THRESHOLD = 1000
 MINIMUM_SEQUENCE_LENGTH = 1000
@@ -131,7 +131,7 @@ def extract_special_sequences_for_species(species: str, depth_threshold: int = D
     print_info(f"Extracting special sequences for species {species} with depth threshold: {depth_threshold}")
 
     try:
-        ref_genome_list = ref_genome_processing_helper.get_reference_genome_file_list_for_species(species)
+        ref_genome_list = common_rgp.get_reference_genome_file_list_for_species(species)
     except Exception as e:
         print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
