@@ -53,7 +53,7 @@ def execute_convert_sam_to_bam(sam_file: str, bam_file: str, sorted_bam: str, th
         print_info(f"Sort for {bam_file} already exists. Skipping.")
     
     # Index the sorted BAM file
-    indexed_bam = sorted_bam.replace(FILE_ENDING_BAM, FILE_ENDING_BAI)
+    indexed_bam = sorted_bam + FILE_ENDING_BAI
 
     if not os.path.exists(indexed_bam):
         print_info(f"Indexing {sorted_bam}...")
