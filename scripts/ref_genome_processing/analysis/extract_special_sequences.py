@@ -147,7 +147,7 @@ def extract_special_sequences_for_species(species: str, depth_threshold: int = D
         mapped_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
         target_folder = get_folder_path_species_results_refgenome_special_sequences(species, ref_genome_id)
 
-        bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_BAM}")
+        bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
         if len(bam_files) == 0:
             print_warning(f"No BAM files found in {mapped_folder} for species {species}. Skipping.")
