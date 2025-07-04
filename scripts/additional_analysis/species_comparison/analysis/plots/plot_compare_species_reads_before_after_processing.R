@@ -12,19 +12,22 @@ process_and_plot_before_after <- function(analysis_files, output_folder, species
 
     print(paste("Processing file:", filepath))
 
-    if (file.exists(filepath)) {
-      df <- read.table(
-        filepath,
-        sep = "\t",
-        header = TRUE,
-        colClasses = c(individual = "character", protocol = "character")
-      )
-      df$species_id <- names(species_names)[i] #get the species ID
-      df$species <- species_names[[i]]  # Get species long name from the provided list
-      list_of_analysis_dataframes[[df$species_id[1]]] <- df # use species id to store
-    } else {
-      stop(paste("File not found:", filepath))
-    }
+        # Check if the file does not exists exit
+    if (!file.exists(file_path)) {
+      message(paste("File not found:", filepath))
+      return(NULL)  # exit the function early without an error
+    } 
+    
+    df <- read.table(
+      filepath,
+      sep = "\t",
+      header = TRUE,
+      colClasses = c(individual = "character", protocol = "character")
+    )
+    df$species_id <- names(species_names)[i] #get the species ID
+    df$species <- species_names[[i]]  # Get species long name from the provided list
+    list_of_analysis_dataframes[[df$species_id[1]]] <- df # use species id to store
+   
   }
   
   df_before_after <- bind_rows(list_of_analysis_dataframes)

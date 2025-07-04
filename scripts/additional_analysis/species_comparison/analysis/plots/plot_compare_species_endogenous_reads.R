@@ -18,37 +18,38 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
 
     print(paste("Processing file:", file_path))
     
-    # Check if the file exists
-    if (file.exists(file_path)) {
-      # Read the CSV file, now with header=TRUE
-      df <- read.csv(file_path, header = TRUE)
-      
-      # Assign column names to the expected names
-      col_names <- c("sample", "endogenous", "total", "percent_endogenous")
+    # Check if the file does not exists exit
+    if (!file.exists(file_path)) {
+      message(paste("File not found:", filepath))
+      return(NULL)  # exit the function early without an error
+    } 
 
-      # Check if the file contains the expected columns.  If not, error.
-      if (!all(c("Filename", "MappedReads", "TotalReads", "Proportion") %in% colnames(df))){
-        stop(paste("File", file_path, "does not contain the expected columns: Filename, MappedReads, TotalReads, Proportion. Please check the input data."))
-      }
+  # Read the CSV file, now with header=TRUE
+  df <- read.csv(file_path, header = TRUE)
+  
+  # Assign column names to the expected names
+  col_names <- c("sample", "endogenous", "total", "percent_endogenous")
+
+  # Check if the file contains the expected columns.  If not, error.
+  if (!all(c("Filename", "MappedReads", "TotalReads", "Proportion") %in% colnames(df))){
+    stop(paste("File", file_path, "does not contain the expected columns: Filename, MappedReads, TotalReads, Proportion. Please check the input data."))
+  }
+  
+  # Rename the columns to standard names
+  df <- df %>%
+    rename(
+      sample = Filename,
+      endogenous = MappedReads,
+      total = TotalReads,
+      percent_endogenous = Proportion
+    )
+  
+  df$species_id <- names(species_names)[i]  # Get species ID
+  df$species <- species_names[[i]] #get species long name
+  
+  list_of_analysis_dataframes[[df$species_id[1]]] <- df
       
-      # Rename the columns to standard names
-      df <- df %>%
-        rename(
-          sample = Filename,
-          endogenous = MappedReads,
-          total = TotalReads,
-          percent_endogenous = Proportion
-        )
-      
-      df$species_id <- names(species_names)[i]  # Get species ID
-      df$species <- species_names[[i]] #get species long name
-      
-      list_of_analysis_dataframes[[df$species_id[1]]] <- df
-      
-    } else {
-      # Print a warning if the file does not exist
-      stop(paste("File not found:", file_path))
-    }
+
   }
   
   # Combine all data frames into one data frame

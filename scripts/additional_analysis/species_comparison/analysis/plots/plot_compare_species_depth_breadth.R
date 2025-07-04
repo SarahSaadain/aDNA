@@ -12,14 +12,16 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
     
     print(paste("Processing file:", filepath))
     
-    if (file.exists(filepath)) {
-      df <- read.table(filepath, sep =",", header = TRUE)
-      df$species_id <- names(species_names)[i]
-      df$species <- species_names[[i]]
-      list_of_analysis_dataframes[[df$species_id[1]]] <- df
-    } else {
-      stop(paste("File not found:", filepath))
+    if (!file.exists(filepath)) {
+      message(paste("File not found:", filepath))
+      return(NULL)  # exit the function early without an error
     }
+
+    df <- read.table(filepath, sep =",", header = TRUE)
+    df$species_id <- names(species_names)[i]
+    df$species <- species_names[[i]]
+    list_of_analysis_dataframes[[df$species_id[1]]] <- df
+    
   }
   
   all_data <- bind_rows(list_of_analysis_dataframes)
