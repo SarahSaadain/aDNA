@@ -22,7 +22,15 @@ def species_prepare_ref_genome(species: str):
     try:
         ref_genome_files = common_rgp.get_reference_genome_file_list_for_species(species)
 
+        number_of_ref_genome_files = len(ref_genome_files)
+        count_current = 0
+
         for ref_genome in ref_genome_files:
+
+            count_current += 1
+
+            print_info(f"[{count_current}/{number_of_ref_genome_files}] Indexing reference genome {ref_genome} ...")
+
             # ref_genome is a tuple of (ref_genome_name without extension, ref_genome_path)
             ref_genome_file_path = ref_genome[1]
             execute_bwa_index_reference_genome(ref_genome_file_path)
@@ -32,7 +40,6 @@ def species_prepare_ref_genome(species: str):
     except Exception as e:
         print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
-
     
 
 def execute_bwa_index_reference_genome(reference_genome_path: str):

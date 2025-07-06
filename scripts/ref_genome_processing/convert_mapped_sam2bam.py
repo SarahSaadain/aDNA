@@ -80,6 +80,9 @@ def convert_ref_genome_mapped_sam_to_bam_for_species(species):
     except Exception as e:
         print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
+    
+    number_of_ref_genome_files = len(ref_genome_list)
+    count_current = 0
 
     for ref_genome_tuple in ref_genome_list:
 
@@ -92,14 +95,22 @@ def convert_ref_genome_mapped_sam_to_bam_for_species(species):
         mapped_folder = get_folder_path_species_processed_refgenome_mapped(species, ref_genome_id)
         sam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SAM}")
 
-        if len(sam_files) == 0:
+        number_of_sam_files = len(sam_files)
+
+        if number_of_sam_files == 0:
             print_warning(f"No mapped SAM files found for reference genome {ref_genome_id} for species {species}. Skipping.")
             return
+        
+        number_of_sam_files = len(sam_files)
         
         print_debug(f"Found {len(sam_files)} mapped SAM files for reference genome {ref_genome_id} for species {species}.")
         print_debug(f"Mapped SAM files: {sam_files}")
 
         for sam_file in sam_files:
+
+            count_current += 1
+            
+            print_info(f"[{count_current}/{number_of_sam_files}] Converting {get_filename_from_path(sam_file)} to BAM for reference genome {ref_genome_id} for species {species} ...")
 
             bam_file = common_rgp.get_bam_file_path_for_sam_file(species, ref_genome_id, sam_file)
             sorted_bam = common_rgp.get_sorted_bam_file_path_for_bam_file(species, ref_genome_id, bam_file)

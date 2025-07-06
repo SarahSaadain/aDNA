@@ -1,16 +1,12 @@
 import os
 import pandas as pd
-
-from multiprocessing import Pool, cpu_count
-
 import gzip
-from collections import Counter
-from Bio import SeqIO
-
 import raw_reads_processing.common_raw_reads_processing_helpers as common_rrp
 
+from multiprocessing import Pool, cpu_count
+from collections import Counter
+from Bio import SeqIO
 from common_aDNA_scripts import *
-
 
 def get_read_length_distribution(fastq_file: str) -> Counter:
     read_lengths = Counter()

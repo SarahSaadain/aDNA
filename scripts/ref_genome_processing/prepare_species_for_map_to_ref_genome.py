@@ -3,8 +3,6 @@ from common_aDNA_scripts import *
 
 import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
 
-FILE_NAME_PREPARE_SCRIPT = "prepare_for_mapping_to_ref_genome.py"
-
 def merge_all_fastq_files(species: str):
 
     print_info(f"Merging all the FASTQ.GZ files for {species}.")
@@ -114,17 +112,6 @@ def all_species_prepare():
     for species in FOLDER_SPECIES: 
 
         print_info(f"Preparing FASTQ.GZ files for {species} for reference genome mapping")
-        scripts_folder = get_folder_path_species_scripts(species)
-
-        prepare_script_path = os.path.join(scripts_folder, FILE_NAME_PREPARE_SCRIPT)
-
-         # Check if prepare.py exists
-        # if os.path.exists(prepare_script_path):
-        #     print_info(f"Found {FILE_NAME_PREPARE_SCRIPT} script for species {species}.")
-        #     call_prepare_script(species, prepare_script_path)
-        # else:
-        #     print_info(f"No {FILE_NAME_PREPARE_SCRIPT} script found for species {species}.")
-        #     merge_all_fastq_files(species)
         
         merge_all_fastq_files(species)
         merge_fastq_by_individual(species)

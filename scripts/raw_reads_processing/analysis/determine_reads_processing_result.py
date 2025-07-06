@@ -2,11 +2,9 @@ import os
 import re
 import subprocess
 import pandas as pd
-
-from multiprocessing import Pool, cpu_count
-
 import raw_reads_processing.common_raw_reads_processing_helpers as common_rrp
 
+from multiprocessing import Pool, cpu_count
 from common_aDNA_scripts import *
 
 def execute_seqkit_stats_count_reads(input_file: str, thread:int = THREADS_DEFAULT) -> int:

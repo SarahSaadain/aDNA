@@ -1,9 +1,8 @@
 import os
 import subprocess
-
+import raw_reads_processing.common_raw_reads_processing_helpers as common_rrp
 
 from common_aDNA_scripts import *
-import raw_reads_processing.common_raw_reads_processing_helpers as common_rrp
 
 def execute_fastp_paired_reads_remove_adapters_and_merge(input_file_path_r1: str, input_file_path_r2: str, output_file_path: str, adapter_sequence_r1:str, adapter_sequence_r2:str, threads:int = THREADS_DEFAULT):
 
@@ -145,14 +144,20 @@ def adapter_remove_for_species(species: str):
 
     # Process paired reads
     if paired_reads:
-        print_debug(f"Found {len(paired_reads)} paired-end reads for species {species}.")
+
+        number_of_paired_reads = len(paired_reads)
+        count_current = 0
+
+        print_debug(f"Found {number_of_paired_reads} paired-end reads for species {species}.")
         print_debug(f"Paired-end reads: {paired_reads}")
 
         print_info("Processing paired-end reads.")
         try:
             for r1, r2 in paired_reads:
 
-                print_info(f"Processing paired reads: {get_filename_from_path(r1)}, {get_filename_from_path(r2)}")  
+                count_current += 1
+
+                print_info(f"[{count_current}/{number_of_paired_reads}] Processing paired reads: {get_filename_from_path(r1)}, {get_filename_from_path(r2)}")  
 
                 adapter_removed_read_file = common_rrp.get_adapter_removed_path_for_paired_raw_reads(species, [r1, r2])
                 
@@ -175,14 +180,20 @@ def adapter_remove_for_species(species: str):
     
     # Process single-end reads
     if single_reads:
-        print_debug(f"Found {len(single_reads)} single-end reads for species {species}.")
+
+        number_of_single_reads = len(single_reads)
+        count_current = 0
+
+        print_debug(f"Found {number_of_single_reads} single-end reads for species {species}.")
         print_debug(f"Single-end reads: {single_reads}")
         
         print_info("Processing single-end reads.")
         try:
             for read_file_path in single_reads:
 
-                print_info(f"Processing single read: {get_filename_from_path(read_file_path)}")
+                count_current += 1
+
+                print_info(f"[{count_current}/{number_of_single_reads}] Processing single read: {get_filename_from_path(read_file_path)}")
 
                 adapter_removed_read_file = common_rrp.get_adapter_removed_path_for_paired_raw_reads(species, [read_file_path])
                 

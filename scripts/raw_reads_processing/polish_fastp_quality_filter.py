@@ -50,16 +50,22 @@ def fastp_quality_filter_for_species(species: str):
 
     reads_files_list = get_files_in_folder_matching_pattern(reads_folder, f"*{FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ}")
 
-    if len(reads_files_list) == 0:
+    number_of_reads_files = len(reads_files_list)
+
+    if number_of_reads_files == 0:
         print_warning(f"No adapter removed reads found for species {species}. Skipping.")
         return
     
     print_debug(f"Found {len(reads_files_list)} adapter removed reads for species {species}.")
     print_debug(f"Adapter removed reads: {reads_files_list}")
 
+    count_current = 0
+
     for read_file_path in reads_files_list:
 
-        print_info(f"Processing read file: {get_filename_from_path(read_file_path)}")
+        count_current += 1
+
+        print_info(f"[{count_current}/{number_of_reads_files}] Processing read file: {get_filename_from_path(read_file_path)}")
 
         individual = common_rrp.get_individual_from_file(read_file_path)
 

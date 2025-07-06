@@ -46,6 +46,12 @@ def map_aDNA_to_refgenome_for_species(species: str):
     except Exception as e:
         print_error(f"Failed to get reference genome files for species {species}: {e}")
         return
+    
+    print_debug(f"Found {len(ref_genome_list)} reference genome files for species {species}.")
+    print_debug(f"Reference genome files: {ref_genome_list}")
+    
+    number_of_entries = len(ref_genome_list) * len(list_of_read_files)
+    count_current = 0
 
     for ref_genome_tuple in ref_genome_list:
 
@@ -57,7 +63,9 @@ def map_aDNA_to_refgenome_for_species(species: str):
 
         for read_file_path in list_of_read_files:
 
-            print_info(f"Mapping {read_file_path} to reference genome {ref_genome_path} ...")
+            count_current += 1
+
+            print_info(f"[{count_current}/{number_of_entries}] Mapping {read_file_path} to reference genome {ref_genome_path} ...")
 
             sam_file_path = common_rgp.get_sam_file_path_for_read_file_and_ref_genome(species, read_file_path, ref_genome_id)
 
