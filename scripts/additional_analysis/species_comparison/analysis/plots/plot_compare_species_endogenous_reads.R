@@ -20,7 +20,7 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
     
     # Check if the file does not exists exit
     if (!file.exists(file_path)) {
-      message(paste("File not found:", filepath))
+      message(paste("File not found:", file_path))
       return(NULL)  # exit the function early without an error
     } 
 
@@ -83,7 +83,7 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
   endogenous_plot <- ggplot(df_combined, aes(x = species, y = percent_endogenous, fill = species)) +
     geom_bar(stat = "identity", position = "dodge") +
     theme_classic(base_size = 16) +
-    labs(x = "Species", y = "Percentage of Endogenous Reads", title = paste("Endogenous Reads Across Species - ", comparison_name)) +
+    labs(x = "Species", y = "Percentage of Endogenous Reads", title = "Endogenous Reads Across Species") +
     theme(axis.text.x = element_text(size = 14, angle = 45, vjust = 1, hjust = 1),
           axis.text.y = element_text(size = 16),
           axis.title.x = element_text(size = 18, face = "bold"),

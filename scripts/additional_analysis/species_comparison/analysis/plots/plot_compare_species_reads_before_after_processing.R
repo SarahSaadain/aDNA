@@ -13,7 +13,7 @@ process_and_plot_before_after <- function(analysis_files, output_folder, species
     print(paste("Processing file:", filepath))
 
         # Check if the file does not exists exit
-    if (!file.exists(file_path)) {
+    if (!file.exists(filepath)) {
       message(paste("File not found:", filepath))
       return(NULL)  # exit the function early without an error
     } 

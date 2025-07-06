@@ -49,7 +49,7 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
     theme_bw() +
     ylab("Percent Covered") +
     xlab("Species") +
-    ggtitle(paste("Distribution of Percent Covered - ", comparison_name)) +
+    ggtitle("Distribution of Percent Covered") +
     theme(axis.text.x = element_text(size = 18, angle = 45, vjust = 1, hjust = 1),
           legend.text = element_text(size = 18),
           axis.text.y = element_text(size = 18),
@@ -75,7 +75,7 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
     theme_bw() +
     ylab("Avg. Depth") +
     xlab("Species") +
-    ggtitle(paste("Distribution of Average Depth - ", comparison_name)) +
+    ggtitle("Distribution of Average Depth") +
     theme(axis.text.x = element_text(size = 18, angle = 45, vjust = 1, hjust = 1),
           legend.text = element_text(size = 18),
           axis.text.y = element_text(size = 18),
@@ -108,7 +108,7 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
     theme_bw() +
     ylab("Mean Percent Covered") +
     xlab("Species") +
-    ggtitle(paste("Mean Percent Covered per Species -", comparison_name)) +
+    ggtitle("Mean Percent Covered per Species") +
     theme(axis.text.x = element_text(size = 16, angle = 45, vjust = 1, hjust = 1),
           axis.text.y = element_text(size = 14),
           axis.title.x = element_text(size = 18, face = "bold"),
@@ -128,7 +128,7 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
     theme_bw() +
     ylab("Mean Avg. Depth") +
     xlab("Species") +
-    ggtitle(paste("Mean Average Depth per Species -", comparison_name)) +
+    ggtitle("Mean Average Depth per Species") +
     scale_y_continuous(
       trans = "log10",
       breaks = scales::trans_breaks("log10", function(x) 10^x),
