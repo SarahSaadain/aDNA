@@ -37,7 +37,7 @@ def _process_single_read_length_file(raw_read_path: str, species: str) -> str | 
 
         # Check if the individual result file already exists to avoid redundant processing.
         if os.path.exists(temp_file_path):
-            print_info(f"[PID {pid}] Individual result file already exists: {temp_file_path}. Skipping.")
+            print_skipping(f"[PID {pid}] Individual result file already exists: {temp_file_path}.")
             return temp_file_path # Return existing path if already processed
 
         # Get read length distribution for raw reads
@@ -103,7 +103,7 @@ def determine_read_length_distribution(species: str):
 
     # If no raw reads are found, log a warning and exit the function.
     if len(raw_reads) == 0:
-        print_warning(f"No raw reads found for species {species}. Skipping.")
+        print_warning(f"No raw reads found for species {species}.")
         return
     
     print_debug(f"Found {len(raw_reads)} raw reads for species {species}.")

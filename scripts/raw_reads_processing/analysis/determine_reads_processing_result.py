@@ -85,7 +85,7 @@ def _process_single_read_file(raw_read_path: str, species: str):
         temp_file_path = os.path.join(processed_dir, temp_file_name)
 
         if os.path.exists(temp_file_path):
-            print_info(f"[PID {pid}] File already exists: {temp_file_path}. Skipping.")
+            print_skipping(f"[PID {pid}] File already exists: {temp_file_path}.")
             return
 
         # Count raw reads
@@ -146,7 +146,7 @@ def determine_reads_processing_result(species: str):
     )
 
     if len(raw_reads) == 0:
-        print_warning(f"No raw reads found for species {species}. Skipping.")
+        print_warning(f"No raw reads found for species {species}.")
         return
 
     print_debug(f"Found {len(raw_reads)} raw reads for species {species}.")
@@ -189,7 +189,7 @@ def combine_reads_processing_results(species: str):
     )
 
     if not analysis_files:
-        print_warning(f"No analysis files found for species {species}. Skipping combination.")
+        print_warning(f"No analysis files found for species {species}.")
         return
     
     print_debug(f"Found {len(analysis_files)} analysis files for species {species}.")

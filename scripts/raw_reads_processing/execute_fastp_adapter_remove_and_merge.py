@@ -72,7 +72,7 @@ def execute_fastp_single_reads_remove_adapters(input_file_path: str, output_file
         raise Exception(f"Read file {input_file_path} does not exist!")
     
     if os.path.exists(output_file_path):
-        print_info(f"Output file {output_file_path} already exists! Skipping!")
+        print_skipping(f"Output file {output_file_path} already exists!")
         return
     
     filepath_json_report = output_file_path.replace(FILE_ENDING_ADAPTER_REMOVED_FASTQ_GZ, "_report.json")
@@ -169,7 +169,7 @@ def adapter_remove_for_species(species: str):
                 )
 
                 if is_ref_genome_read_file_exists:
-                    print_info(f"Individual {individual} already prepared for reference genome processing! Skipping!")
+                    print_skipping(f"Individual {individual} already prepared for reference genome processing!")
                     continue
                 
                 execute_fastp_paired_reads_remove_adapters_and_merge(r1, r2, adapter_removed_read_file, adapter_sequence_r1, adapter_sequence_r2)
@@ -205,7 +205,7 @@ def adapter_remove_for_species(species: str):
                 )
 
                 if is_ref_genome_read_file_exists:
-                    print_info(f"Individual {individual} already prepared for reference genome processing! Skipping!")
+                    print_skipping(f"Individual {individual} already prepared for reference genome processing!")
                     continue
                 
                 execute_fastp_single_reads_remove_adapters(read_file_path, adapter_removed_read_file, adapter_sequence_r1)

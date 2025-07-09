@@ -15,7 +15,7 @@ def plot_depth_analysis(species: str, reference_genome_id: str):
 
     # here have multiple files, one for each sample, hence the list
     if len(analysis_files) == 0:
-        print_warning(f"No depth analysis files found for species {species} and reference genome {reference_genome_id}. Skipping.")
+        print_warning(f"No depth analysis files found for species {species} and reference genome {reference_genome_id}.")
         return
     
     print_debug(f"Found {len(analysis_files)} depth analysis files for species {species} and reference genome {reference_genome_id}.")
@@ -57,7 +57,7 @@ def plot_breadth_analysis(species: str, reference_genome_id: str):
     analysis_files = get_files_in_folder_matching_pattern(analysis_folder, f"*{FILE_ENDING_EXTENDED_COVERAGE_ANALYSIS_CSV}")
 
     if len(analysis_files) == 0:
-        print_warning(f"No breadth analysis files found for species {species}. Skipping.")
+        print_warning(f"No breadth analysis files found for species {species}.")
         return
     
     print_debug(f"Found {len(analysis_files)} depth analysis files for species {species} and reference genome {reference_genome_id}.")
@@ -99,7 +99,7 @@ def plot_endogenous_reads(species: str, reference_genome_id: str):
     analysis_files = get_files_in_folder_matching_pattern(endogenous_reads_analysis_folder, f"*{FILE_ENDING_ENDOGENOUS_READS_CSV}")
 
     if len(analysis_files) == 0:
-        print_warning(f"No endogenous reads files found for species {species} and reference genome {reference_genome_id}.. Skipping.")
+        print_warning(f"No endogenous reads files found for species {species} and reference genome {reference_genome_id}.")
         return
     
     print_debug(f"Found {len(analysis_files)} depth analysis files for species {species} and reference genome {reference_genome_id}.")

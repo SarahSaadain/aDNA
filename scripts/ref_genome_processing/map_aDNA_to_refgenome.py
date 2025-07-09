@@ -15,7 +15,7 @@ def execute_bwa_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, 
         raise Exception(f"Reference genome file {ref_genome_path} does not exist!")
     
     if os.path.exists(output_file_path):
-        print_info(f"Output file {output_file_path} already exists! Skipping!")
+        print_skipping(f"Output file {output_file_path} already exists!")
         return
     
     command_bwa = f"{PROGRAM_PATH_BWA} {PROGRAM_PATH_BWA_MEM} -t {str(threads)} {ref_genome_path} {input_file_path} > {output_file_path}"
@@ -35,7 +35,7 @@ def map_aDNA_to_refgenome_for_species(species: str):
     list_of_read_files = get_files_in_folder_matching_pattern(read_folder, f"*{FILE_ENDING_FASTQ_GZ}")
 
     if len(list_of_read_files) == 0:
-        print_warning(f"No reads found for species {species}. Skipping.")
+        print_warning(f"No reads found for species {species}.")
         return
     
     print_debug(f"Found {len(list_of_read_files)} read files for species {species}.")
@@ -72,7 +72,7 @@ def map_aDNA_to_refgenome_for_species(species: str):
             print_debug(f"Output file: {sam_file_path}")
 
             if os.path.exists(sam_file_path):
-                print_info(f"Output file {sam_file_path} already exists! Skipping!")
+                print_skipping(f"Output file {sam_file_path} already exists!")
                 return
             
             # we only need to map if the sorted bam file does not exist
@@ -82,7 +82,7 @@ def map_aDNA_to_refgenome_for_species(species: str):
             print_debug(f"Sorted BAM file path: {sorted_bam_file_path}")
 
             if os.path.exists(sorted_bam_file_path):
-                print_info(f"Sorted BAM file {sorted_bam_file_path} already exists! Skipping mapping for {read_file_path}.")
+                print_skipping(f"Sorted BAM file {sorted_bam_file_path} already exists!")
                 continue
 
             execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, sam_file_path, THREADS_DEFAULT)

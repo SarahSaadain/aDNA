@@ -48,7 +48,7 @@ def execute_bwa_index_reference_genome(reference_genome_path: str):
     # Check if index file already exists
     index_file = f"{reference_genome_path}.bwt"
     if os.path.exists(index_file):
-        print_info(f"Index file {index_file} already exists, skipping indexing.")
+        print_skipping(f"Index file {index_file} already exists.")
         return 
 
     command_bwa = f"{PROGRAM_PATH_BWA} {PROGRAM_PATH_BWA_INDEX} {reference_genome_path}"

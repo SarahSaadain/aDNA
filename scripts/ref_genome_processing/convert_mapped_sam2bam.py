@@ -98,7 +98,7 @@ def convert_ref_genome_mapped_sam_to_bam_for_species(species):
         number_of_sam_files = len(sam_files)
 
         if number_of_sam_files == 0:
-            print_warning(f"No mapped SAM files found for reference genome {ref_genome_id} for species {species}. Skipping.")
+            print_warning(f"No mapped SAM files found for reference genome {ref_genome_id} for species {species}.")
             return
         
         number_of_sam_files = len(sam_files)

@@ -10,7 +10,7 @@ def execute_fastp_quality_filter(input_file_path:str, output_file_path:str, thre
         raise Exception(f"Read file {input_file_path} does not exist!")
     
     if os.path.exists(output_file_path):
-        print_info(f"Output file {output_file_path} already exists! Skipping!")
+        print_skipping(f"Output file {output_file_path} already exists!")
         return
     
     filepath_failed_reads = output_file_path.replace(FILE_ENDING_QUALITY_FILTERED_FASTQ_GZ, "_failed.fastq.gz")
@@ -53,7 +53,7 @@ def fastp_quality_filter_for_species(species: str):
     number_of_reads_files = len(reads_files_list)
 
     if number_of_reads_files == 0:
-        print_warning(f"No adapter removed reads found for species {species}. Skipping.")
+        print_warning(f"No adapter removed reads found for species {species}.")
         return
     
     print_debug(f"Found {len(reads_files_list)} adapter removed reads for species {species}.")
@@ -75,7 +75,7 @@ def fastp_quality_filter_for_species(species: str):
         )
 
         if is_ref_genome_read_file_exists:
-            print_info(f"Individual {individual} already prepared for reference genome processing! Skipping!")
+            print_skipping(f"Individual {individual} already prepared for reference genome processing!")
             continue
 
         output_file_path = common_rrp.get_quality_filtered_path_for_adapter_removed_reads(species, read_file_path)

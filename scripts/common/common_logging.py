@@ -23,16 +23,19 @@ def print_info(message: str):
     logging.info(f"ℹ️  {message}")
 
 def print_error(message: str):
-    logging.error(f"❌  {message}")
+    logging.error(f"❌ {message}")
 
 def print_success(message: str):
-    logging.info(f"✅  {message}")
+    logging.info(f"✅ {message}")
+
+def print_skipping(message: str):
+    logging.info(f"⏩ Skipping: {message}")
 
 def print_warning(message: str):
-    logging.warning(f"⚠️  {message}")
+    logging.warning(f"⚠️ {message}")
 
 def print_debug(message: str):
-    logging.debug(f"🐞  {message}")
+    logging.debug(f"🐞 {message}")
 
 def print_execution(message: str):
     print_headline(message)

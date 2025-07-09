@@ -37,7 +37,7 @@ def plot_read_length_distribution(species: str):
 
     # If no matching files are found, skip this step.
     if len(analysis_files) == 0:
-        print_warning(f"No read length distribution files found for species {species}. Skipping.")
+        print_warning(f"No read length distribution files found for species {species}.")
         return
 
     # Retrieve the R script that generates the length distribution plots.

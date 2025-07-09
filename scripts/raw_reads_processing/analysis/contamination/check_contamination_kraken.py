@@ -12,7 +12,7 @@ def run_kraken_on_file(species: str, fastq_file_path: str,  Kraken_report_tsv: s
 
     # Check if output files already exist
     if os.path.exists(Kraken_report_tsv):
-        print_info(f"Output files {Kraken_report_tsv} already exist. Skipping.")
+        print_skipping(f"Output files {Kraken_report_tsv} already exist.")
         return
     
     # get the Kraken database path from the config
@@ -63,7 +63,7 @@ def create_kraken_top5_analysis(report_file_path: str, output_file_path: str):
 
     # Check if output file already exists
     if os.path.exists(output_file_path):
-        print_info(f"Analysis output file {get_filename_from_path(output_file_path)} already exists. Skipping analysis.")
+        print_skipping(f"Analysis output file {get_filename_from_path(output_file_path)} already exists.")
         return
 
     # Construct the shell command pipeline
@@ -139,7 +139,7 @@ def combine_kraken2_top5_analysis(species: str):
 
     # If no species were found, print a warning and return
     if not species_total_counts:
-        print_warning(f"No contaminants found in Kraken2 top 5 analysis for species {species}. Skipping analysis.")
+        print_warning(f"No contaminants found in Kraken2 top 5 analysis for species {species}.")
         return
     
     print_debug(f"Total species found: {len(species_total_counts)}")
@@ -203,7 +203,7 @@ def run_Kraken_per_species(species: str):
 
     # if no files are found, skip species
     if not fastq_files:
-        print_warning(f"No duplicate removed FASTQ.GZ files found for species {species}. Skipping.")
+        print_warning(f"No duplicate removed FASTQ.GZ files found for species {species}.")
         return
 
     print_info(f"Found {len(fastq_files)} relevant FASTQ.GZ files for species {species}")
@@ -221,7 +221,7 @@ def run_Kraken_per_species(species: str):
 
     # if no files remain after filtering, skip species
     if not fastq_files_filtered:
-        print_warning(f"No FASTQ.GZ files found for species {species} after filtering. Skipping.")
+        print_warning(f"No FASTQ.GZ files found for species {species} after filtering.")
         return
 
     print_debug(f"Found {len(fastq_files_filtered)} relevant FASTQ.GZ files after filtering")

@@ -10,7 +10,7 @@ def run_centrifuge_on_file(species: str, fastq_file_path: str, centrifuge_output
 
              # Check if output files already exist
     if os.path.exists(centrifuge_output_txt) and os.path.exists(centrifuge_report_tsv):
-        print_info(f"Output files for {get_filename_from_path(fastq_file_path)} already exist. Skipping.")
+        print_skipping(f"Output files for {get_filename_from_path(fastq_file_path)} already exist.")
         return
 
     # get the Centrifuge database path from the config
@@ -57,7 +57,7 @@ def analyze_centrifuge_output(output_file_path: str, taxon_counts_output_path: s
 
     # Check if output file already exists
     if os.path.exists(taxon_counts_output_path):
-        print_info(f"Taxon counts output file {get_filename_from_path(taxon_counts_output_path)} already exists. Skipping analysis.")
+        print_skipping(f"Taxon counts output file {get_filename_from_path(taxon_counts_output_path)} already exists.")
         return
 
     # Construct the shell command pipeline
@@ -97,7 +97,7 @@ def run_centrifuge_per_species(species: str):
 
     # if no files are found, skip species
     if not fastq_files:
-        print_warning(f"No duplicate removed FASTQ.GZ files found for species {species}. Skipping.")
+        print_warning(f"No duplicate removed FASTQ.GZ files found for species {species}.")
         return
 
     print_info(f"Found {len(fastq_files)} relevant FASTQ.GZ files for species {species}")
@@ -115,7 +115,7 @@ def run_centrifuge_per_species(species: str):
 
     # if no files remain after filtering, skip species
     if not fastq_files_filtered:
-        print_warning(f"No FASTQ.GZ files found for species {species} after filtering. Skipping.")
+        print_warning(f"No FASTQ.GZ files found for species {species} after filtering.")
         return
 
     print_debug(f"Found {len(fastq_files_filtered)} relevant FASTQ.GZ files after filtering")

@@ -30,7 +30,7 @@ def execute_extract_special_sequences(bam_file_path:str, output_folder:str, dept
     output_file_path = os.path.join(output_folder, output_filename)
 
     if os.path.exists(output_file_path):
-        print_info(f"Output file {output_file_path} already exists! Skipping!")
+        print_skipping(f"Output file {output_file_path} already exists!")
         return
 
     with pysam.AlignmentFile(bam_file_path, 'rb', threads=threads) as bamfile, open(output_file_path, 'w') as special_reads_file_content:
@@ -93,7 +93,7 @@ def execute_extract_unmapped_regions(bam_file_path: str, output_folder: str, min
     output_filename = os.path.join(output_folder, os.path.basename(bam_file_path).replace(FILE_ENDING_BAM, "_unmapped_regions.txt"))
     
     if os.path.exists(output_filename):
-        print_info(f"Output file {output_filename} already exists! Skipping!")
+        print_skipping(f"Output file {output_filename} already exists!")
         return
 
     print_info(f"Extracting unmapped regions from {bam_file_path}. Output: {output_filename}")
@@ -150,7 +150,7 @@ def extract_special_sequences_for_species(species: str, depth_threshold: int = D
         bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
         if len(bam_files) == 0:
-            print_warning(f"No BAM files found in {mapped_folder} for species {species}. Skipping.")
+            print_warning(f"No BAM files found in {mapped_folder} for species {species}.")
             return
 
         print_debug(f"Found {len(bam_files)} BAM files.")

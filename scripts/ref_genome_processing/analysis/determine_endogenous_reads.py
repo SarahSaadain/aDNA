@@ -41,7 +41,7 @@ def determine_endogenous_reads_for_bam_file(bam_file: str, processed_folder: str
     target_file_path = os.path.join(processed_folder, output_filename)
 
     if os.path.exists(target_file_path):
-        print_info(f"Result file already exists for {bam_filename}. Skipping.")
+        print_skipping(f"Result file already exists for {bam_filename}.")
         return
 
     print_info(f"Determining endogenous reads for {bam_filename} ...")
@@ -137,7 +137,7 @@ def determine_endogenous_reads_for_species(species: str, ref_genome_id: str):
     bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
     if len(bam_files) == 0:
-        print_warning(f"No BAM files found in {mapped_folder} for species {species}. Skipping.")
+        print_warning(f"No BAM files found in {mapped_folder} for species {species}.")
         return
 
     print_debug(f"Found {len(bam_files)} BAM files for species {species}: {bam_files}")

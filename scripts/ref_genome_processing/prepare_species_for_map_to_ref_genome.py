@@ -22,7 +22,7 @@ def merge_all_fastq_files(species: str):
     output_file_path = common_rgp.get_species_combined_read_path(species)
 
     if common_rgp.is_species_combined_reads_file_exists(species):
-        print_info(f"Output file {output_file_path} already exists. Skipping.")
+        print_skipping(f"Output file {output_file_path} already exists.")
         return
     
     # filter out files that contain "LB" or "EB"
@@ -90,7 +90,7 @@ def merge_fastq_by_individual(species: str):
         output_file_path = common_rgp.get_species_individual_reads_path(species, individual)
 
         if common_rgp.is_species_individual_reads_file_exists(species, individual):
-            print_info(f"Output file {output_file_path} already exists. Skipping.")
+            print_skipping(f"Output file {output_file_path} already exists.")
             continue
 
         input_pattern_path = os.path.join(duplicates_removed_folder, pattern)

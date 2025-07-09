@@ -17,7 +17,7 @@ def execute_samtools_detpth(input_file: str, coverage_output_file: str):
         raise Exception(f"Input file {input_file} does not exist!")
 
     if os.path.exists(coverage_output_file):
-        print_info(f"Output file {coverage_output_file} already exists! Skipping!")
+        print_skipping(f"Output file {coverage_output_file} already exists!")
         return
 
     command = f"{PROGRAM_PATH_SAMTOOLS} {PROGRAM_PATH_SAMTOOLS_DEPTH} -a {input_file} > {coverage_output_file}"
@@ -74,12 +74,12 @@ def analyze_coverage_file(coverage_file, depth_breath_output_folder):
 
     # Skip processing if output already exists
     if os.path.exists(analysis_file_path):
-        print_info(f"[PID {pid}] Analysis file {analysis_file_path} already exists! Skipping.")
+        print_skipping(f"[PID {pid}] Analysis file {analysis_file_path} already exists.")
         return
 
     # Check that the input file exists
     if not os.path.exists(coverage_file):
-        print_error(f"[PID {pid}] Coverage file {coverage_file} does not exist! Skipping.")
+        print_error(f"[PID {pid}] Coverage file {coverage_file} does not exist!")
         return
 
     # Count total lines in the file to estimate processing progress
@@ -201,7 +201,7 @@ def execute_samtools_depth_for_species(species: str, reference_genome_id: str):
     list_of_bam_files = get_files_in_folder_matching_pattern(mapped_folder, f"*{FILE_ENDING_SORTED_BAM}")
 
     if len(list_of_bam_files) == 0:
-        print_warning(f"No mapped BAM files found in {mapped_folder} for species {species}. Skipping samtools depth execution.")
+        print_warning(f"No mapped BAM files found in {mapped_folder} for species {species}.")
         return
 
     print_debug(f"Found {len(list_of_bam_files)} BAM files for species {species}")
@@ -257,7 +257,7 @@ def perform_extended_analysis_for_species(species: str, reference_genome_id: str
     list_of_coverage_files = get_files_in_folder_matching_pattern(samtools_depth_folder, f"*{FILE_ENDING_SAMTOOLS_DEPTH_TSV}")
 
     if len(list_of_coverage_files) == 0:
-        print_warning(f"No samtools depth files found in {samtools_depth_folder} for species {species}. Skipping extended analysis.")
+        print_warning(f"No samtools depth files found in {samtools_depth_folder} for species {species}.")
         return
 
     print_debug(f"Found {len(list_of_coverage_files)} coverage files for species {species}")
@@ -305,7 +305,7 @@ def combine_analysis_files(species: str, reference_genome_id: str):
     )
 
     if not individual_analysis_files:
-        print_warning(f"No individual analysis files found to combine for species {species} in {analysis_folder}. Skipping.")
+        print_warning(f"No individual analysis files found to combine for species {species} in {analysis_folder}.")
         return
 
     print_debug(f"Found {len(individual_analysis_files)} analysis files to combine for species {species}")
@@ -319,7 +319,7 @@ def combine_analysis_files(species: str, reference_genome_id: str):
             df_analysis = pd.read_csv(analysis_file)
 
             if df_analysis.empty:
-                print_warning(f"Analysis file {analysis_file} is empty. Skipping.")
+                print_warning(f"Analysis file {analysis_file} is empty.")
                 continue
 
             # Parse BAM filename from analysis filename
@@ -348,9 +348,9 @@ def combine_analysis_files(species: str, reference_genome_id: str):
             detailed_rows.append(df_analysis)
 
         except FileNotFoundError:
-            print_error(f"Analysis file not found: {analysis_file}. Skipping.")
+            print_error(f"Analysis file not found: {analysis_file}.")
         except pd.errors.EmptyDataError:
-            print_warning(f"Analysis file is empty or malformed: {analysis_file}. Skipping.")
+            print_warning(f"Analysis file is empty or malformed: {analysis_file}.")
         except Exception as e:
             print_error(f"An error occurred processing analysis file {analysis_file}: {e}")
 
