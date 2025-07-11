@@ -163,7 +163,7 @@ Following this convention ensures proper organization and automated processing w
 
 ##### Filename Components:
 - **`<Individual>`** – A unique identifier for the sample or individual.  
-- **`<Protocol>`** – The sequencing or library preparation protocol used (to enable easy comparison of different lab protocols or sequencing technologies).  
+- **`<Protocol>`** – The sequencing or library prep protocol (to enable easy comparison of different protocols or sequencing technologies).  
 - **`<Original_Filename>`** – The original filename assigned by the sequencing platform.  
 - **`.fastq.gz`** – The expected file extension, indicating compressed FASTQ format.  
 
