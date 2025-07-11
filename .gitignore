@@ -9,10 +9,4 @@ aDNA.code-workspace
 */results/
 results/
 __pycache__
-scripts/try_and_error/
-sequencing_data/
 config.yaml
-fetch_results.sh
-update_roco_scripts.sh
-analysis_no_pipeline/
-Drosi_NHM.R
