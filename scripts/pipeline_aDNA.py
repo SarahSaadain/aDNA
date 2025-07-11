@@ -57,7 +57,7 @@ def run_pipeline_reference_genome_processing():
     determine_coverage_depth_and_breadth.all_species_determine_coverage_depth_and_breath()
 
     # extract special sequences 
-    extract_special_sequences.all_species_extract_special_sequences()
+    #extract_special_sequences.all_species_extract_special_sequences()
 
     # generate plots for all species to visualize results
     # these contain 
