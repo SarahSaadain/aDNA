@@ -17,7 +17,7 @@ plot_breadth_violin <- function(df) {
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.background = element_rect(fill = "white", colour = "black")) +
-    scale_fill_brewer(palette = "Set2")
+    scale_fill_viridis_d()
 }
 
 # Bar plot function: overall percent covered per individual
@@ -43,7 +43,7 @@ plot_breadth_bar <- function(df) {
           axis.title.x = element_text(size = 16, face = "bold"),
           axis.title.y = element_text(size = 16, face = "bold"),
           plot.title = element_text(size = 18, face = "bold", hjust = 0.5)) +
-    scale_fill_brewer(palette = "Set2")
+    scale_fill_viridis_d()
 }
 
 # Command-line args: <species> <input_file.csv> <output_folder>

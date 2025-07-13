@@ -88,7 +88,7 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
   # Create the plot
   endogenous_plot_bar <- ggplot(df, aes(x = Individual, y = percent_endogenous, fill = Individual)) +
     geom_bar(stat = "identity", position = "dodge") +
-    theme_classic(base_size = 16) +
+    theme_bw() +
     labs(x = "File", y = "Percentage of Endogenous Reads", title = paste("Endogenous Reads")) +
     theme(axis.text.x = element_text(size = 14, angle = 45, vjust = 1, hjust = 1),
           axis.text.y = element_text(size = 16),
@@ -98,7 +98,9 @@ plot_endogenous_reads <- function(species, source_file, target_folder) {
           legend.position = "none",
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          panel.background = element_rect(fill = "white", colour = "black"))
+          panel.background = element_rect(fill = "white", colour = "black")) +
+    scale_fill_viridis_d()
+
 
   ggsave(file_path, plot = endogenous_plot_bar, width = 6, height = 6, dpi = 300)
 }

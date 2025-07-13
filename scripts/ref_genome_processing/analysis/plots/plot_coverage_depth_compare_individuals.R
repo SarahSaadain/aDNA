@@ -22,7 +22,7 @@ plot_depth_coverage_violin <- function(df) {
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.background = element_rect(fill = "white", colour = "black")) +
-    scale_fill_brewer(palette = "Set3")
+    scale_fill_viridis_d()
 }
 
 # Bar plot: average depth per individual (aggregated)
@@ -44,7 +44,7 @@ plot_depth_coverage_bar <- function(df) {
           axis.title.x = element_text(size = 16, face = "bold"),
           axis.title.y = element_text(size = 16, face = "bold"),
           plot.title = element_text(size = 18, face = "bold", hjust = 0.5)) +
-    scale_fill_brewer(palette = "Set3")
+    scale_fill_viridis_d()
 }
 
 # Command-line args: <species> <input_file.csv> <output_folder>

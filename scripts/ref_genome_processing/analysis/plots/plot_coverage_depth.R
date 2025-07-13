@@ -30,8 +30,8 @@ plot_depth_coverage_violon <- function(df_depth, species) {
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.background = element_rect(fill = "white", colour = "black"),
-          legend.position = "none") #+
-    #scale_fill_manual(values = species_colors)
+          legend.position = "none") +
+    scale_fill_viridis_d()
 
     return(plot_depth_violin)
 }
