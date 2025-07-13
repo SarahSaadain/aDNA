@@ -21,6 +21,7 @@ import ref_genome_processing.analysis.determine_endogenous_reads as determine_en
 import ref_genome_processing.analysis.extract_special_sequences as extract_special_sequences
 import ref_genome_processing.analysis.determine_coverage_depth_and_breadth as determine_coverage_depth_and_breadth
 import ref_genome_processing.analysis.generate_plots_ref_genome_processing as generate_plots_ref_genome_processing
+import ref_genome_processing.analysis.analyze_damage as analyze_damage
 
 import additional_analysis.species_comparison.analysis.generate_plots_species_compare as generate_plots_species_compare
 import additional_analysis.mtdna_analysis.pipeline_mtdna_analysis as pipeline_mtdna_analysis
@@ -49,6 +50,10 @@ def run_pipeline_reference_genome_processing():
     # convert mapped reads from sam to bam. also sorts the bam file and indexes it
     convert_mapped_sam2bam.all_species_convert_sam_to_bam()
 
+    # run mapDamage on the mapped reads
+    # this step analyzes the damage patterns in the mapped reads
+    analyze_damage.all_species_run_mapdamage()
+    
     # quality control for mapped reads
     # determine endogenous reads
     determine_endogenous_reads.all_species_determine_endogenous_reads()
