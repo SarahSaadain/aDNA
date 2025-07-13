@@ -218,6 +218,16 @@ def get_folder_path_species_results_refgenome_mtdna(species: str, reference_geno
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_species_results_refgenome_damage(species: str, reference_genome_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome(species, reference_genome_id), FOLDER_DAMAGE_ANALYSIS)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_refgenome_damage_individual(species: str, reference_genome_id: str, individual_id: str) -> str:
+    path = os.path.join(get_folder_path_species_results_refgenome_damage(species, reference_genome_id), individual_id)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_species_results_refgenome_mtdna_regions(species: str, reference_genome_id: str) -> str:
     path = os.path.join(get_folder_path_species_results_refgenome_mtdna(species, reference_genome_id), FOLDER_REGIONS)
     check_folder_exists_or_create(path)

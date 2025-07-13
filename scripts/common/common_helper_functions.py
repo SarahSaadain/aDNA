@@ -187,3 +187,46 @@ def get_raw_paired_reads_list_of_species(species: str) -> list:
     ]
 
     return file_paths
+
+import subprocess
+from typing import Optional
+
+def run_command(command: list, description: str = "", cwd: Optional[str] = None) -> str:
+    """
+    Run a shell command and return its stdout output.
+
+    Parameters:
+        command (list): The command and arguments to execute.
+        description (str): Optional description for logging.
+        cwd (str, optional): Working directory to execute the command in.
+
+    Returns:
+        str: Captured stdout output.
+
+    Raises:
+        subprocess.CalledProcessError: If the command fails.
+    """
+    print_debug("Entering run_command function")
+
+    print_info(f"Running: {description or ' '.join(command)}")
+    
+    if cwd:
+        print_debug(f"Working directory: {cwd}")
+
+    result = subprocess.run(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=True,
+        cwd=cwd  # <- this is the key change
+    )
+
+    if result.stdout:
+        print_info(f"{result.stdout.strip()}")
+
+    if result.stderr:
+        print_warning(f"{result.stderr.strip()}")
+
+    print_success(f"{description} completed successfully")
+    return result.stdout.strip()
