@@ -239,7 +239,7 @@ def process_bam_file(mapped_bam_file, depth_breath_output_folder):
 
     mapped_bam_file_base_name = get_filename_from_path(mapped_bam_file)
 
-    print_info(f"Processing BAM file {mapped_bam_file} with PID {pid}")
+    print_info(f"[PID {pid}] Processing BAM file {mapped_bam_file} with PID {pid}")
 
     coverage_file_name = mapped_bam_file_base_name.replace(FILE_ENDING_SORTED_BAM, FILE_ENDING_SAMTOOLS_DEPTH_TSV)
     coverage_output_file = os.path.join(depth_breath_output_folder, coverage_file_name)
