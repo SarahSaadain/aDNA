@@ -8,9 +8,9 @@ This project contains a pipeline to analyze raw ancient data, obtained from the 
 - Raw reads and reference genome must be provided in the relevant folders. 
     - Raw reads shoud be renamed according to the naming convention specified in the [RAW Reads filenames](#RAW-Reads-filenames) section. Also see the [Manually renaming the raw reads files](#Manually-renaming-the-raw-reads-files) section.
     - Reference genome must be provided in the `species/raw/ref_genome/` folder.
-    - Species folders must be added to the `FOLDER_SPECIES` variable in the `common_aDNA_scripts.py` file.
+    - Species must be added to the config file
     - Please refer to the [Species Folders](#Species-Folders) section for the expected folder structure.
-- You need to set the `PATH_ADNA_PROJECT` variable in the `common_aDNA_scripts.py` file to point to the project directory.
+- You need to add the project path to the config file.
 
 ## Configuration File (config.yaml)
 
@@ -25,7 +25,7 @@ Example `config.yaml`
 project_name: "aDNA_Project"
 project_description: "Analysis of ancient DNA data"
 threads_default: 50  # Default number of threads to use for parallel processing
-path_adna_project: "/mnt/data5/sarah/aDNA" #Main project path
+path_adna_project: "/path/to/project" #Main project path
 log_level: "INFO"
 
 processing:
@@ -74,6 +74,8 @@ tools:
   samtools: "samtools"
   angsd: "angsd"
   seqkit: "seqkit"
+  kraken: "kraken"
+  mapdamage: "mapDamage"
 ```
 
 ### Global Settings
@@ -175,51 +177,7 @@ Bger1_S_326862_S37_R1_001.fastq.gz
 
 #### Manually renaming the raw reads files
 
-For manually renaming the raw read files, use the `rename.py` script located in the `resources/` folder in the root directory of the project.  
-
-##### Usage  
-
-The script reads a CSV file containing old and new filename mappings and renames the files accordingly in the specified folder. 
-
-**How It Works**
-- The script reads the CSV file and stores the old-to-new name mappings.
-- It scans the specified folder for filenames that contain any of the old names.
-- If a match is found, the filename is updated accordingly.
-- If --test is enabled, it prints the changes without renaming the files.
-
-This ensures efficient and structured renaming of raw read files within the pipeline.
-
-###### CSV Format  
-
-The CSV file should have two columns:  
-- **Column 1:** The original filename or a substring to be replaced.  
-- **Column 2:** The new filename or replacement substring.  
-
-**Example (`rename_list.csv`):**  
-
-```
-344209,Dsim19_2trial_344209
-344210,Dsim19_2trial_344210
-```
-
-##### Running the Script  
-
-Navigate to the project root and execute the script:  
-
-```bash
-python resources/rename.py rename_list.csv path/to/raw_reads/
-```
-
-This will rename the files in `path/to/raw_reads/` based on the mappings in `rename_list.csv`.
-
-##### Test Mode
-To preview the changes without renaming files, use the `--test` flag:
-
-```bash
-python resources/rename.py rename_list.csv path/to/raw_reads/ --test
-```
-
-This will print the planned renaming actions without modifying any files.
+For manually renaming the raw read files, use the `rename.py` script located at https://github.com/SarahSaadain/aDNA_Project_Data/blob/main/resources/rename.py .  
 
 ### Scripts Folder
 
