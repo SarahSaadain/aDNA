@@ -69,7 +69,7 @@ def fastp_quality_filter_for_species(species: str):
 
         individual = common_rrp.get_individual_from_file(read_file_path)
 
-        is_ref_genome_read_file_exists = common_rrp.is_species_individual_and_combined_reads_file_exists(
+        is_ref_genome_read_file_exists = common_rrp.is_species_individual_reads_file_exists(
             species, 
             individual
         )

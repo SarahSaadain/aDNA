@@ -113,7 +113,7 @@ def all_species_prepare():
 
         print_info(f"Preparing FASTQ.GZ files for {species} for reference genome mapping")
         
-        merge_all_fastq_files(species)
+        #merge_all_fastq_files(species)
         merge_fastq_by_individual(species)
     
     print_success(f"Finished preparing FASTQ.GZ files for reference genome mapping for all species")

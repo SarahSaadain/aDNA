@@ -163,7 +163,7 @@ def adapter_remove_for_species(species: str):
                 
                 individual = common_rrp.get_individual_from_file(r1)
 
-                is_ref_genome_read_file_exists = common_rrp.is_species_individual_and_combined_reads_file_exists(
+                is_ref_genome_read_file_exists = common_rrp.is_species_individual_reads_file_exists(
                     species, 
                     individual
                 )
@@ -199,7 +199,7 @@ def adapter_remove_for_species(species: str):
                 
                 individual = common_rrp.get_individual_from_file(read_file_path)
 
-                is_ref_genome_read_file_exists = common_rrp.is_species_individual_and_combined_reads_file_exists(
+                is_ref_genome_read_file_exists = common_rrp.is_species_individual_reads_file_exists(
                     species, 
                     individual
                 )
