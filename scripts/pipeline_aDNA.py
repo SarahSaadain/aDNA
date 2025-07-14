@@ -48,7 +48,8 @@ def run_pipeline_reference_genome_processing():
     map_aDNA_to_refgenome.all_species_map_aDNA_to_refgenome()
 
     # convert mapped reads from sam to bam. also sorts the bam file and indexes it
-    convert_mapped_sam2bam.all_species_convert_sam_to_bam()
+    # Note 2025-04-07: This step is now called directly after mapping to reduce space usage
+    #convert_mapped_sam2bam.all_species_convert_sam_to_bam()
 
     # run mapDamage on the mapped reads
     # this step analyzes the damage patterns in the mapped reads

@@ -3,6 +3,7 @@ import subprocess
 from common_aDNA_scripts import *
 
 import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
+import ref_genome_processing.convert_mapped_sam2bam as convert_sam2bam
 
 def execute_bwa_map_aDNA_to_refgenome(input_file_path:str, ref_genome_path:str, output_file_path:str, threads:int = THREADS_DEFAULT):
     
@@ -86,6 +87,13 @@ def map_aDNA_to_refgenome_for_species(species: str):
                 continue
 
             execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, sam_file_path, THREADS_DEFAULT)
+
+            # Convert SAM to BAM and sort
+            # Add this here so the SAM to BAM conversion is done directly after mapping
+            # This will help to reduce the space used by the SAM files as they can be very large and are not needed after conversion
+            # if this step will be called later, we will require more space as first all SAM files will be created and then converted to BAM files
+            convert_sam2bam.execute_convert_sam_to_bam(sam_file_path, bam_file_path, sorted_bam_file_path)
+
 
     print_success(f"Mapping aDNA to reference genome for species {species} complete")
 
