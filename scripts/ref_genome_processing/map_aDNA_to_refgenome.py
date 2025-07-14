@@ -71,10 +71,6 @@ def map_aDNA_to_refgenome_for_species(species: str):
             sam_file_path = common_rgp.get_sam_file_path_for_read_file_and_ref_genome(species, read_file_path, ref_genome_id)
 
             print_debug(f"Output file: {sam_file_path}")
-
-            if os.path.exists(sam_file_path):
-                print_skipping(f"Output file {sam_file_path} already exists!")
-                return
             
             # we only need to map if the sorted bam file does not exist
             bam_file_path = common_rgp.get_bam_file_path_for_sam_file(species, ref_genome_id, sam_file_path)
@@ -86,7 +82,10 @@ def map_aDNA_to_refgenome_for_species(species: str):
                 print_skipping(f"Sorted BAM file {sorted_bam_file_path} already exists!")
                 continue
 
-            execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, sam_file_path, THREADS_DEFAULT)
+            if os.path.exists(sam_file_path):
+                print_skipping(f"SAM file {sam_file_path} already exists!")
+            else:
+                execute_bwa_map_aDNA_to_refgenome(read_file_path, ref_genome_path, sam_file_path, THREADS_DEFAULT)
 
             # Convert SAM to BAM and sort
             # Add this here so the SAM to BAM conversion is done directly after mapping
