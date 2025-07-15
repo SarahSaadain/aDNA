@@ -21,7 +21,6 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
     df$species_id <- names(species_names)[i]
     df$species <- species_names[[i]]
     list_of_analysis_dataframes[[df$species_id[1]]] <- df
-    
   }
   
   all_data <- bind_rows(list_of_analysis_dataframes)
@@ -34,14 +33,6 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
     desired_order = unname(species_names)
     all_data$species <- factor(all_data$species, levels = desired_order)
   }
-  
-  num_species <- length(unique(all_data$species))
-  if (num_species <= 8) {
-    species_colors <- c("salmon", "orange", "chartreuse3", "darkgreen", "darkblue", "grey", "darkorchid", "cyan")[1:num_species]
-  } else {
-    species_colors <- colorRampPalette(c("salmon", "orange", "chartreuse3", "darkgreen", "darkblue", "grey", "darkorchid", "cyan"))(num_species)
-  }
-  names(species_colors) <- levels(all_data$species)
   
   # Violin plot: Percent Covered
   plot_breadth <- ggplot(all_data, aes(x = factor(species), y = percent_covered, fill = species)) +
@@ -60,7 +51,7 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
           panel.grid.minor = element_blank(),
           panel.background = element_rect(fill = "white", colour = "black"),
           legend.position = "none") +
-    scale_fill_manual(values = species_colors)
+    scale_fill_viridis_d()
   
   ggsave(file.path(output_folder, paste0(comparison_name, "_plot_breadth.png")), plot_breadth, width = 12, height = 8, dpi = 300)
   
@@ -86,7 +77,7 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
           panel.grid.minor = element_blank(),
           panel.background = element_rect(fill = "white", colour = "black"),
           legend.position = "none") +
-    scale_fill_manual(values = species_colors)
+    scale_fill_viridis_d()
   
   ggsave(file.path(output_folder, paste0(comparison_name, "_plot_depth.png")), plot_depth, width = 12, height = 8, dpi = 300)
   
@@ -116,10 +107,9 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
           plot.title = element_text(size = 22, face = "bold", hjust = 0.5),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          panel.background = element_rect(fill = "white", colour = "black"),
           legend.position = "none") +
-    scale_fill_manual(values = species_colors)
-  
+    scale_fill_viridis_d()
+
   ggsave(file.path(output_folder, paste0(comparison_name, "_plot_breadth_mean_coverage.png")), bar_plot_coverage, width = 10, height = 6, dpi = 300)
 
 # Bar plot: Mean Avg. Depth (log scale for visibility)
@@ -141,14 +131,11 @@ process_and_plot_depth_breadth <- function(analysis_files, output_folder, specie
           plot.title = element_text(size = 22, face = "bold", hjust = 0.5),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          panel.background = element_rect(fill = "white", colour = "black"),
           legend.position = "none") +
-    scale_fill_manual(values = species_colors)
+    scale_fill_viridis_d()
   
   ggsave(file.path(output_folder, paste0(comparison_name, "_plot_depth_mean.png")), bar_plot_depth, width = 10, height = 6, dpi = 300)
 }
-
-
 
 # Command line argument handling
 args <- commandArgs(trailingOnly = TRUE)
@@ -225,7 +212,7 @@ for (comparison_name in names(config$compare_species)) {
       ref_genome_name,
       "coverage_depth_breadth",
       paste0(
-        actual_species_id, "_combined.fastq_", ref_genome_name, "_extended_coverage_analysis.csv"
+        actual_species_id, "_combined_coverage_analysis_detailed.csv"
       )
     )
     # Store the constructed file path in the list, using the original 'comparison_entry_key'

@@ -6,6 +6,7 @@ library(tidyr)
 library(tidyverse)
 library(stringr)
 library(scales)
+library(viridis)
 library(yaml) # Load the yaml library
 
 process_and_plot_endogenous_reads <- function(analysis_files, output_folder, species_names, comparison_name) {
@@ -14,6 +15,7 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
   
   # Iterate over each analysis file
   for (i in 1:length(analysis_files)) {
+    
     file_path <- analysis_files[i]
 
     print(paste("Processing file:", file_path))
@@ -24,32 +26,30 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
       return(NULL)  # exit the function early without an error
     } 
 
-  # Read the CSV file, now with header=TRUE
-  df <- read.csv(file_path, header = TRUE)
-  
-  # Assign column names to the expected names
-  col_names <- c("sample", "endogenous", "total", "percent_endogenous")
+    # Read the CSV file, now with header=TRUE
+    df <- read.csv(file_path, header = TRUE)
+    
+    # Assign column names to the expected names
+    col_names <- c("sample", "endogenous", "total", "percent_endogenous")
 
-  # Check if the file contains the expected columns.  If not, error.
-  if (!all(c("Filename", "MappedReads", "TotalReads", "Proportion") %in% colnames(df))){
-    stop(paste("File", file_path, "does not contain the expected columns: Filename, MappedReads, TotalReads, Proportion. Please check the input data."))
-  }
-  
-  # Rename the columns to standard names
-  df <- df %>%
-    rename(
-      sample = Filename,
-      endogenous = MappedReads,
-      total = TotalReads,
-      percent_endogenous = Proportion
-    )
-  
-  df$species_id <- names(species_names)[i]  # Get species ID
-  df$species <- species_names[[i]] #get species long name
-  
-  list_of_analysis_dataframes[[df$species_id[1]]] <- df
-      
-
+    # Check if the file contains the expected columns.  If not, error.
+    if (!all(c("Filename", "MappedReads", "TotalReads", "Proportion") %in% colnames(df))){
+      stop(paste("File", file_path, "does not contain the expected columns: Filename, MappedReads, TotalReads, Proportion. Please check the input data."))
+    }
+    
+    # Rename the columns to standard names
+    df <- df %>%
+      rename(
+        sample = Filename,
+        endogenous = MappedReads,
+        total = TotalReads,
+        percent_endogenous = Proportion
+      )
+    
+    df$species_id <- names(species_names)[i]  # Get species ID
+    df$species <- species_names[[i]] #get species long name
+    
+    list_of_analysis_dataframes[[df$species_id[1]]] <- df
   }
   
   # Combine all data frames into one data frame
@@ -67,22 +67,13 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
     df_combined$species <- factor(df_combined$species, levels = desired_order)
   }
   
-  # Define a color palette for species.  Make it dynamic.
-  num_species <- length(unique(df_combined$species))
-  if (num_species <= 8) {
-    species_colors <- c("salmon", "orange", "chartreuse3", "darkgreen", "darkblue", "grey", "darkorchid", "cyan")[1:num_species]
-  } else {
-    species_colors <- colorRampPalette(c("salmon", "orange", "chartreuse3", "darkgreen", "darkblue", "grey", "darkorchid", "cyan"))(num_species)
-  }
-  names(species_colors) <- levels(df_combined$species)
-  
   # Reorder labels based on desired species order
   df_combined$label <- factor(df_combined$label, levels = df_combined$label[order(match(df_combined$species, desired_order))])
   
   # Create the plot
   endogenous_plot <- ggplot(df_combined, aes(x = species, y = percent_endogenous, fill = species)) +
     geom_bar(stat = "identity", position = "dodge") +
-    theme_classic(base_size = 16) +
+    theme_bw(base_size = 16) +
     labs(x = "Species", y = "Percentage of Endogenous Reads", title = "Endogenous Reads Across Species") +
     theme(axis.text.x = element_text(size = 14, angle = 45, vjust = 1, hjust = 1),
           axis.text.y = element_text(size = 16),
@@ -91,9 +82,9 @@ process_and_plot_endogenous_reads <- function(analysis_files, output_folder, spe
           plot.title = element_text(size = 22, face = "bold", hjust = 0.5),
           legend.position = "none",
           panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.background = element_rect(fill = "white", colour = "black")) +
-    scale_fill_manual(values = species_colors)
+          panel.grid.minor = element_blank()
+    ) +
+    scale_fill_viridis_d()
   
   # Print the plot
   #print(endogenous_plot)
