@@ -6,7 +6,6 @@ library(tidyr)
 library(tidyverse)
 library(stringr)
 library(scales)
-library(viridis)
 library(yaml) # Load the yaml library
 
 process_and_plot_endogenous_reads <- function(analysis_files, output_folder, species_names, comparison_name) {
