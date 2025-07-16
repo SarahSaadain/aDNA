@@ -70,7 +70,7 @@ def run_mapdamage_for_species(species: str):
                 common_adna.print_warning(f"Sorted BAM file {sorted_bam_file} does not exist.")
                 continue
 
-            individual_id = common_rgp.get_individual_from_file(sorted_bam_file)
+            individual_id = common_adna.get_filename_from_path(sorted_bam_file).split(".")[0]
             output_folder = common_adna.get_folder_path_species_results_refgenome_damage_individual(
                 species, ref_genome_id, individual_id)
             
