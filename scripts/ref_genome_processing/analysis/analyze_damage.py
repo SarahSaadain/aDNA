@@ -27,7 +27,8 @@ def execute_mapdamage(bam_file_path: str, ref_genome_path: str, output_folder: s
         common_adna.PROGRAM_PATH_MAPDAMAGE,
         "-i", bam_file_path,
         "-r", ref_genome_path,
-        "--folder", output_folder
+        "--folder", output_folder,
+        "--merge-reference-sequences"
     ]
 
     try:
@@ -77,8 +78,8 @@ def run_mapdamage_for_species(species: str):
             tasks.append((sorted_bam_file, ref_genome_path, output_folder))
 
         if tasks:
-            num_processes = min(common_adna.THREADS_DEFAULT, cpu_count())
-            common_adna.print_info(f"Running mapDamage with {num_processes} threads ...")
+            num_processes = min(common_adna.THREADS_DEFAULT, cpu_count(), len(tasks))
+            common_adna.print_info(f"Running mapDamage with max {num_processes} threads ...")
 
             with Pool(processes=num_processes) as pool:
                 pool.starmap(execute_mapdamage, tasks)
