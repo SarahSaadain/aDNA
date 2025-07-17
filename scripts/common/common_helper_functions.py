@@ -1,6 +1,7 @@
 import os
 import subprocess
 import glob
+from typing import Optional
 
 from common.common_constants import *
 from common.common_logging import *
@@ -50,36 +51,39 @@ def is_sam_file_sorted(sam_file: str) -> bool:
         return False
 
 def is_fasta_file(file_name: str) -> bool:
-    return file_name.endswith("fna") or file_name.endswith("fa") or file_name.endswith("fasta")
+    return file_name.endswith(FILE_ENDING_FNA) or file_name.endswith(FILE_ENDING_FA) or file_name.endswith(FILE_ENDING_FASTA)
 
 def is_fasta_gz_file(file_name: str) -> bool:
-    return file_name.endswith("fna.gz") or file_name.endswith("fa.gz") or file_name.endswith("fasta.gz") 
+    return file_name.endswith(FILE_ENDING_FNA_GZ) or file_name.endswith(FILE_ENDING_FA_GZ) or file_name.endswith(FILE_ENDING_FASTQ_GZ) 
 
 def call_r_script(script_path: str, *args):
     if not os.path.exists(script_path):
         raise FileNotFoundError(f"R script not found: {script_path}")
 
     command = ["Rscript", script_path] + list(args)
-    print_debug(f"Executing command: {' '.join(command)}")
 
-    result = subprocess.run(
-        command,
-        capture_output=True,
-        text=True
-    )
+    run_command(command, description=f"R script: {script_path}")
 
-    # Combine stdout and stderr
-    combined_output = result.stdout + result.stderr
+    # print_debug(f"Executing command: {' '.join(command)}")
 
-    # Print line-by-line
-    for line in combined_output.splitlines():
-        print_info(f"R script output: {line}") 
+    # result = subprocess.run(
+    #     command,
+    #     capture_output=True,
+    #     text=True
+    # )
 
-    if result.returncode != 0:
-        print_error(f"R script failed with exit code {result.returncode}")
-        return
+    # # Combine stdout and stderr
+    # combined_output = result.stdout + result.stderr
 
-    print_info(f"R script executed successfully: {script_path}")
+    # # Print line-by-line
+    # for line in combined_output.splitlines():
+    #     print_info(f"R script output: {line}") 
+
+    # if result.returncode != 0:
+    #     print_error(f"R script failed with exit code {result.returncode}")
+    #     return
+
+    # print_info(f"R script executed successfully: {script_path}")
 
 def get_adapter_sequence(species: str) -> tuple[str,str]:
     """
@@ -110,10 +114,6 @@ def get_adapter_sequence(species: str) -> tuple[str,str]:
 
     return adapter_sequence_r1, adapter_sequence_r2
 
-#####################
-# File paths
-#####################
-
 def get_filename_from_path(file_path: str) -> str:
     return os.path.basename(file_path)
 
@@ -135,7 +135,7 @@ def get_raw_reads_list_of_species(species: str) -> list:
     
     raw_reads_folder = get_folder_path_species_raw_reads(species)
 
-    return get_files_in_folder_matching_pattern(raw_reads_folder, "*.fastq.gz")
+    return get_files_in_folder_matching_pattern(raw_reads_folder, f"*{FILE_ENDING_FASTQ_GZ}")
    
 
 def get_files_in_folder_matching_pattern(folder: str, pattern: str) -> list:
@@ -188,10 +188,7 @@ def get_raw_paired_reads_list_of_species(species: str) -> list:
 
     return file_paths
 
-import subprocess
-from typing import Optional
-
-def run_command(command: list, description: str = "", cwd: Optional[str] = None) -> str:
+def run_command(command: list, description: str = "", cwd: Optional[str] = None, throw_error: bool = False) -> str:
     """
     Run a shell command and return its stdout output.
 
@@ -208,6 +205,8 @@ def run_command(command: list, description: str = "", cwd: Optional[str] = None)
     """
     print_debug("Entering run_command function")
 
+    command_program = command[0] if command else "Unknown"
+
     print_info(f"Running: {description or ' '.join(command)}")
     
     if cwd:
@@ -219,14 +218,24 @@ def run_command(command: list, description: str = "", cwd: Optional[str] = None)
         stderr=subprocess.PIPE,
         text=True,
         check=True,
-        cwd=cwd  # <- this is the key change
+        cwd=cwd
     )
 
     if result.stdout:
-        print_info(f"{result.stdout.strip()}")
+        for line in result.stdout.splitlines():
+            print_info(f"[{command_program}] {line.strip()}")
+
+    if result.stderr and throw_error:
+        print_error(f"[{command_program}] Command failed with error:")
+        
+        for line in result.stderr.splitlines():
+            print_error(f"[{command_program}] {line.strip()}")
+        
+        raise subprocess.CalledProcessError(result.returncode, command, output=result.stdout, stderr=result.stderr)
 
     if result.stderr:
-        print_warning(f"{result.stderr.strip()}")
+        for line in result.stdout.splitlines():
+            print_warning(f"[{command_program}] {line.strip()}")
 
-    print_success(f"{description} completed successfully")
+    print_info(f"{command_program} completed successfully")
     return result.stdout.strip()
