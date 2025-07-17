@@ -9,12 +9,12 @@ def is_species_combined_reads_file_exists(species: str) -> bool:
     combined_reads_path = get_species_combined_read_path(species)
     return os.path.exists(combined_reads_path)
 
-def get_species_individual_reads_path(species: str, individual: str) -> str:
+def create_species_individual_combined_read_filepath(species: str, individual: str) -> str:
     output_folder = common.get_folder_path_species_processed_prepared_for_ref_genome(species)
     return os.path.join(output_folder, f"{individual}{common.FILE_ENDING_FASTQ_GZ}")
 
 def is_species_individual_reads_file_exists(species: str, individual: str) -> bool:
-    individual_reads_path = get_species_individual_reads_path(species, individual)
+    individual_reads_path = create_species_individual_combined_read_filepath(species, individual)
     return os.path.exists(individual_reads_path)
 
 def is_species_individual_and_combined_reads_file_exists(species: str, individual: str) -> bool:

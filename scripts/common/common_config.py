@@ -124,4 +124,4 @@ PROGRAM_PATH_SEQKIT_STATS = "stats"
 PROGRAM_PATH_CENTRIFUGE = get_config_value(ConfigSettings.TOOLS.value, 'centrifuge', default='centrifuge')
 PROGRAM_PATH_KRAKEN = get_config_value(ConfigSettings.TOOLS.value, 'kraken', default='kraken2')
 PROGRAM_PATH_MAPDAMAGE = get_config_value(ConfigSettings.TOOLS.value, 'mapdamage', default='mapDamage')
-
+PROGRAM_PATH_ECMSD = get_config_value(ConfigSettings.TOOLS.value, 'ecmsd', default='ECMSD')

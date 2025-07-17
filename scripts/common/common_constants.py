@@ -46,6 +46,7 @@ FOLDER_READ_LENGTH_DISTRIBUTION = "read_length_distribution"
 FOLDER_CONTAMINATION = "contamination"
 FOLDER_CENTRIFUGE = "centrifuge"
 FOLDER_KRAKEN = "kraken"
+FOLDER_ECMSD = "ecmsd"
 FOLDER_DAMAGE_ANALYSIS = "damage_analysis"
 
 FOLDER_REGIONS = "regions"

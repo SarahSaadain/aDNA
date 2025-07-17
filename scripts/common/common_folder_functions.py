@@ -26,6 +26,16 @@ def get_folder_path_logs() -> str:
     check_folder_exists_or_create(path)
     return path
 
+def get_folder_path_resources() -> str:
+    path = os.path.join(get_folder_path_resources(), FOLDER_RESOURCES)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_resources_ecmsd() -> str:
+    path = os.path.join(get_folder_path_resources(), FOLDER_ECMSD)
+    check_folder_exists_or_create(path)
+    return path
+
 def get_folder_path_results_plots() -> str:
     path = os.path.join(get_folder_path_results(), FOLDER_PLOTS)
     check_folder_exists_or_create(path)
@@ -82,6 +92,8 @@ def get_folder_path_species_resources(species: str) -> str:
     path = os.path.join(get_folder_path_species(species), FOLDER_RESOURCES)
     check_folder_exists_or_create(path)
     return path
+
+
 
 def get_folder_path_species_raw_reads(species: str) -> str:
     path = os.path.join(get_folder_path_species_raw(species), FOLDER_READS)
@@ -240,6 +252,11 @@ def get_folder_path_species_results_qc(species: str) -> str:
 
 def get_folder_path_species_results_qc_centrifuge(species: str) -> str:
     path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_CENTRIFUGE)
+    check_folder_exists_or_create(path)
+    return path
+
+def get_folder_path_species_results_qc_ecmsd(species: str) -> str:
+    path = os.path.join(get_folder_path_species_results_qc(species), FOLDER_ECMSD)
     check_folder_exists_or_create(path)
     return path
 

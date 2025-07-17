@@ -7,6 +7,7 @@ import raw_reads_processing.execute_fastp_adapter_remove_and_merge as execute_fa
 import raw_reads_processing.polish_fastp_quality_filter as polish_fastp_quality_filter
 import raw_reads_processing.polish_fastp_deduplication as polish_fastp_deduplication
 import raw_reads_processing.quality_checking.generate_quality_check_report as generate_quality_check_report
+import raw_reads_processing.merge_reads_by_individual as merge_reads_by_individual
 import raw_reads_processing.analysis.determine_reads_processing_result as determine_reads_processing_result
 import raw_reads_processing.analysis.determine_read_length_distribution as determine_read_length_distribution
 import raw_reads_processing.analysis.generate_plots_raw_reads_processing as generate_plots_raw_reads_processing
@@ -34,12 +35,6 @@ def run_pipeline_reference_genome_processing():
     ############################################################
     # Mapping to reference genome
     ############################################################
-
-    # prepare species for mapping to reference genome
-    # this step uses the processed reads and prepares them for mapping to the 
-    # reference genome by concatenating the reads and creating different fastq files.
-    # fastq files are created per individual
-    prepare_species_for_map_to_ref_genome.all_species_prepare()
 
     # prepare reference genome for mapping
     prepare_ref_genome_for_mapping.all_species_prepare_ref_genome()
@@ -110,6 +105,13 @@ def run_pipeline_raw_reads_processing():
 
     # generate quality check report (html) to easily access all qc results
     generate_quality_check_report.all_species_generate_quality_check_report()
+
+    # prepare species for mapping to reference genome
+    # this step uses the processed reads and prepares them for mapping to the 
+    # reference genome by concatenating the reads and creating different fastq files.
+    # fastq files are created per individual
+    #prepare_species_for_map_to_ref_genome.all_species_prepare()
+    merge_reads_by_individual.all_species_merge_reads_by_individual()
 
     # determine reads processing before and after
     determine_reads_processing_result.all_species_determine_determine_reads_processing_result()
