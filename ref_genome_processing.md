@@ -86,7 +86,7 @@ Each row represents a **single scaffold** from the reference genome, with calcul
 
 > 🔹 **Note**: Unlike the detailed file, this version contains no `Filename` column since the file itself is specific to one individual.
 
-##### Example Entry
+###### Example Entry
 
 ```
 scaffold,avg_depth,max_depth,covered_bases,total_bases,percent_covered
@@ -121,7 +121,7 @@ Each row represents a single **scaffold** for a given individual.
 | `percent_covered` | Percentage of the scaffold covered by at least one read (`covered_bases / total_bases * 100`). |
 | `Filename`        | The name of the BAM file corresponding to the individual, identifying the sample.              |
 
-##### Example Entry
+###### Example Entry
 
 ```
 scaffold,avg_depth,max_depth,covered_bases,total_bases,percent_covered,Filename
@@ -156,7 +156,7 @@ Each row represents a single **individual**, identified by their BAM filename, w
 | `OverallTotalBases`     | Total number of bases in the reference genome.                   |
 | `OverallPercentCovered` | Percentage of the reference genome covered by at least one read. |
 
-##### Example Entry
+###### Example Entry
 
 ```
 Filename,OverallAvgDepth,OverallMaxDepth,OverallCoveredBases,OverallTotalBases,OverallPercentCovered
@@ -169,7 +169,7 @@ This row shows that:
 * \~93% of the reference genome was covered by at least one read.
 * The maximum depth at any position was over 3 million reads.
 
-### Analysis Summary
+#### Analysis Summary
 
 For each **individual**:
 
@@ -182,7 +182,7 @@ For **combined analyses**:
 * Coverage values are merged across individuals.
 * Suitable for comparisons across samples or species-level overviews.
 
-### Visualization
+#### Visualization
 
 * **Barplots**: Use individual summary data (`<species>_coverage_analysis.csv`) to compare total coverage.
 * **Violin plots**: Use detailed data (`<species>_coverage_analysis_detailed.csv`) to show distribution of coverage across scaffolds and individuals.
