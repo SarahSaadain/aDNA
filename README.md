@@ -18,7 +18,7 @@ The `config.yaml` file is used to configure the aDNA pipeline. It contains setti
 
 Example `config.yaml`
 
-```
+```yaml
 # config.yaml - Configuration file for aDNA pipeline
 
 # Global settings
@@ -146,18 +146,18 @@ The project contains folders for different species, which contain the raw data, 
 
 When adding a new species, make sure to 
 - add the folder name to the `config.yaml`
-- provide the raw reads in `species/raw/reads/` folder
-- provide the reference genome in `species/raw/ref_genome/` folder
-- provide mtDNA reads in `species/raw/mtdna/` folder
+- provide the raw reads in `<species>/raw/reads/` folder
+- provide the reference genome in `<species>/raw/ref_genome/` folder
+- provide mtDNA reads in `<species>/raw/mtdna/` folder
 - all other folders will be created and populated automatically
-    - folder `species/processed/` contains the intermediary files during processing
-    - folder `species/results/` contains the final results and reports
+    - folder `<species>/processed/` contains the intermediary files during processing
+    - folder `<species>/results/` contains the final results and reports
 
 #### RAW Reads Filenames
 
 The pipeline expects input read files to follow a standardized naming convention:
 
-```
+```bash
 <Individual>_<Protocol>_<Original_Filename>.fastq.gz
 ```
 
@@ -205,8 +205,8 @@ The `pipeline_aDNA.py` file is the main entry point for the aDNA pipeline. It or
 
 The pipeline is divided into several stages, executed sequentially:
 
-1. **Raw reads processing** - for more details see [Raw Read Processing](scripts/raw_reads_processing/raw_reads_processing.md)
-2. **Reference genome processing**  
+1. **Raw reads processing** - for more details see [Raw Read Processing](raw_reads_processing.md)
+2. **Reference genome processing** - for more details see [Reference Genome Processing](ref_genome_processing.md)
 3. **Additional analysis**   
 
 The pipeline automatically manages dependencies and workflow execution.
@@ -215,7 +215,7 @@ The pipeline automatically manages dependencies and workflow execution.
 
 To run the pipeline, navigate to the root directory containing the scripts folder and execute:
 
-```sh
+```bash
 python scripts/pipeline_aDNA.py
 ```
 
@@ -237,15 +237,13 @@ If you want to restart the pipeline from the beginning, you can delete the relev
 
 ##### Parallelization
 
-Some stages support parallelization. The number of threads can be adjusted in the `common_aDNA_scripts.py` file.
+Some stages support parallelization. The number of threads can be adjusted in the config file file.
 
 #### Species-Specific Scripts
 
 Species-specific can be used to prepare the reads for processing. These scripts are organized into separate folders:
 
-- **`species/scripts`**
-
-These scripts are executed within the main pipeline script if provided.  
+- **`<species>/scripts`**
 
 ## Requirements
 
