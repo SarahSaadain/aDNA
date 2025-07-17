@@ -7,18 +7,18 @@ import ref_genome_processing.common_ref_genome_processing_helpers as common_rgp
 
 from ref_genome_processing.map_aDNA_to_refgenome import execute_bwa_map_aDNA_to_refgenome
 
-def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir: str):
+def execute_angsd_create_and_map_consensus_sequence(sorted_bam_file: str, output_dir: str):
 
     pid = os.getpid() # Get current process ID for logging
-    print_info(f"[PID {pid}] Executing angsd to create consensus sequence for {input_file}")
+    print_info(f"[PID {pid}] Executing angsd to create consensus sequence for {sorted_bam_file}")
 
-    if not os.path.exists(input_file):
-        raise Exception(f"Input file {input_file} does not exist!")
+    if not os.path.exists(sorted_bam_file):
+        raise Exception(f"Input file {sorted_bam_file} does not exist!")
     
     if not os.path.exists(output_dir):
         raise Exception(f"Output directory {output_dir} does not exist!")
 
-    base_name = get_filename_from_path_without_extension(input_file)
+    base_name = get_filename_from_path_without_extension(sorted_bam_file)
 
     # Construct the output file path for the consensus FASTA sequence.
     out_file_path = os.path.join(output_dir, f"{base_name}_consensus{FILE_ENDING_FASTA}")
@@ -28,20 +28,33 @@ def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir:
         print_info(f"[PID {pid}] Consensus sequence for {base_name} already exists. Skipping.")
         return
 
-    print_info(f"[PID {pid}] Creating consensus sequence of {input_file}...")
+    print_info(f"[PID {pid}] Creating consensus sequence of {sorted_bam_file}...")
 
     try:
-        command_angsd = [PROGRAM_PATH_ANGSD, "-out", out_file_path, "-i", input_file, "-doFasta", "2", "-doCounts", "1"]
+        command_angsd = [
+            PROGRAM_PATH_ANGSD, 
+            "-out", out_file_path, 
+            "-i", sorted_bam_file, 
+            "-doFasta", "2", 
+            "-doCounts", "1"
+            "-doMajorMinor", "1"
+            "-doMaf", "1",
+            "-GL", "1",
+            "-SNP_pval", "1e-6"
+        ]
         print_debug(f"[PID {pid}] Executing command: {' '.join(command_angsd)}")
 
         subprocess.run(command_angsd, check=True, capture_output=True, text=True) # Added capture_output and text
-        print_success(f"[PID {pid}] Consensus sequence of {input_file} created successfully.")
+        print_success(f"[PID {pid}] Consensus sequence of {sorted_bam_file} created successfully.")
 
         # Index the newly created gzipped consensus sequence using Samtools faidx.
         print_info(f"[PID {pid}] Indexing consensus sequence {out_file_path + FILE_ENDING_FA_GZ}...")
 
         try:
-            command_samtools = [PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_FAIDX, "-i", out_file_path+FILE_ENDING_FA_GZ]
+            command_samtools = [
+                PROGRAM_PATH_SAMTOOLS, PROGRAM_PATH_SAMTOOLS_FAIDX, 
+                "-i", out_file_path+FILE_ENDING_FA_GZ
+                ]
             print_debug(f"[PID {pid}] Executing command: {' '.join(command_samtools)}")
 
             subprocess.run(command_samtools, check=True, capture_output=True, text=True) # Added capture_output and text
@@ -52,7 +65,7 @@ def execute_angsd_create_and_map_consensus_sequence(input_file: str, output_dir:
         # map consensus sequence to reference genome
 
     except Exception as e:
-        print_error(f"[PID {pid}] Failed to create consensus sequence of {input_file}: {e}")
+        print_error(f"[PID {pid}] Failed to create consensus sequence of {sorted_bam_file}: {e}")
 
 def create_consensus_sequence_for_species(species: str, ref_genome_id: str):
 
