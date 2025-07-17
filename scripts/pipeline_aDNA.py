@@ -38,7 +38,7 @@ def run_pipeline_reference_genome_processing():
     # prepare species for mapping to reference genome
     # this step uses the processed reads and prepares them for mapping to the 
     # reference genome by concatenating the reads and creating different fastq files.
-    # fastq files are created for the species (all reads), and per individual
+    # fastq files are created per individual
     prepare_species_for_map_to_ref_genome.all_species_prepare()
 
     # prepare reference genome for mapping
